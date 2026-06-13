@@ -722,6 +722,12 @@
             color: #9EA4B5;
             font-weight: 400;
         }
+
+              /* HIDE MOBILE UI BY DEFAULT (DESKTOP) */
+        .mobile-bottom-ui {
+            display: none;
+        }
+
         /* RESPONSIVE MEDIA BREAKPOINTS */
         @media (max-width: 1024px) {
             .search-container {
@@ -1084,6 +1090,7 @@
             </div>
         </div>
         <nav class="mobile-tabs">
+            <div class="tab-indicator"></div>
             <a href="index.html" class="mobile-tab-item active">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
