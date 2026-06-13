@@ -1179,6 +1179,15 @@
             }
         }
 
+        // Mobile Tab Switching Logic
+        const mobileTabs = document.querySelectorAll('.mobile-tab-item');
+        mobileTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                mobileTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
         // Mega Menu Toggle Logic
         const megaMenuTrigger = document.getElementById('megaMenuTrigger');
         const megaMenu = document.getElementById('megaMenu');
