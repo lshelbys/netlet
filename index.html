@@ -722,19 +722,6 @@
             color: #9EA4B5;
             font-weight: 400;
         }
-
-        /* FOOTER */
-        .footer {
-            background-color: #FFFFFF;
-            border-top: 1px solid #E2E5F1;
-            margin-top: 64px;
-            padding: 24px 0;
-            text-align: center;
-            color: #7E859B;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
         /* RESPONSIVE MEDIA BREAKPOINTS */
         @media (max-width: 1024px) {
             .search-container {
@@ -758,12 +745,16 @@
             .header-container {
                 flex-wrap: wrap;
                 gap: 12px;
+                justify-content: center;
             }
             .search-container {
                 order: 3;
                 max-width: 100%;
                 width: 100%;
                 margin: 0;
+            }
+            .header-actions {
+                display: none; /* Hide desktop actions to declutter; use bottom tabs instead */
             }
             .delivery-location {
                 display: none;
@@ -782,6 +773,77 @@
             }
             .hero-graphic {
                 display: none;
+            }
+
+            /* SHOW AND STYLE MOBILE UI */
+            .mobile-bottom-ui {
+                display: block;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.8);
+                backdrop-filter: blur(20px) saturate(180%);
+                -webkit-backdrop-filter: blur(20px) saturate(180%);
+                z-index: 2000;
+                border-top: 1px solid rgba(255, 255, 255, 0.3);
+                box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+
+            .mobile-search-logo-area {
+                display: none; /* Hidden to avoid redundancy with the top header */
+            }
+
+            .mobile-tabs {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 12px 0;
+            }
+
+            .mobile-tab-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                color: #7E859B;
+                font-size: 10px;
+                font-weight: 600;
+                text-decoration: none;
+                flex: 1;
+                position: relative;
+            }
+
+            .mobile-tab-item i {
+                font-size: 20px;
+                transition: transform 0.3s ease;
+            }
+
+            .mobile-tab-item.active {
+                color: var(--netlet-blue);
+            }
+
+            .mobile-tab-item:active i {
+                transform: scale(0.9);
+            }
+
+            .mobile-cart-badge {
+                position: absolute;
+                top: -6px;
+                right: 20%;
+                background-color: var(--netlet-red);
+                color: white;
+                font-size: 9px;
+                font-weight: 700;
+                padding: 2px 5px;
+                border-radius: 10px;
+                min-width: 16px;
+                text-align: center;
+            }
+
+            body {
+                padding-bottom: 70px; /* Space for the fixed bottom bar */
             }
         }
 
@@ -850,6 +912,11 @@
         }
         .logo-bounce {
             animation: bounce 0.6s ease-out;
+        }
+
+        /* HIDE MOBILE UI BY DEFAULT (DESKTOP) */
+        .mobile-bottom-ui {
+            display: none;
         }
     </style>
 </head>
@@ -970,11 +1037,41 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="footer-container">
-            <p>&copy; 2026 NetLet Marketplace. Built elegantly with unified HTML & CSS structure.</p>
+    <!-- Mobile Bottom Interface -->
+    <div class="mobile-bottom-ui">
+        <div class="mobile-search-logo-area">
+            <div class="mobile-logo-centered">
+                <a href="index.html"><img src="logo.png" alt="NetLet Logo"></a>
+            </div>
+            <div class="mobile-search-bar">
+                <input type="text" placeholder="Search products...">
+                <i class="fas fa-search"></i>
+            </div>
         </div>
-    </footer>
+        <nav class="mobile-tabs">
+            <a href="index.html" class="mobile-tab-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="mobile-tab-item" id="mobileMegaTrigger">
+                <i class="fas fa-th-large"></i>
+                <span>Categories</span>
+            </a>
+            <a href="#" class="mobile-tab-item">
+                <i class="fas fa-tags"></i>
+                <span>Deals</span>
+            </a>
+            <a href="#" class="mobile-tab-item">
+                <i class="fas fa-user"></i>
+                <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-tab-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Cart</span>
+                <span class="mobile-cart-badge">0</span>
+            </a>
+        </nav>
+    </div>
 
     <!-- Delivery Location Modal -->
     <div id="locationModal" class="modal">
@@ -1042,6 +1139,7 @@
         // 2. CART LOGIC
         let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
         const cartBadge = document.querySelector('.cart-badge');
+        const mobileCartBadge = document.querySelector('.mobile-cart-badge');
 
         // Use event delegation for buttons inside the dynamic grid
         document.getElementById('productGrid').addEventListener('click', (e) => {
@@ -1058,9 +1156,16 @@
         }
 
         function updateCartUI() {
-            cartBadge.textContent = cart.length;
-            cartBadge.style.transform = 'scale(1.3)';
-            setTimeout(() => cartBadge.style.transform = 'scale(1)', 200);
+            if (cartBadge) {
+                cartBadge.textContent = cart.length;
+                cartBadge.style.transform = 'scale(1.3)';
+                setTimeout(() => cartBadge.style.transform = 'scale(1)', 200);
+            }
+            if (mobileCartBadge) {
+                mobileCartBadge.textContent = cart.length;
+                mobileCartBadge.style.transform = 'scale(1.3)';
+                setTimeout(() => mobileCartBadge.style.transform = 'scale(1)', 200);
+            }
         }
 
         // Mega Menu Toggle Logic
@@ -1071,6 +1176,14 @@
             e.stopPropagation();
             megaMenu.classList.toggle('active');
         });
+
+        const mobileMegaTrigger = document.getElementById('mobileMegaTrigger');
+        if (mobileMegaTrigger) {
+            mobileMegaTrigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                megaMenu.classList.toggle('active');
+            });
+        }
 
         document.addEventListener('click', () => {
             megaMenu.classList.remove('active');
@@ -1123,6 +1236,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             await fetchInventory();
             renderProducts();
+            updateCartUI();
         });
     </script>
 </body>
