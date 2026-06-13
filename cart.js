@@ -1,4 +1,5 @@
 import { inventory, fetchInventory, escapeHtml } from './inventory.js';
+import { Toast, LoadingOverlay } from './utils.js';
 
 const cartItemsContainer = document.getElementById('cartItems');
 const subtotalEl = document.getElementById('subtotal');
@@ -70,11 +71,15 @@ window.removeFromCart = function(id) {
 
 confirmBtn.addEventListener('click', () => {
     if (idToDelete === null) return;
-    
+
     let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
+    const prevLength = cart.length;
     cart = cart.filter(itemId => Number(itemId) !== Number(idToDelete));
     localStorage.setItem('netletCart', JSON.stringify(cart));
-    
+
+    const removed = prevLength - cart.length;
+    new Toast(`Removed ${removed} item${removed > 1 ? 's' : ''} from cart`, 'success', 2000);
+
     idToDelete = null;
     modal.classList.remove('active');
     renderCart();
@@ -86,6 +91,18 @@ cancelBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await fetchInventory();
-    renderCart();
+    try {
+        LoadingOverlay.show('Loading cart...');
+        const start = performance.now();
+
+        await fetchInventory();
+        renderCart();
+
+        const elapsed = Math.max(200 - (performance.now() - start), 0);
+        setTimeout(() => LoadingOverlay.hide(), elapsed);
+    } catch (err) {
+        LoadingOverlay.hide();
+        new Toast('Error loading cart. Please refresh the page.', 'error', 4000);
+        console.error('Cart loading error:', err);
+    }
 });
