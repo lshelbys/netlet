@@ -84,6 +84,18 @@
             object-fit: contain;
         }
 
+        /* Accessibility: visible keyboard focus ring for all interactive elements */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        .chip:focus-visible,
+        [tabindex]:focus-visible {
+            outline: 2px solid var(--netlet-blue);
+            outline-offset: 2px;
+            border-radius: 8px;
+        }
+
         #mainLogo {
             display: inline-block;
         }
@@ -891,6 +903,47 @@
             body {
                 padding-bottom: 130px; /* Increased space for the floating bar */
             }
+
+            /* Tighter spacing and a 2-column product grid on phones */
+            .section-wrapper {
+                margin: 24px auto;
+                padding: 0 16px;
+            }
+            .section-header {
+                margin-bottom: 20px;
+            }
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .product-card {
+                padding: 12px;
+            }
+            .image-container {
+                height: 130px;
+            }
+            .image-placeholder {
+                font-size: 36px;
+            }
+        }
+
+        /* Single column on very narrow phones to keep cards legible */
+        @media (max-width: 380px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Respect users who prefer reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
 
         /* MODAL STYLES */
@@ -972,7 +1025,7 @@
             
             <div class="logo-section">
                 <div class="logo">
-                    <a href="index.html" id="mainLogo"><img src="logo.png" alt="NetLet Logo"></a>
+                    <a href="index.html" id="mainLogo"><img src="logo.png" alt="NetLet home" width="3130" height="1725" decoding="async"></a>
                 </div>
                 
                 <div class="delivery-location">
@@ -1082,7 +1135,7 @@
     <div class="mobile-bottom-ui">
         <div class="mobile-search-logo-area">
             <div class="mobile-logo-centered">
-                <a href="index.html"><img src="logo.png" alt="NetLet Logo"></a>
+                <a href="index.html"><img src="logo.png" alt="NetLet home" width="3130" height="1725" decoding="async" loading="lazy"></a>
             </div>
             <div class="mobile-search-bar">
                 <input type="text" placeholder="Search products...">
@@ -1147,8 +1200,8 @@
                 <article class="product-card" data-id="${product.id}">
                     <div>
                         <div class="discount-badge" style="display: ${product.oldPrice ? 'block' : 'none'}">SALE</div>
-                        <button class="wishlist-btn" style="background:none; border:none; padding:0;">
-                            <i class="far fa-heart wishlist-icon"></i>
+                        <button class="wishlist-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to wishlist" style="background:none; border:none; padding:0;">
+                            <i class="far fa-heart wishlist-icon" aria-hidden="true"></i>
                         </button>
                         <div class="image-container">
                             <i class="fas ${escapeHtml(product.icon)} image-placeholder"></i>
@@ -1172,7 +1225,7 @@
                             <span>${product.rating}</span>
                             <span class="rating-count">(${product.reviews})</span>
                         </div>
-                        <button class="add-to-cart-btn">ADD TO CART</button>
+                        <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart">ADD TO CART</button>
                     </div>
                 </article>
             `).join('');

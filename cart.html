@@ -129,11 +129,26 @@
         /* MOBILE UI STYLES (MATCHING INDEX) */
         .mobile-bottom-ui { display: none; }
 
+        /* Accessibility: visible keyboard focus ring */
+        a:focus-visible,
+        button:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--netlet-blue);
+            outline-offset: 2px;
+            border-radius: 8px;
+        }
+
         @media (max-width: 768px) {
-            .container { flex-direction: column; }
+            .container { flex-direction: column; padding: 16px; gap: 16px; }
             .order-summary-section { order: -1; }
             .summary-box { position: static; margin-bottom: 20px; }
-            
+
+            /* Compact cart items so they fit narrow screens */
+            .cart-item { padding: 14px; gap: 14px; }
+            .item-image { width: 72px; height: 72px; font-size: 30px; }
+            .item-title { font-size: 15px; }
+            .cart-header h2 { font-size: 16px; }
+
             .mobile-bottom-ui {
                 display: block;
                 position: fixed;
@@ -239,7 +254,7 @@
 <body>
     <header class="cart-header">
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between;">
-            <a href="index.html"><img src="logo.png" alt="NetLet" style="height: 50px;"></a>
+            <a href="index.html"><img src="logo.png" alt="NetLet home" width="3130" height="1725" decoding="async" style="height: 50px; width: auto;"></a>
             <h2 style="margin: 0; font-size: 18px;">Shopping Cart</h2>
             <a href="index.html" style="color: var(--netlet-blue); font-weight: 700;">Continue Shopping</a>
         </div>
