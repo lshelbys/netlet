@@ -66,10 +66,16 @@
         .btn-danger:hover {
             background-color: #c7152f;
         }
+        /* Horizontal scroll keeps the wide table usable on small screens */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 30px;
+        }
         table {
             width: 100%;
+            min-width: 760px;
             border-collapse: collapse;
-            margin-top: 30px;
         }
         table th, table td {
             border: 1px solid #e2e5f1;
@@ -127,12 +133,47 @@
             border-radius: 4px;
             font-weight: bold;
         }
+
+        /* Accessibility: visible keyboard focus ring */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid #1E3A8A;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Mobile layout: stack tools and let buttons/inputs span full width */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+            .container {
+                padding: 16px;
+            }
+            .inventory-tools {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .search-box,
+            .inventory-tools .btn {
+                width: 100%;
+            }
+            .stats-bar {
+                justify-content: space-between;
+            }
+            .product-actions button {
+                margin-bottom: 5px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-            <img src="logo.png" alt="NetLet Logo" style="height: 80px; width: auto; object-fit: contain;">
+            <img src="logo.png" alt="NetLet Logo" width="3130" height="1725" decoding="async" style="height: 80px; width: auto; object-fit: contain;">
             <h1 style="margin: 0;">NetLet Inventory Manager</h1>
         </div>
         <p>This interface allows you to manage the products displayed on your <a href="index.html">main website</a>. Changes are synced across all users via Supabase.</p>
@@ -163,6 +204,7 @@
             </div>
         </div>
 
+        <div class="table-wrapper">
         <table id="inventoryTable">
             <thead>
                 <tr>
@@ -182,6 +224,7 @@
                 <!-- Products will be rendered here -->
             </tbody>
         </table>
+        </div>
 
         <hr style="margin: 30px 0;">
 
