@@ -1,4 +1,4 @@
-import { inventory, fetchInventory } from './inventory.js';
+import { inventory, fetchInventory, escapeHtml } from './inventory.js';
 
 const cartItemsContainer = document.getElementById('cartItems');
 const subtotalEl = document.getElementById('subtotal');
@@ -39,10 +39,10 @@ function renderCart() {
             totalCost += product.price * qty;
             html += `
                 <div class="cart-item">
-                    <div class="item-image"><i class="fas ${product.icon}"></i></div>
+                    <div class="item-image"><i class="fas ${escapeHtml(product.icon)}"></i></div>
                     <div class="item-details">
-                        <div class="item-brand">${product.brand}</div>
-                        <h3 class="item-title">${product.title}</h3>
+                        <div class="item-brand">${escapeHtml(product.brand)}</div>
+                        <h3 class="item-title">${escapeHtml(product.title)}</h3>
                         <div class="item-qty">Quantity: ${qty}</div>
                         <button class="remove-btn" onclick="removeFromCart(${product.id})">Remove</button>
                     </div>
@@ -72,7 +72,7 @@ confirmBtn.addEventListener('click', () => {
     if (idToDelete === null) return;
     
     let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
-    cart = cart.filter(itemId => itemId !== idToDelete);
+    cart = cart.filter(itemId => Number(itemId) !== Number(idToDelete));
     localStorage.setItem('netletCart', JSON.stringify(cart));
     
     idToDelete = null;
