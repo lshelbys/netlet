@@ -72,8 +72,19 @@ export async function addProductToInventory(product) {
 
     try {
         const { id, ...productData } = product;
+        // Convert camelCase to snake_case for Supabase
+        const dbData = {
+            brand: productData.brand,
+            title: productData.title,
+            price: productData.price,
+            old_price: productData.oldPrice,
+            is_express: productData.isExpress,
+            rating: productData.rating,
+            reviews: productData.reviews,
+            icon: productData.icon
+        };
         const data = await withRetry(async () => {
-            const { data, error } = await supabase.from('products').insert([productData]).select();
+            const { data, error } = await supabase.from('products').insert([dbData]).select();
             if (error) throw error;
             return data;
         });
@@ -115,8 +126,19 @@ export async function updateProductInInventory(updatedProduct) {
 
     try {
         const { id, ...updateData } = updatedProduct;
+        // Convert camelCase to snake_case for Supabase
+        const dbData = {
+            brand: updateData.brand,
+            title: updateData.title,
+            price: updateData.price,
+            old_price: updateData.oldPrice,
+            is_express: updateData.isExpress,
+            rating: updateData.rating,
+            reviews: updateData.reviews,
+            icon: updateData.icon
+        };
         const data = await withRetry(async () => {
-            const { data, error } = await supabase.from('products').update(updateData).eq('id', id).select();
+            const { data, error } = await supabase.from('products').update(dbData).eq('id', id).select();
             if (error) throw error;
             return data;
         });
@@ -143,7 +165,19 @@ export async function replaceInventory(products) {
     try {
         const rows = products
             .filter(p => p && (p.brand || p.title))
-            .map(({ id, ...rest }) => rest);
+            .map(({ id, ...rest }) => {
+                // Convert camelCase to snake_case for Supabase
+                return {
+                    brand: rest.brand,
+                    title: rest.title,
+                    price: rest.price,
+                    old_price: rest.oldPrice,
+                    is_express: rest.isExpress,
+                    rating: rest.rating,
+                    reviews: rest.reviews,
+                    icon: rest.icon
+                };
+            });
 
         await withRetry(async () => {
             const { error } = await supabase.from('products').delete().gte('id', 0);
