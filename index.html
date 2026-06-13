@@ -780,6 +780,54 @@
                 display: none;
             }
         }
+
+        /* MODAL STYLES */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 15% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            animation: modalFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .close-modal {
+            color: #7E859B;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: var(--text-dark);
+        }
     </style>
 </head>
 <body>
@@ -905,6 +953,26 @@
         </div>
     </footer>
 
+    <!-- Delivery Location Modal -->
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; color: var(--text-dark);">Select Delivery Location</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <p style="font-size: 14px; margin-bottom: 20px; color: var(--text-main);">Choose your city for accurate delivery times and costs.</p>
+            <select id="locationSelect" style="width: 100%; padding: 12px; border: 1px solid #E2E5F1; border-radius: 12px; font-size: 14px; outline: none; margin-bottom: 20px;">
+                <option value="Kuwait City">Kuwait City</option>
+                <option value="Jahra">Jahra</option>
+                <option value="Ahmadi">Ahmadi</option>
+                <option value="Farwaniya">Farwaniya</option>
+                <option value="Hawally">Hawally</option>
+                <option value="Mubarak Al-Kabeer">Mubarak Al-Kabeer</option>
+            </select>
+            <button id="saveLocation" class="add-to-cart-btn" style="margin-top: 0;">SAVE LOCATION</button>
+        </div>
+    </div>
+
     <script type="module">
         import { inventory, fetchInventory } from './inventory.js';
 
@@ -986,6 +1054,34 @@
         });
 
         megaMenu.addEventListener('click', (e) => e.stopPropagation());
+
+        // Delivery Location Modal Logic
+        const deliveryLocation = document.querySelector('.delivery-location');
+        const locationModal = document.getElementById('locationModal');
+        const closeModal = document.querySelector('.close-modal');
+        const saveLocationBtn = document.getElementById('saveLocation');
+        const locationName = document.querySelector('.location-name');
+        const locationSelect = document.getElementById('locationSelect');
+
+        deliveryLocation.addEventListener('click', () => {
+            locationModal.style.display = 'block';
+        });
+
+        closeModal.addEventListener('click', () => {
+            locationModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === locationModal) {
+                locationModal.style.display = 'none';
+            }
+        });
+
+        saveLocationBtn.addEventListener('click', () => {
+            const selected = locationSelect.value;
+            locationName.innerHTML = `${selected} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>`;
+            locationModal.style.display = 'none';
+        });
 
         // 3. INITIALIZE
         document.addEventListener('DOMContentLoaded', async () => {
