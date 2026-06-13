@@ -1,4 +1,5 @@
 import { inventory, fetchInventory, addProductToInventory, deleteProductFromInventory, updateProductInInventory, replaceInventory, escapeHtml } from './inventory.js';
+import { Toast, LoadingOverlay } from './utils.js';
 
 const productForm = document.getElementById('productForm');
 const inventoryTableBody = document.querySelector('#inventoryTable tbody');
@@ -17,14 +18,10 @@ const importFile = document.getElementById('importFile');
 
 let editingProductId = null;
 
-// Function to display alerts
+// Use toast notifications instead of inline alerts
 function showAlert(message, type = 'success') {
-    alertMessage.textContent = message;
-    alertMessage.className = `alert alert-${type}`;
-    alertMessage.style.display = 'block';
-    setTimeout(() => {
-        alertMessage.style.display = 'none';
-    }, 3000);
+    const toastType = type === 'error' ? 'error' : 'success';
+    new Toast(message, toastType, 3000);
 }
 
 // Function to render the inventory table
@@ -238,6 +235,18 @@ importFile.addEventListener('change', (e) => {
 
 // Initial render when the page loads
 document.addEventListener('DOMContentLoaded', async () => {
-    await fetchInventory();
-    renderInventory();
+    try {
+        LoadingOverlay.show('Loading inventory...');
+        const start = performance.now();
+
+        await fetchInventory();
+        renderInventory();
+
+        const elapsed = Math.max(200 - (performance.now() - start), 0);
+        setTimeout(() => LoadingOverlay.hide(), elapsed);
+    } catch (err) {
+        LoadingOverlay.hide();
+        new Toast('Error loading inventory. Please refresh the page.', 'error', 4000);
+        console.error('Inventory loading error:', err);
+    }
 });
