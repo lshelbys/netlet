@@ -1,4 +1,4 @@
-import { inventory, fetchInventory, addProductToInventory, deleteProductFromInventory, updateProductInInventory } from './inventory.js';
+import { inventory, fetchInventory, addProductToInventory, deleteProductFromInventory, updateProductInInventory, replaceInventory, escapeHtml } from './inventory.js';
 
 const productForm = document.getElementById('productForm');
 const inventoryTableBody = document.querySelector('#inventoryTable tbody');
@@ -38,16 +38,18 @@ function renderInventory(filterText = '') {
 
     filtered.forEach(product => {
         const row = inventoryTableBody.insertRow();
+        const price = Number(product.price) || 0;
+        const oldPrice = product.oldPrice != null ? Number(product.oldPrice) : null;
         row.innerHTML = `
             <td>${product.id}</td>
-            <td>${product.brand}</td>
-            <td>${product.title}</td>
-            <td>KWD ${product.price.toFixed(2)}</td>
-            <td>${product.oldPrice ? `KWD ${product.oldPrice.toFixed(2)}` : 'N/A'}</td>
+            <td>${escapeHtml(product.brand)}</td>
+            <td>${escapeHtml(product.title)}</td>
+            <td>KWD ${price.toFixed(2)}</td>
+            <td>${oldPrice != null ? `KWD ${oldPrice.toFixed(2)}` : 'N/A'}</td>
             <td>${product.isExpress ? 'Yes' : 'No'}</td>
-            <td>${product.rating}</td>
-            <td>${product.reviews}</td>
-            <td><i class="fas ${product.icon}"></i> ${product.icon}</td>
+            <td>${escapeHtml(product.rating)}</td>
+            <td>${escapeHtml(product.reviews)}</td>
+            <td><i class="fas ${escapeHtml(product.icon)}"></i> ${escapeHtml(product.icon)}</td>
             <td class="product-actions">
                 <button class="btn btn-edit" data-id="${product.id}" style="background-color: #ffc107; color: black;">Edit</button>
                 <button class="btn btn-danger btn-delete" data-id="${product.id}">Delete</button>
@@ -193,7 +195,7 @@ importFile.addEventListener('change', (e) => {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
         const text = event.target.result;
         const rows = text.split('\n').filter(row => row.trim() !== '');
         const headers = rows[0].split(',').map(h => h.trim());
@@ -203,25 +205,28 @@ importFile.addEventListener('change', (e) => {
                 // Simple regex to handle quoted strings containing commas
                 const values = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
                 const cleanedValues = values.map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"'));
-                
+
                 const product = {};
                 headers.forEach((header, index) => {
                     let val = cleanedValues[index];
                     // Type conversion
-                    if (header === 'id' || header === 'reviews') product[header] = parseInt(val);
+                    if (header === 'id' || header === 'reviews') product[header] = parseInt(val, 10);
                     else if (header === 'price' || header === 'rating') product[header] = parseFloat(val);
                     else if (header === 'oldPrice') product[header] = val ? parseFloat(val) : null;
-                    else if (header === 'isExpress') product[header] = val.toLowerCase() === 'true';
+                    else if (header === 'isExpress') product[header] = (val || '').toLowerCase() === 'true';
                     else product[header] = val;
                 });
                 return product;
             });
 
             if (confirm(`Are you sure you want to replace current inventory with ${importedInventory.length} items?`)) {
-                replaceInventory(importedInventory);
-                saveInventoryToLocalStorage();
-                renderInventory();
-                showAlert('Inventory imported successfully!');
+                const { error } = await replaceInventory(importedInventory);
+                if (error) {
+                    showAlert('Error importing inventory to the database.', 'error');
+                } else {
+                    renderInventory();
+                    showAlert('Inventory imported successfully!');
+                }
             }
         } catch (err) {
             showAlert('Error parsing CSV. Ensure the format is correct.', 'error');

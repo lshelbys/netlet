@@ -40,8 +40,40 @@ export async function updateProductInInventory(updatedProduct) {
     const { id, ...updateData } = updatedProduct;
     const { data, error } = await supabase.from('products').update(updateData).eq('id', id).select();
     if (!error && data) {
-        const index = inventory.findIndex(p => p.id === id);
+        const index = inventory.findIndex(p => Number(p.id) === Number(id));
         if (index !== -1) inventory[index] = data[0];
     }
     return { data, error };
+}
+
+// Replaces the entire inventory in Supabase with the provided list of products.
+// Used by the CSV import feature. Existing rows are deleted and the new rows
+// are inserted, letting Supabase generate fresh ids.
+export async function replaceInventory(products) {
+    const rows = products
+        .filter(p => p && (p.brand || p.title))
+        .map(({ id, ...rest }) => rest);
+
+    // Supabase requires a filter on delete; ids are always >= 0.
+    const { error: deleteError } = await supabase.from('products').delete().gte('id', 0);
+    if (deleteError) return { data: null, error: deleteError };
+
+    const { data, error } = await supabase.from('products').insert(rows).select();
+    if (!error && data) {
+        inventory.length = 0;
+        inventory.push(...data);
+    }
+    return { data, error };
+}
+
+// Escapes a value for safe insertion into HTML, preventing XSS from
+// product data that originates from the database or CSV imports.
+export function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (ch) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[ch]);
 }
