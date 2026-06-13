@@ -1136,7 +1136,7 @@
     </div>
 
     <script type="module">
-        import { inventory, fetchInventory } from './inventory.js';
+        import { inventory, fetchInventory, escapeHtml } from './inventory.js';
 
         // 1. RENDER LOGIC
         function renderProducts() {
@@ -1151,11 +1151,11 @@
                             <i class="far fa-heart wishlist-icon"></i>
                         </button>
                         <div class="image-container">
-                            <i class="fas ${product.icon} image-placeholder"></i>
+                            <i class="fas ${escapeHtml(product.icon)} image-placeholder"></i>
                         </div>
                         <div class="product-details">
-                            <span class="product-brand">${product.brand}</span>
-                            <p class="product-title">${product.title}</p>
+                            <span class="product-brand">${escapeHtml(product.brand)}</span>
+                            <p class="product-title">${escapeHtml(product.title)}</p>
                         </div>
                     </div>
                     <div>
