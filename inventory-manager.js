@@ -81,11 +81,11 @@ productForm.addEventListener('submit', async (e) => {
     if (editingProductId) {
         const { error } = await updateProductInInventory(productData);
         if (!error) showAlert('Product updated successfully!');
-        else showAlert('Error updating product.', 'error');
+        else showAlert(`Error updating product: ${error.message || error}`, 'error');
     } else {
         const { error } = await addProductToInventory(productData);
         if (!error) showAlert('Product added successfully!');
-        else showAlert('Error adding product.', 'error');
+        else showAlert(`Error adding product: ${error.message || error}`, 'error');
     }
 
     // Pass search value to maintain current filter after adding/editing
