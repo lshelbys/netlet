@@ -4,6 +4,7 @@ const cartItemsContainer = document.getElementById('cartItems');
 const subtotalEl = document.getElementById('subtotal');
 const totalEl = document.getElementById('total');
 const itemCountEl = document.getElementById('itemCount');
+const mobileCartBadge = document.querySelector('.mobile-cart-badge');
 
 const modal = document.getElementById('confirmModal');
 const confirmBtn = document.getElementById('confirmBtn');
@@ -59,6 +60,7 @@ function updateTotals(total, count) {
     subtotalEl.textContent = total.toFixed(2);
     totalEl.textContent = total.toFixed(2);
     itemCountEl.textContent = count;
+    if (mobileCartBadge) mobileCartBadge.textContent = count;
 }
 
 window.removeFromCart = function(id) {
