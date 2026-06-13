@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netlet Inventory Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'system-ui', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f7f9fa;
+            color: #404553;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #1F2229;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #e2e5f1;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .btn {
+            background-color: #1E3A8A;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: background-color 0.2s;
+        }
+        .btn:hover {
+            background-color: #152c6a;
+        }
+        .btn-danger {
+            background-color: #E61C38;
+        }
+        .btn-danger:hover {
+            background-color: #c7152f;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        table th, table td {
+            border: 1px solid #e2e5f1;
+            padding: 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+        table th {
+            background-color: #f0f2f5;
+            font-weight: 700;
+            color: #1F2229;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .product-actions button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .inventory-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        .search-box {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #e2e5f1;
+            border-radius: 4px;
+        }
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            background: #eef2f7;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <img src="logo.png" alt="NetLet Logo" style="height: 80px; width: auto; object-fit: contain;">
+            <h1 style="margin: 0;">NetLet Inventory Manager</h1>
+        </div>
+        <p>This interface allows you to manage the products displayed on your <a href="index.html">main website</a>. Changes are synced across all users via Supabase.</p>
+
+        <hr style="margin: 30px 0;">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Current Inventory</h2>
+            <button id="toggleFormBtn" class="btn" title="Add New Product">
+                <i class="fas fa-plus"></i> Add Product
+            </button>
+        </div>
+
+        <div id="alertMessage" class="alert" style="display: none;"></div>
+        
+        <div class="inventory-tools">
+            <input type="text" id="searchInput" class="search-box" placeholder="Search by brand or title...">
+            <button id="exportBtn" class="btn" style="background-color: #28a745;">
+                <i class="fas fa-file-export"></i> Export CSV
+            </button>
+            <button id="importBtn" class="btn" style="background-color: #17a2b8;">
+                <i class="fas fa-file-import"></i> Import CSV
+            </button>
+            <input type="file" id="importFile" style="display: none;" accept=".csv">
+            <div class="stats-bar">
+                <div>Total: <span id="totalItems">0</span></div>
+                <div>Value: KWD <span id="totalValue">0.00</span></div>
+            </div>
+        </div>
+
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Brand</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Old Price</th>
+                    <th>Express</th>
+                    <th>Rating</th>
+                    <th>Reviews</th>
+                    <th>Icon</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Products will be rendered here -->
+            </tbody>
+        </table>
+
+        <hr style="margin: 30px 0;">
+
+        <!-- This container was missing, which caused the JavaScript to fail -->
+        <div id="formContainer" style="display: none;">
+            <h2 id="formTitle">Add New Product</h2>
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="brand">Brand:</label>
+                    <input type="text" id="brand" required>
+                </div>
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <textarea id="title" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price (KWD):</label>
+                    <input type="number" id="price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="oldPrice">Old Price (KWD, optional):</label>
+                    <input type="number" id="oldPrice" step="0.01">
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="isExpress">
+                    <label for="isExpress">NetLet Express</label>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating (0-5):</label>
+                    <input type="number" id="rating" step="0.1" min="0" max="5" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="reviews">Number of Reviews:</label>
+                    <input type="number" id="reviews" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="icon">Font Awesome Icon Class (e.g., fa-mobile-alt):</label>
+                    <input type="text" id="icon" value="fa-box">
+                </div>
+                <button type="submit" id="submitBtn" class="btn">Add Product</button>
+                <button type="button" id="cancelBtn" class="btn btn-danger" style="display: none;">Cancel Edit</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="./inventory-manager.js"></script>
+</body>
+</html>

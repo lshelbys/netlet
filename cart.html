@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | NetLet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --netlet-blue: #1E3A8A;
+            --netlet-orange: #ffa86e;
+            --bg-gray: #F7F9FA;
+            --text-dark: #1F2229;
+        }
+
+        body {
+            font-family: 'system-ui', -apple-system, sans-serif;
+            background-color: var(--bg-gray);
+            color: #404553;
+            margin: 0;
+            padding-top: 100px;
+        }
+
+        /* Reuse Header Styles */
+        .cart-header {
+            background: rgba(247, 246, 242, 0.75);
+            backdrop-filter: blur(25px) saturate(210%);
+            position: fixed;
+            top: 0; width: 100%; z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 24px;
+            padding: 20px;
+        }
+
+        .cart-items-section { flex: 2; }
+        .order-summary-section { flex: 1; }
+
+        /* Liquid Glass Item Card */
+        .cart-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 20px;
+            box-shadow: 
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.05);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-item:hover { 
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px) scale(1.01); 
+        }
+
+        .item-image {
+            width: 100px; height: 100px;
+            background: white; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 40px; color: #E2E5F1;
+        }
+
+        .item-details { flex: 1; }
+        .item-title { font-weight: 700; font-size: 16px; margin: 0 0 5px 0; }
+        .item-price { color: var(--text-dark); font-weight: 800; font-size: 18px; }
+
+        .remove-btn {
+            background: none; border: none; color: #E61C38;
+            cursor: pointer; font-weight: 600; padding: 5px 0;
+        }
+
+        /* Order Summary Glass Box */
+        .summary-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            position: sticky; top: 120px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .summary-row {
+            display: flex; justify-content: space-between;
+            margin-bottom: 12px; font-weight: 500;
+        }
+
+        .total-row {
+            border-top: 1px solid #ddd;
+            padding-top: 15px; margin-top: 15px;
+            font-size: 20px; font-weight: 800;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: var(--netlet-blue);
+            color: white; border: none;
+            padding: 15px; border-radius: 12px;
+            font-weight: 700; font-size: 16px;
+            margin-top: 20px; cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .checkout-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(30, 58, 138, 0.2);
+        }
+
+        .empty-cart {
+            text-align: center; padding: 100px 0;
+            font-size: 20px; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header class="cart-header">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between;">
+            <a href="index.html"><img src="logo.png" alt="NetLet" style="height: 50px;"></a>
+            <h2 style="margin: 0; font-size: 18px;">Shopping Cart</h2>
+            <a href="index.html" style="color: var(--netlet-blue); font-weight: 700;">Continue Shopping</a>
+        </div>
+    </header>
+
+    <main class="container" id="cartContainer">
+        <div class="cart-items-section" id="cartItems">
+            <!-- Items injected by cart.js -->
+        </div>
+
+        <div class="order-summary-section">
+            <div class="summary-box">
+                <h3 style="margin-top: 0;">Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal (<span id="itemCount">0</span> items)</span>
+                    <span>KWD <span id="subtotal">0.00</span></span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color: #28a745;">FREE</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>Total</span>
+                    <span>KWD <span id="total">0.00</span></span>
+                </div>
+                <button class="checkout-btn">CHECKOUT NOW</button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="cart.js"></script>
+</body>
+</html>
