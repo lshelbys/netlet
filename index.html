@@ -782,12 +782,14 @@
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                background: rgba(255, 255, 255, 0.8);
-                backdrop-filter: blur(20px) saturate(180%);
-                -webkit-backdrop-filter: blur(20px) saturate(180%);
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(25px) saturate(210%);
+                -webkit-backdrop-filter: blur(25px) saturate(210%);
                 z-index: 2000;
                 border-top: 1px solid rgba(255, 255, 255, 0.3);
-                box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+                box-shadow: 
+                    0 -8px 32px rgba(0, 0, 0, 0.1),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.5);
                 padding-bottom: env(safe-area-inset-bottom);
             }
 
@@ -822,6 +824,12 @@
 
             .mobile-tab-item.active {
                 color: var(--netlet-blue);
+                transform: translateY(-2px);
+            }
+
+            .mobile-tab-item:active {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
             }
 
             .mobile-tab-item:active i {
@@ -912,11 +920,6 @@
         }
         .logo-bounce {
             animation: bounce 0.6s ease-out;
-        }
-
-        /* HIDE MOBILE UI BY DEFAULT (DESKTOP) */
-        .mobile-bottom-ui {
-            display: none;
         }
     </style>
 </head>
