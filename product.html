@@ -426,14 +426,37 @@
     <!-- Mobile Bottom UI -->
     <div class="mobile-bottom-ui">
         <nav class="mobile-tabs">
+            <div class="tab-indicator"></div>
             <a href="index.html" class="mobile-tab-item"><i class="fas fa-home"></i><span>Home</span></a>
-            <a href="index.html" class="mobile-tab-item"><i class="fas fa-th-large"></i><span>Categories</span></a>
-            <a href="index.html" class="mobile-tab-item"><i class="fas fa-tags"></i><span>Deals</span></a>
-            <a href="#" class="mobile-tab-item"><i class="fas fa-user"></i><span>Account</span></a>
-            <a href="cart.html" class="mobile-tab-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></a>
+            <a href="index.html" class="mobile-tab-item" id="mobileMegaTrigger"><i class="fas fa-th-large"></i><span>Categories</span></a>
+            <a href="deals.html" class="mobile-tab-item"><i class="fas fa-tags"></i><span>Deals</span></a>
+            <a href="account.html" class="mobile-tab-item"><i class="fas fa-user"></i><span>Account</span></a>
+            <a href="cart.html" class="mobile-tab-item"><i class="fas fa-shopping-cart"></i><span>Cart</span><span class="mobile-cart-badge">0</span></a>
         </nav>
     </div>
 
     <script type="module" src="product.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartBadge = document.querySelector('.mobile-cart-badge');
+            if (cartBadge) {
+                const cart = JSON.parse(localStorage.getItem('netletCart')) || [];
+                const totalItems = cart.reduce((sum, item) => {
+                    return sum + (typeof item === 'object' ? (item.quantity || 1) : 1);
+                }, 0);
+                cartBadge.textContent = totalItems;
+            }
+
+            const mobileTabs = document.querySelectorAll('.mobile-tab-item');
+            const indicator = document.querySelector('.tab-indicator');
+            mobileTabs.forEach((tab, index) => {
+                tab.addEventListener('click', function() {
+                    mobileTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    if (indicator) indicator.style.transform = `translateX(${index * 100}%)`;
+                });
+            });
+        });
+    </script>
 </body>
 </html>

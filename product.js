@@ -1,5 +1,6 @@
 import { inventory, fetchInventory, escapeHtml } from './inventory.js';
 import { Toast } from './utils.js';
+import { ReviewsSystem } from './reviews.js';
 
 const root = document.getElementById('productRoot');
 const crumbTitle = document.getElementById('crumbTitle');
@@ -137,6 +138,11 @@ function renderProduct(product) {
                 <button class="fullscreen-close" aria-label="Close fullscreen"><i class="fas fa-times"></i></button>
             </div>
         </div>
+
+        <!-- Reviews Section -->
+        <div style="max-width: 1440px; margin: 0 auto; padding: 40px 24px;">
+            <div id="reviewsSection"></div>
+        </div>
     `;
 
     // Track current image index
@@ -271,6 +277,10 @@ function renderProduct(product) {
         }
         localStorage.setItem('netletWishlist', JSON.stringify(wishlist));
     });
+
+    // Initialize reviews system
+    const reviewsSystem = new ReviewsSystem(product.id, '#reviewsSection');
+    reviewsSystem.render();
 }
 
 async function init() {

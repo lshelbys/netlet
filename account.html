@@ -56,10 +56,13 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            height: 40px;
         }
 
-        .logo-link i {
-            color: var(--netlet-red);
+        .logo-link img {
+            height: 100%;
+            width: auto;
+            max-width: 120px;
         }
 
         .back-link {
@@ -258,20 +261,34 @@
         .social-btn {
             flex: 1;
             padding: 12px;
-            border: 1px solid rgba(126, 133, 155, 0.3);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             cursor: pointer;
             transition: all 0.3s;
             font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--netlet-blue);
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
         }
 
         .social-btn:hover {
-            background: rgba(255, 255, 255, 0.8);
-            border-color: var(--netlet-blue);
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.6);
+        }
+
+        .social-btn:active {
+            transform: translateY(0);
         }
 
         /* Default mobile nav hidden on desktop */
@@ -472,8 +489,7 @@
     <header class="account-header">
         <div class="account-header-content">
             <a href="index.html" class="logo-link">
-                <i class="fas fa-home-lg-alt"></i>
-                <span>NetLet</span>
+                <img src="logo.png" alt="NetLet home" width="3130" height="1725" decoding="async">
             </a>
             <a href="index.html" class="back-link">
                 <i class="fas fa-arrow-left"></i>
@@ -633,11 +649,11 @@
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="#" class="mobile-tab-item" id="mobileMegaTrigger">
+            <a href="index.html" class="mobile-tab-item" id="mobileMegaTrigger">
                 <i class="fas fa-th-large"></i>
                 <span>Categories</span>
             </a>
-            <a href="#" class="mobile-tab-item" id="dealsTrigger">
+            <a href="deals.html" class="mobile-tab-item" id="dealsTrigger">
                 <i class="fas fa-tags"></i>
                 <span>Deals</span>
             </a>
@@ -708,6 +724,18 @@
                 }, 0);
                 cartBadge.textContent = totalItems;
             }
+
+            // Mobile Tab Switching
+            const mobileTabs = document.querySelectorAll('.mobile-tab-item');
+            const indicator = document.querySelector('.tab-indicator');
+
+            mobileTabs.forEach((tab, index) => {
+                tab.addEventListener('click', function() {
+                    mobileTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    if (indicator) indicator.style.transform = `translateX(${index * 100}%)`;
+                });
+            });
         });
     </script>
 </body>

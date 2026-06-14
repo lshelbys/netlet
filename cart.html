@@ -159,11 +159,127 @@
             .summary-box { position: static; margin-bottom: 20px; }
 
             /* Compact cart items so they fit narrow screens */
-            .cart-item { padding: 14px; gap: 14px; }
-            .item-image { width: 72px; height: 72px; font-size: 30px; }
+            .cart-item {
+                padding: 14px;
+                gap: 14px;
+                flex-wrap: wrap;
+            }
+            .item-image { width: 72px; height: 72px; font-size: 30px; flex-shrink: 0; }
             .item-title { font-size: 15px; }
             .cart-header h2 { font-size: 16px; }
 
+            /* Better mobile header layout */
+            .cart-header {
+                padding: 12px 0;
+            }
+
+            .cart-header > div {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .cart-header a:last-child {
+                display: none;
+            }
+
+            /* Improve quantity controls on mobile */
+            .qty-controls {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                width: 100%;
+                margin-top: 8px;
+            }
+
+            .qty-controls button {
+                padding: 6px 12px;
+                font-size: 14px;
+                min-height: 36px;
+            }
+
+            .qty-input {
+                width: 50px;
+                padding: 6px;
+                text-align: center;
+                font-size: 14px;
+            }
+
+            /* Better summary box styling for mobile */
+            .summary-box {
+                border-radius: 16px;
+                padding: 18px;
+            }
+
+            .summary-box h3 {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+
+            .summary-row {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            .total-row {
+                font-size: 18px;
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+
+            .checkout-btn {
+                padding: 14px;
+                font-size: 15px;
+                margin-top: 16px;
+                min-height: 48px;
+            }
+
+            /* Remove button styling */
+            .remove-btn {
+                width: 100%;
+                text-align: center;
+                padding: 8px;
+                margin-top: 8px;
+                background: rgba(230, 28, 56, 0.1);
+                border: 1px solid rgba(230, 28, 56, 0.3);
+                border-radius: 8px;
+            }
+
+            /* Empty cart text adjustment */
+            .empty-cart {
+                padding: 60px 20px;
+                font-size: 18px;
+            }
+
+            /* Better item details layout */
+            .item-details {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .item-meta {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+                width: 100%;
+            }
+
+            .item-price {
+                font-size: 16px;
+            }
+
+            /* Ensure mobile nav doesn't overlap content */
+            body {
+                padding-bottom: 130px;
+                padding-top: 80px;
+            }
+
+            .cart-header {
+                padding: 14px 0;
+            }
+
+            /* Mobile Bottom Navigation Menu */
             .mobile-bottom-ui {
                 display: block;
                 position: fixed;
@@ -225,14 +341,25 @@
                 flex: 1;
                 position: relative;
                 z-index: 1;
-                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                background: none;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s;
             }
 
-            .mobile-tab-item i { font-size: 20px; }
+            .mobile-tab-item i {
+                font-size: 20px;
+                transition: transform 0.3s ease;
+            }
 
             .mobile-tab-item.active {
-                color: var(--netlet-blue);
+                color: #1E3A8A;
                 transform: translateY(-2px);
+            }
+
+            .mobile-tab-item:active {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
             }
 
             .mobile-cart-badge {
@@ -248,21 +375,112 @@
                 min-width: 16px;
                 text-align: center;
             }
+        }
 
-            body { padding-bottom: 130px; }
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .cart-item {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .item-image {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+
+            .item-title {
+                font-size: 14px;
+            }
+
+            .item-price {
+                font-size: 15px;
+            }
+
+            .summary-box {
+                padding: 16px;
+            }
+
+            .summary-row {
+                font-size: 13px;
+            }
+
+            .total-row {
+                font-size: 16px;
+            }
+
+            .checkout-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            body {
+                padding-top: 70px;
+            }
+
+            .cart-header > div {
+                padding: 0 12px;
+            }
+        }
+
+        /* Small phones optimization */
+        @media (max-width: 380px) {
+            .cart-item {
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .item-image {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .summary-box h3 {
+                font-size: 16px;
+            }
+
+            body {
+                padding-top: 65px;
+            }
         }
 
         /* Confirm Modal Styles */
         #confirmModal {
             display: none;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 3000; align-items: center; justify-content: center;
         }
         #confirmModal.active { display: flex; }
         .modal-content {
-            background: white; padding: 30px; border-radius: 16px;
-            max-width: 300px; text-align: center;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 40px 36px;
+            border-radius: 20px;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        .modal-content h3 {
+            margin: 0 0 12px 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1F2229;
+        }
+        .modal-content p {
+            margin: 0 0 24px 0;
+            font-size: 14px;
+            color: #404553;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -308,15 +526,15 @@
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="index.html#categories" class="mobile-tab-item">
+            <a href="index.html" class="mobile-tab-item" id="mobileMegaTrigger">
                 <i class="fas fa-th-large"></i>
                 <span>Categories</span>
             </a>
-            <a href="index.html#deals" class="mobile-tab-item">
+            <a href="deals.html" class="mobile-tab-item">
                 <i class="fas fa-tags"></i>
                 <span>Deals</span>
             </a>
-            <a href="#" class="mobile-tab-item">
+            <a href="account.html" class="mobile-tab-item">
                 <i class="fas fa-user"></i>
                 <span>Account</span>
             </a>
@@ -333,9 +551,9 @@
         <div class="modal-content">
             <h3>Remove Item?</h3>
             <p>Are you sure you want to remove this from your cart?</p>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button id="cancelBtn" style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd; cursor:pointer;">Cancel</button>
-                <button id="confirmBtn" style="flex:1; padding:10px; border-radius:8px; background:#E61C38; color:white; border:none; cursor:pointer;">Remove</button>
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button id="cancelBtn" style="flex:1; padding:12px; border-radius:12px; border:1px solid rgba(255, 255, 255, 0.6); background:rgba(255, 255, 255, 0.4); backdrop-filter: blur(20px) saturate(180%); color:#1E3A8A; font-weight: 600; font-size: 14px; cursor:pointer; transition: all 0.3s ease;">Cancel</button>
+                <button id="confirmBtn" style="flex:1; padding:12px; border-radius:12px; background:linear-gradient(135deg, #E61C38 0%, #B81530 100%); color:white; border:none; font-weight: 600; font-size: 14px; cursor:pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(230, 28, 56, 0.2);">Remove</button>
             </div>
         </div>
     </div>
