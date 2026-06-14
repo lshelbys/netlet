@@ -621,6 +621,14 @@
             color: #E2E5F1;
         }
 
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            mix-blend-mode: multiply;
+        }
+
         .product-details {
             display: flex;
             flex-direction: column;
@@ -1190,57 +1198,109 @@
 
     <script type="module">
         import { inventory, fetchInventory, escapeHtml } from './inventory.js';
+        import { Toast, LoadingOverlay, handleError } from './utils.js';
+
+        // State management
+        let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('netletWishlist')) || [];
+        let sortBy = 'name'; // 'name', 'price-asc', 'price-desc', 'rating'
+        let searchQuery = '';
+        let selectedCategory = '';
+
+        // DOM elements
+        const cartBadge = document.querySelector('.cart-badge');
+        const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+        const searchInput = document.querySelector('.search-container input');
+        const categoryChips = document.querySelectorAll('.chip');
 
         // 1. RENDER LOGIC
+        function getFilteredAndSortedProducts() {
+            let filtered = inventory.filter(p => {
+                const matchesSearch = !searchQuery ||
+                    p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    p.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesSearch;
+            });
+
+            // Sort products
+            return filtered.sort((a, b) => {
+                switch(sortBy) {
+                    case 'price-asc': return a.price - b.price;
+                    case 'price-desc': return b.price - a.price;
+                    case 'rating': return b.rating - a.rating;
+                    case 'name':
+                    default: return a.title.localeCompare(b.title);
+                }
+            });
+        }
+
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             if (!grid) return;
-            
-            grid.innerHTML = inventory.map(product => `
-                <article class="product-card" data-id="${product.id}">
-                    <div>
-                        <div class="discount-badge" style="display: ${product.oldPrice ? 'block' : 'none'}">SALE</div>
-                        <button class="wishlist-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to wishlist" style="background:none; border:none; padding:0;">
-                            <i class="far fa-heart wishlist-icon" aria-hidden="true"></i>
-                        </button>
-                        <div class="image-container">
-                            <i class="fas ${escapeHtml(product.icon)} image-placeholder"></i>
+
+            const products = getFilteredAndSortedProducts();
+
+            if (products.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #7E859B;">
+                    <i class="fas fa-search" style="font-size: 48px; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
+                    <p>No products found${searchQuery ? ` for "${searchQuery}"` : ''}. Try adjusting your search or filters.</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = products.map(product => {
+                const isWishlisted = wishlist.includes(product.id);
+                return `
+                    <article class="product-card" data-id="${product.id}">
+                        <div>
+                            <div class="discount-badge" style="display: ${product.oldPrice ? 'block' : 'none'}">SALE</div>
+                            <button class="wishlist-btn" type="button" data-id="${product.id}" aria-label="Add ${escapeHtml(product.title)} to wishlist" style="background:none; border:none; padding:0;">
+                                <i class="fa${isWishlisted ? 's' : 'r'} fa-heart wishlist-icon" aria-hidden="true" style="color: ${isWishlisted ? '#E61C38' : '#C2C6D1'};"></i>
+                            </button>
+                            <div class="image-container">
+                                ${product.images && product.images.length > 0
+                                    ? `<img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.title)}" class="product-image" loading="lazy" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)} image-placeholder\\'></i>';">`
+                                    : `<i class="fas ${escapeHtml(product.icon)} image-placeholder"></i>`}
+                            </div>
+                            <div class="product-details">
+                                <span class="product-brand">${escapeHtml(product.brand)}</span>
+                                <p class="product-title">${escapeHtml(product.title)}</p>
+                            </div>
                         </div>
-                        <div class="product-details">
-                            <span class="product-brand">${escapeHtml(product.brand)}</span>
-                            <p class="product-title">${escapeHtml(product.title)}</p>
+                        <div>
+                            <div class="price-container">
+                                <span class="price-currency">KWD</span>
+                                <span class="price-amount">${product.price.toFixed(2)}</span>
+                                ${product.oldPrice ? `<span class="strike-price">KWD ${product.oldPrice.toFixed(2)}</span>` : ''}
+                            </div>
+                            <div class="express-badge-container">
+                                ${product.isExpress ? '<span class="express-badge">express</span>' : ''}
+                            </div>
+                            <div class="rating-row">
+                                <i class="fas fa-star star-icon"></i>
+                                <span>${product.rating}</span>
+                                <span class="rating-count">(${product.reviews})</span>
+                            </div>
+                            <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart">ADD TO CART</button>
                         </div>
-                    </div>
-                    <div>
-                        <div class="price-container">
-                            <span class="price-currency">KWD</span>
-                            <span class="price-amount">${product.price.toFixed(2)}</span>
-                            ${product.oldPrice ? `<span class="strike-price">KWD ${product.oldPrice.toFixed(2)}</span>` : ''}
-                        </div>
-                        <div class="express-badge-container">
-                            ${product.isExpress ? '<span class="express-badge">express</span>' : ''}
-                        </div>
-                        <div class="rating-row">
-                            <i class="fas fa-star star-icon"></i>
-                            <span>${product.rating}</span>
-                            <span class="rating-count">(${product.reviews})</span>
-                        </div>
-                        <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart">ADD TO CART</button>
-                    </div>
-                </article>
-            `).join('');
+                    </article>
+                `;
+            }).join('');
         }
 
-        // 2. CART LOGIC
-        let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
-        const cartBadge = document.querySelector('.cart-badge');
-        const mobileCartBadge = document.querySelector('.mobile-cart-badge');
-
-        // Use event delegation for buttons inside the dynamic grid
+        // 2. CART & WISHLIST LOGIC
         document.getElementById('productGrid').addEventListener('click', (e) => {
-            if (e.target.classList.contains('add-to-cart-btn')) {
-                const productId = parseInt(e.target.closest('.product-card').dataset.id);
+            const card = e.target.closest('.product-card');
+            if (!card) return;
+            const productId = parseInt(card.dataset.id);
+
+            if (e.target.classList.contains('add-to-cart-btn') || e.target.closest('.add-to-cart-btn')) {
                 addToCart(productId);
+            } else if (e.target.classList.contains('wishlist-btn') || e.target.closest('.wishlist-btn')) {
+                toggleWishlist(productId);
+            } else {
+                // Clicking anywhere else on the card opens its product page
+                window.location.href = `product.html?id=${productId}`;
             }
         });
 
@@ -1248,6 +1308,21 @@
             cart.push(productId);
             localStorage.setItem('netletCart', JSON.stringify(cart));
             updateCartUI();
+            const product = inventory.find(p => p.id === productId);
+            new Toast(`Added ${product.brand} to cart`, 'success', 2000);
+        }
+
+        function toggleWishlist(productId) {
+            const index = wishlist.indexOf(productId);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+                new Toast('Removed from wishlist', 'info', 1500);
+            } else {
+                wishlist.push(productId);
+                new Toast('Added to wishlist', 'success', 1500);
+            }
+            localStorage.setItem('netletWishlist', JSON.stringify(wishlist));
+            renderProducts();
         }
 
         function updateCartUI() {
@@ -1263,10 +1338,28 @@
             }
         }
 
+        // 3. SEARCH & FILTER
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderProducts();
+            });
+        }
+
+        categoryChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                categoryChips.forEach(c => c.style.opacity = '0.6');
+                chip.style.opacity = '1';
+                selectedCategory = chip.textContent;
+                renderProducts();
+            });
+        });
+
+        // 4. UI INTERACTIONS
         // Mobile Tab Switching Logic
         const mobileTabs = document.querySelectorAll('.mobile-tab-item');
         const indicator = document.querySelector('.tab-indicator');
-        
+
         mobileTabs.forEach((tab, index) => {
             tab.addEventListener('click', function() {
                 mobileTabs.forEach(t => t.classList.remove('active'));
@@ -1279,24 +1372,38 @@
         const megaMenuTrigger = document.getElementById('megaMenuTrigger');
         const megaMenu = document.getElementById('megaMenu');
 
-        megaMenuTrigger.addEventListener('click', (e) => {
-            e.stopPropagation();
-            megaMenu.classList.toggle('active');
-        });
-        
+        if (megaMenuTrigger && megaMenu) {
+            megaMenuTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                megaMenu.classList.toggle('active');
+            });
+
+            document.addEventListener('click', () => {
+                megaMenu.classList.remove('active');
+            });
+
+            megaMenu.addEventListener('click', (e) => e.stopPropagation());
+        }
+
         const mobileMegaTrigger = document.getElementById('mobileMegaTrigger');
         if (mobileMegaTrigger) {
             mobileMegaTrigger.addEventListener('click', (e) => {
                 e.preventDefault();
-                megaMenu.classList.toggle('active');
+                if (megaMenu) megaMenu.classList.toggle('active');
             });
         }
 
-        document.addEventListener('click', () => {
-            megaMenu.classList.remove('active');
-        });
-
-        megaMenu.addEventListener('click', (e) => e.stopPropagation());
+        // Logo Bounce Effect
+        const mainLogo = document.getElementById('mainLogo');
+        if (mainLogo) {
+            mainLogo.addEventListener('click', (e) => {
+                e.preventDefault();
+                mainLogo.classList.add('logo-bounce');
+                setTimeout(() => {
+                    window.location.href = mainLogo.href;
+                }, 600);
+            });
+        }
 
         // Delivery Location Modal Logic
         const deliveryLocation = document.querySelector('.delivery-location');
@@ -1306,44 +1413,52 @@
         const locationName = document.querySelector('.location-name');
         const locationSelect = document.getElementById('locationSelect');
 
-        deliveryLocation.addEventListener('click', () => {
-            locationModal.style.display = 'block';
-        });
+        if (deliveryLocation && locationModal) {
+            deliveryLocation.addEventListener('click', () => {
+                locationModal.style.display = 'block';
+            });
 
-        closeModal.addEventListener('click', () => {
-            locationModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target === locationModal) {
+            closeModal.addEventListener('click', () => {
                 locationModal.style.display = 'none';
-            }
-        });
+            });
 
-        saveLocationBtn.addEventListener('click', () => {
-            const selected = locationSelect.value;
-            locationName.innerHTML = `${selected} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>`;
-            locationModal.style.display = 'none';
-        });
+            window.addEventListener('click', (event) => {
+                if (event.target === locationModal) {
+                    locationModal.style.display = 'none';
+                }
+            });
 
-        // Logo Bounce Effect
-        const mainLogo = document.getElementById('mainLogo');
-        if (mainLogo) {
-            mainLogo.addEventListener('click', (e) => {
-                e.preventDefault(); // Stop immediate navigation to show the animation
-                
-                mainLogo.classList.add('logo-bounce');
-                
-                setTimeout(() => {
-                    window.location.href = mainLogo.href;
-                }, 600); // Navigate after the animation finishes
+            saveLocationBtn.addEventListener('click', () => {
+                const selected = locationSelect.value;
+                locationName.innerHTML = `${selected} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>`;
+                locationModal.style.display = 'none';
+                new Toast(`Delivery location set to ${selected}`, 'success', 2000);
             });
         }
-        // 3. INITIALIZE
+
+        // 5. INITIALIZATION
         document.addEventListener('DOMContentLoaded', async () => {
-            await fetchInventory();
-            renderProducts();
-            updateCartUI();
+            try {
+                LoadingOverlay.show('Loading products...');
+                const start = performance.now();
+
+                const result = await fetchInventory();
+                if (!result || result.length === 0) {
+                    new Toast('Unable to load products. Please refresh the page.', 'error', 4000);
+                    LoadingOverlay.hide();
+                    return;
+                }
+
+                renderProducts();
+                updateCartUI();
+
+                const elapsed = Math.max(300 - (performance.now() - start), 0);
+                setTimeout(() => LoadingOverlay.hide(), elapsed);
+                new Toast('Products loaded successfully', 'success', 1500);
+            } catch (err) {
+                LoadingOverlay.hide();
+                handleError(err, 'initialization');
+            }
         });
     </script>
 </body>

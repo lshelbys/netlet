@@ -1,4 +1,5 @@
 import { inventory, fetchInventory, escapeHtml } from './inventory.js';
+import { Toast, LoadingOverlay } from './utils.js';
 
 const cartItemsContainer = document.getElementById('cartItems');
 const subtotalEl = document.getElementById('subtotal');
@@ -37,12 +38,16 @@ function renderCart() {
         if (product) {
             const qty = counts[id];
             totalCost += product.price * qty;
+            const images = Array.isArray(product.images) ? product.images : [];
+            const imageMarkup = images.length > 0
+                ? `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply;" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)}\\'></i>';">`
+                : `<i class="fas ${escapeHtml(product.icon)}"></i>`;
             html += `
                 <div class="cart-item">
-                    <div class="item-image"><i class="fas ${escapeHtml(product.icon)}"></i></div>
+                    <a href="product.html?id=${product.id}" class="item-image" style="overflow:hidden;">${imageMarkup}</a>
                     <div class="item-details">
                         <div class="item-brand">${escapeHtml(product.brand)}</div>
-                        <h3 class="item-title">${escapeHtml(product.title)}</h3>
+                        <h3 class="item-title"><a href="product.html?id=${product.id}" style="color:inherit;">${escapeHtml(product.title)}</a></h3>
                         <div class="item-qty">Quantity: ${qty}</div>
                         <button class="remove-btn" onclick="removeFromCart(${product.id})">Remove</button>
                     </div>
@@ -70,11 +75,15 @@ window.removeFromCart = function(id) {
 
 confirmBtn.addEventListener('click', () => {
     if (idToDelete === null) return;
-    
+
     let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
+    const prevLength = cart.length;
     cart = cart.filter(itemId => Number(itemId) !== Number(idToDelete));
     localStorage.setItem('netletCart', JSON.stringify(cart));
-    
+
+    const removed = prevLength - cart.length;
+    new Toast(`Removed ${removed} item${removed > 1 ? 's' : ''} from cart`, 'success', 2000);
+
     idToDelete = null;
     modal.classList.remove('active');
     renderCart();
@@ -86,6 +95,18 @@ cancelBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await fetchInventory();
-    renderCart();
+    try {
+        LoadingOverlay.show('Loading cart...');
+        const start = performance.now();
+
+        await fetchInventory();
+        renderCart();
+
+        const elapsed = Math.max(200 - (performance.now() - start), 0);
+        setTimeout(() => LoadingOverlay.hide(), elapsed);
+    } catch (err) {
+        LoadingOverlay.hide();
+        new Toast('Error loading cart. Please refresh the page.', 'error', 4000);
+        console.error('Cart loading error:', err);
+    }
 });
