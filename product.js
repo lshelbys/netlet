@@ -102,8 +102,10 @@ function renderProduct(product) {
                 </div>
                 <hr class="divider">
                 <div style="margin-bottom: 16px;">
-                    ${product.inStock
-                        ? `<div style="color: #28a745; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-check-circle"></i> In Stock</div>`
+                    ${product.stockStatus === 'In Stock'
+                        ? `<div style="color: #28a745; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-check-circle"></i> In Stock (${product.stockQuantity} available)</div>`
+                        : product.stockStatus === 'Low Stock'
+                        ? `<div style="color: #FFC107; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-exclamation-triangle"></i> Low Stock (${product.stockQuantity} left)</div>`
                         : `<div style="color: #E61C38; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-times-circle"></i> Out of Stock</div>`}
                 </div>
                 ${product.description
@@ -112,7 +114,7 @@ function renderProduct(product) {
                         ${product.isExpress ? 'Eligible for fast NetLet Express delivery.' : 'Standard delivery available.'}
                         Backed by ${escapeHtml(product.reviews)} customer reviews with an average rating of ${escapeHtml(product.rating)} out of 5.</p>`}
                 <div class="actions">
-                    <button class="add-cart-btn" id="addCartBtn" ${!product.inStock ? 'disabled' : ''} style="${!product.inStock ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                    <button class="add-cart-btn" id="addCartBtn" ${product.stockStatus === 'Out of Stock' ? 'disabled' : ''} style="${product.stockStatus === 'Out of Stock' ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
                         <i class="fas fa-shopping-cart"></i> ADD TO CART
                     </button>
                     <button class="wishlist-btn" id="wishlistBtn" aria-label="Toggle wishlist">
@@ -235,7 +237,7 @@ function renderProduct(product) {
 
     // Add to cart
     document.getElementById('addCartBtn').addEventListener('click', () => {
-        if (!product.inStock) {
+        if (product.stockStatus === 'Out of Stock') {
             new Toast('This product is out of stock', 'error', 2000);
             return;
         }

@@ -218,7 +218,8 @@
                     <th>Express</th>
                     <th>Rating</th>
                     <th>Reviews</th>
-                    <th>Quantity</th>
+                    <th>Stock Qty</th>
+                    <th>Threshold</th>
                     <th>Status</th>
                     <th>Icon</th>
                     <th>Actions</th>
@@ -293,12 +294,14 @@
                     <small style="color:#7E859B; display:block; margin-top:4px;">Used as a fallback when no images are provided.</small>
                 </div>
                 <div class="form-group">
-                    <label for="quantity">Quantity in Stock:</label>
-                    <input type="number" id="quantity" min="0" value="0">
+                    <label for="stockQuantity">Stock Quantity:</label>
+                    <input type="number" id="stockQuantity" min="0" value="0" required>
+                    <small style="color:#7E859B; display:block; margin-top:4px;">Total number of items available in inventory.</small>
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" id="inStock" checked>
-                    <label for="inStock">In Stock</label>
+                    <label for="lowStockThreshold">Low Stock Threshold:</label>
+                    <input type="number" id="lowStockThreshold" min="0" value="5" required>
+                    <small style="color:#7E859B; display:block; margin-top:4px;">When quantity falls below this number, product shows "Low Stock" warning. When it reaches 0, item is "Out of Stock".</small>
                 </div>
                 <div class="form-group">
                     <label>Product Images:</label>

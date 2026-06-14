@@ -127,8 +127,17 @@ function renderInventory(filterText = '') {
         const thumb = images.length > 0
             ? `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}" style="width:40px; height:40px; object-fit:cover; border-radius:4px;" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)}\\'></i>';">`
             : `<i class="fas ${escapeHtml(product.icon)}"></i>`;
-        const stockStatus = product.inStock ? 'In Stock' : 'Out of Stock';
-        const stockStatusColor = product.inStock ? 'color: #28a745;' : 'color: #E61C38;';
+        const stockStatus = product.stockStatus || 'Out of Stock';
+        let statusColor = '#E61C38'; // Red for Out of Stock
+        let statusIcon = 'fa-times-circle';
+        if (stockStatus === 'In Stock') {
+            statusColor = '#28a745'; // Green
+            statusIcon = 'fa-check-circle';
+        } else if (stockStatus === 'Low Stock') {
+            statusColor = '#FFC107'; // Yellow
+            statusIcon = 'fa-exclamation-triangle';
+        }
+
         row.innerHTML = `
             <td>${product.id}</td>
             <td>${escapeHtml(product.brand)}</td>
@@ -140,8 +149,9 @@ function renderInventory(filterText = '') {
             <td>${product.isExpress ? 'Yes' : 'No'}</td>
             <td>${escapeHtml(product.rating)}</td>
             <td>${escapeHtml(product.reviews)}</td>
-            <td>${product.quantity || 0}</td>
-            <td style="${stockStatusColor} font-weight: 600;">${stockStatus}</td>
+            <td style="font-weight: 600; color: ${statusColor};">${product.stockQuantity || 0}</td>
+            <td>${product.lowStockThreshold || 5}</td>
+            <td style="color: ${statusColor}; font-weight: 600;"><i class="fas ${statusIcon}"></i> ${stockStatus}</td>
             <td><i class="fas ${escapeHtml(product.icon)}"></i> ${escapeHtml(product.icon)}</td>
             <td class="product-actions">
                 <button class="btn btn-edit" data-id="${product.id}" style="background-color: #ffc107; color: black;">Edit</button>
@@ -158,7 +168,7 @@ productForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const productData = {
-        id: editingProductId, // Supabase handles new ID generation
+        id: editingProductId,
         brand: document.getElementById('brand').value,
         sku: document.getElementById('sku').value || null,
         title: document.getElementById('title').value,
@@ -171,8 +181,8 @@ productForm.addEventListener('submit', async (e) => {
         reviews: parseInt(document.getElementById('reviews').value, 10),
         icon: document.getElementById('icon').value,
         images: getImageUrls(),
-        quantity: parseInt(document.getElementById('quantity').value, 10) || 0,
-        inStock: document.getElementById('inStock').checked
+        stockQuantity: parseInt(document.getElementById('stockQuantity').value, 10) || 0,
+        lowStockThreshold: parseInt(document.getElementById('lowStockThreshold').value, 10) || 5
     };
 
     if (isNaN(productData.price) || (productData.oldPrice !== null && isNaN(productData.oldPrice)) || isNaN(productData.rating) || isNaN(productData.reviews)) {
@@ -227,8 +237,8 @@ function startEdit(id) {
     document.getElementById('rating').value = product.rating;
     document.getElementById('reviews').value = product.reviews;
     document.getElementById('icon').value = product.icon;
-    document.getElementById('quantity').value = product.quantity || 0;
-    document.getElementById('inStock').checked = product.inStock ?? true;
+    document.getElementById('stockQuantity').value = product.stockQuantity || 0;
+    document.getElementById('lowStockThreshold').value = product.lowStockThreshold || 5;
 
     // Populate image slots
     clearImageSlots();
@@ -278,7 +288,7 @@ toggleFormBtn.addEventListener('click', () => {
 exportBtn.addEventListener('click', () => {
     if (inventory.length === 0) return showAlert('Inventory is empty!', 'error');
 
-    const headers = ['id', 'brand', 'sku', 'title', 'description', 'category', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'quantity', 'inStock', 'images'];
+    const headers = ['id', 'brand', 'sku', 'title', 'description', 'category', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'stockQuantity', 'lowStockThreshold', 'images'];
 
     const csvRows = [
         headers.join(','), // Header row
@@ -327,10 +337,10 @@ importFile.addEventListener('change', (e) => {
                 headers.forEach((header, index) => {
                     let val = cleanedValues[index];
                     // Type conversion
-                    if (header === 'id' || header === 'reviews' || header === 'quantity') product[header] = parseInt(val, 10);
+                    if (header === 'id' || header === 'reviews' || header === 'stockQuantity' || header === 'lowStockThreshold') product[header] = parseInt(val, 10);
                     else if (header === 'price' || header === 'rating') product[header] = parseFloat(val);
                     else if (header === 'oldPrice') product[header] = val ? parseFloat(val) : null;
-                    else if (header === 'isExpress' || header === 'inStock') product[header] = (val || '').toLowerCase() === 'true';
+                    else if (header === 'isExpress') product[header] = (val || '').toLowerCase() === 'true';
                     else if (header === 'category') product[header] = val || null;
                     else if (header === 'images') {
                         try { product[header] = JSON.parse(val || '[]'); }

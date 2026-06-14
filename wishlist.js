@@ -71,7 +71,7 @@ function renderWishlist() {
             const productId = parseInt(btn.dataset.id);
             const product = inventory.find(p => p.id === productId);
             if (product) {
-                if (!product.inStock) {
+                if (product.stockStatus === 'Out of Stock') {
                     new Toast('This product is out of stock', 'error', 2000);
                     return;
                 }

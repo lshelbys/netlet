@@ -91,14 +91,14 @@ window.changeQuantity = function(index, newQty) {
         return;
     }
 
-    if (!product || !product.inStock) {
+    if (!product || product.stockStatus === 'Out of Stock') {
         new Toast('This product is out of stock and cannot be purchased', 'error', 2000);
         removeFromCart(cartItem.id);
         return;
     }
 
-    if (product.quantity > 0 && newQty > product.quantity) {
-        new Toast(`Only ${product.quantity} item(s) available in stock`, 'error', 2000);
+    if (newQty > product.stockQuantity) {
+        new Toast(`Only ${product.stockQuantity} item(s) available in stock`, 'error', 2000);
         return;
     }
 
@@ -147,12 +147,12 @@ document.querySelector('.checkout-btn')?.addEventListener('click', () => {
             new Toast('One or more items in your cart no longer exist', 'error', 2000);
             return;
         }
-        if (!product.inStock) {
+        if (product.stockStatus === 'Out of Stock') {
             new Toast(`${product.brand} is out of stock. Please remove it before checkout.`, 'error', 2000);
             return;
         }
-        if (product.quantity > 0 && item.quantity > product.quantity) {
-            new Toast(`Only ${product.quantity} of ${product.brand} available. Please adjust quantity.`, 'error', 2000);
+        if (item.quantity > product.stockQuantity) {
+            new Toast(`Only ${product.stockQuantity} of ${product.brand} available. Please adjust quantity.`, 'error', 2000);
             return;
         }
     }

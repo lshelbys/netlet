@@ -1329,11 +1329,13 @@
                                 <span class="rating-count">(${product.reviews})</span>
                             </div>
                             <div style="margin: 8px 0; font-size: 12px; font-weight: 600;">
-                                ${product.inStock
+                                ${product.stockStatus === 'In Stock'
                                     ? '<span style="color: #28a745;"><i class="fas fa-check-circle"></i> In Stock</span>'
+                                    : product.stockStatus === 'Low Stock'
+                                    ? '<span style="color: #FFC107;"><i class="fas fa-exclamation-triangle"></i> Low Stock</span>'
                                     : '<span style="color: #E61C38;"><i class="fas fa-times-circle"></i> Out of Stock</span>'}
                             </div>
-                            <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart" ${!product.inStock ? 'disabled' : ''} style="${!product.inStock ? 'opacity: 0.5; cursor: not-allowed;' : ''}">ADD TO CART</button>
+                            <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart" ${product.stockStatus === 'Out of Stock' ? 'disabled' : ''} style="${product.stockStatus === 'Out of Stock' ? 'opacity: 0.5; cursor: not-allowed;' : ''}">ADD TO CART</button>
                         </div>
                     </article>
                 `;
@@ -1400,7 +1402,7 @@
         function addToCart(productId) {
             const product = inventory.find(p => p.id === productId);
             if (!product) return;
-            if (!product.inStock) {
+            if (product.stockStatus === 'Out of Stock') {
                 new Toast('This product is out of stock', 'error', 2000);
                 return;
             }
