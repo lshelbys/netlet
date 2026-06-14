@@ -82,31 +82,20 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
         }
 
         .promo-message {
-            animation: fadeInOut 5s ease-in-out infinite;
+            position: absolute;
             opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
         }
 
         .promo-message.active {
-            animation: fadeInOut 5s ease-in-out;
             opacity: 1;
-        }
-
-        @keyframes fadeInOut {
-            0% {
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
+            position: static;
+            pointer-events: auto;
         }
 
         /* MAIN HEADER */
