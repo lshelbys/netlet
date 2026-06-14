@@ -1,6 +1,7 @@
 import { inventory, fetchInventory, addProductToInventory, deleteProductFromInventory, updateProductInInventory, replaceInventory, escapeHtml } from './inventory.js';
 import { Toast, LoadingOverlay } from './utils.js';
 
+// Get DOM elements - safely check if they exist
 const productForm = document.getElementById('productForm');
 const inventoryTableBody = document.querySelector('#inventoryTable tbody');
 const alertMessage = document.getElementById('alertMessage');
@@ -15,8 +16,93 @@ const formContainer = document.getElementById('formContainer');
 const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const importFile = document.getElementById('importFile');
+const imagesContainer = document.getElementById('imagesContainer');
+let addImageBtn = document.getElementById('addImageBtn');
+
+// Ensure addImageBtn is available and set up with timeout as fallback
+if (!addImageBtn) {
+    setTimeout(() => {
+        addImageBtn = document.getElementById('addImageBtn');
+        if (addImageBtn) {
+            attachAddImageListener();
+        }
+    }, 100);
+}
+
+function attachAddImageListener() {
+    if (!addImageBtn) return;
+    addImageBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addImageSlot();
+    });
+}
 
 let editingProductId = null;
+
+// Render a single image input slot with remove button
+function createImageInput(url = '') {
+    const div = document.createElement('div');
+    div.className = 'image-input-slot';
+    div.style.cssText = 'display:flex; gap:8px; align-items:flex-start;';
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'image-input';
+    input.placeholder = 'https://example.com/image.jpg';
+    input.value = url;
+    input.style.cssText = 'flex:1; padding:10px; border:1px solid #e2e5f1; border-radius:4px; font-size:14px;';
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'btn btn-danger';
+    removeBtn.style.cssText = 'padding:10px 15px; white-space:nowrap;';
+    removeBtn.innerHTML = '<i class="fas fa-trash"></i>';
+    removeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        div.remove();
+    });
+
+    div.appendChild(input);
+    div.appendChild(removeBtn);
+    return div;
+}
+
+// Collect all image URLs from the input slots
+function getImageUrls() {
+    const inputs = imagesContainer.querySelectorAll('.image-input');
+    return Array.from(inputs)
+        .map(input => input.value.trim())
+        .filter(url => url.length > 0);
+}
+
+// Add a new empty image input slot
+function addImageSlot(url = '') {
+    imagesContainer.appendChild(createImageInput(url));
+}
+
+// Clear all image slots
+function clearImageSlots() {
+    imagesContainer.innerHTML = '';
+}
+
+// Initialize button listener
+if (addImageBtn) {
+    attachAddImageListener();
+}
+
+// Initialize with one empty slot when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (imagesContainer && imagesContainer.children.length === 0) {
+            addImageSlot();
+        }
+    });
+} else {
+    if (imagesContainer && imagesContainer.children.length === 0) {
+        addImageSlot();
+    }
+}
 
 // Use toast notifications instead of inline alerts
 function showAlert(message, type = 'success') {
@@ -27,9 +113,9 @@ function showAlert(message, type = 'success') {
 // Function to render the inventory table
 function renderInventory(filterText = '') {
     inventoryTableBody.innerHTML = ''; // Clear existing rows
-    
-    const filtered = inventory.filter(p => 
-        p.brand.toLowerCase().includes(filterText.toLowerCase()) || 
+
+    const filtered = inventory.filter(p =>
+        p.brand.toLowerCase().includes(filterText.toLowerCase()) ||
         p.title.toLowerCase().includes(filterText.toLowerCase())
     );
 
@@ -37,9 +123,14 @@ function renderInventory(filterText = '') {
         const row = inventoryTableBody.insertRow();
         const price = Number(product.price) || 0;
         const oldPrice = product.oldPrice != null ? Number(product.oldPrice) : null;
+        const images = Array.isArray(product.images) ? product.images : [];
+        const thumb = images.length > 0
+            ? `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}" style="width:40px; height:40px; object-fit:cover; border-radius:4px;" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)}\\'></i>';">`
+            : `<i class="fas ${escapeHtml(product.icon)}"></i>`;
         row.innerHTML = `
             <td>${product.id}</td>
             <td>${escapeHtml(product.brand)}</td>
+            <td>${product.sku ? escapeHtml(product.sku) : '-'}</td>
             <td>${escapeHtml(product.title)}</td>
             <td>KWD ${price.toFixed(2)}</td>
             <td>${oldPrice != null ? `KWD ${oldPrice.toFixed(2)}` : 'N/A'}</td>
@@ -64,13 +155,15 @@ productForm.addEventListener('submit', async (e) => {
     const productData = {
         id: editingProductId, // Supabase handles new ID generation
         brand: document.getElementById('brand').value,
+        sku: document.getElementById('sku').value || null,
         title: document.getElementById('title').value,
         price: parseFloat(document.getElementById('price').value),
         oldPrice: document.getElementById('oldPrice').value ? parseFloat(document.getElementById('oldPrice').value) : null,
         isExpress: document.getElementById('isExpress').checked,
         rating: parseFloat(document.getElementById('rating').value),
         reviews: parseInt(document.getElementById('reviews').value, 10),
-        icon: document.getElementById('icon').value
+        icon: document.getElementById('icon').value,
+        images: getImageUrls()
     };
 
     if (isNaN(productData.price) || (productData.oldPrice !== null && isNaN(productData.oldPrice)) || isNaN(productData.rating) || isNaN(productData.reviews)) {
@@ -115,6 +208,7 @@ function startEdit(id) {
     editingProductId = id;
     formContainer.style.display = 'block';
     document.getElementById('brand').value = product.brand;
+    document.getElementById('sku').value = product.sku || '';
     document.getElementById('title').value = product.title;
     document.getElementById('price').value = product.price;
     document.getElementById('oldPrice').value = product.oldPrice || '';
@@ -122,6 +216,15 @@ function startEdit(id) {
     document.getElementById('rating').value = product.rating;
     document.getElementById('reviews').value = product.reviews;
     document.getElementById('icon').value = product.icon;
+
+    // Populate image slots
+    clearImageSlots();
+    const images = Array.isArray(product.images) ? product.images : [];
+    if (images.length > 0) {
+        images.forEach(url => addImageSlot(url));
+    } else {
+        addImageSlot(); // Add one empty slot if no images
+    }
 
     formTitle.textContent = 'Edit Product';
     submitBtn.textContent = 'Update Product';
@@ -132,6 +235,8 @@ function startEdit(id) {
 function resetForm() {
     editingProductId = null;
     productForm.reset();
+    clearImageSlots();
+    addImageSlot(); // Add one empty slot
     formTitle.textContent = 'Add New Product';
     submitBtn.textContent = 'Add Product';
     cancelBtn.style.display = 'none';
@@ -160,12 +265,14 @@ toggleFormBtn.addEventListener('click', () => {
 exportBtn.addEventListener('click', () => {
     if (inventory.length === 0) return showAlert('Inventory is empty!', 'error');
 
-    const headers = ['id', 'brand', 'title', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon'];
-    
+    const headers = ['id', 'brand', 'sku', 'title', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'images'];
+
     const csvRows = [
         headers.join(','), // Header row
         ...inventory.map(p => headers.map(header => {
             let val = p[header] === null || p[header] === undefined ? '' : p[header];
+            // Serialize the images array as a JSON string so it survives CSV round-trips
+            if (header === 'images') val = JSON.stringify(Array.isArray(val) ? val : []);
             // Escape quotes and wrap strings in quotes to handle commas within the data
             if (typeof val === 'string') val = `"${val.replace(/"/g, '""')}"`;
             return val;
@@ -175,7 +282,7 @@ exportBtn.addEventListener('click', () => {
     const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
-    
+
     link.setAttribute('href', url);
     link.setAttribute('download', `netlet_inventory_${new Date().toISOString().split('T')[0]}.csv`);
     link.style.visibility = 'hidden';
@@ -211,6 +318,10 @@ importFile.addEventListener('change', (e) => {
                     else if (header === 'price' || header === 'rating') product[header] = parseFloat(val);
                     else if (header === 'oldPrice') product[header] = val ? parseFloat(val) : null;
                     else if (header === 'isExpress') product[header] = (val || '').toLowerCase() === 'true';
+                    else if (header === 'images') {
+                        try { product[header] = JSON.parse(val || '[]'); }
+                        catch { product[header] = val ? [val] : []; }
+                    }
                     else product[header] = val;
                 });
                 return product;

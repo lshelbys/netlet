@@ -8,6 +8,47 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 // Using a single constant array reference ensures all modules see the same data
 export const inventory = [];
 
+// Normalizes a row from Supabase (snake_case) into the camelCase shape the
+// rest of the app expects. Also ensures `images` is always an array.
+function normalizeProduct(row) {
+    if (!row) return row;
+    let images = row.images;
+    if (typeof images === 'string') {
+        try { images = JSON.parse(images); } catch { images = images ? [images] : []; }
+    }
+    if (!Array.isArray(images)) images = [];
+    return {
+        id: row.id,
+        brand: row.brand,
+        sku: row.sku ?? null,
+        title: row.title,
+        price: row.price,
+        oldPrice: row.old_price ?? null,
+        isExpress: row.is_express ?? false,
+        rating: row.rating,
+        reviews: row.reviews,
+        icon: row.icon,
+        images
+    };
+}
+
+// Converts the app's camelCase product into the snake_case row Supabase stores.
+function toDbRow(product) {
+    const images = Array.isArray(product.images) ? product.images : [];
+    return {
+        brand: product.brand,
+        sku: product.sku || null,
+        title: product.title,
+        price: product.price,
+        old_price: product.oldPrice,
+        is_express: product.isExpress,
+        rating: product.rating,
+        reviews: product.reviews,
+        icon: product.icon,
+        images: JSON.stringify(images)
+    };
+}
+
 // Rate limiter to prevent request spamming (max 10 requests per second)
 const apiRateLimiter = {
     calls: [],
@@ -57,7 +98,7 @@ export async function fetchInventory() {
         });
 
         inventory.length = 0;
-        inventory.push(...data);
+        inventory.push(...data.map(normalizeProduct));
         return inventory;
     } catch (err) {
         console.error('Error fetching inventory:', err);
@@ -71,25 +112,15 @@ export async function addProductToInventory(product) {
     }
 
     try {
-        const { id, ...productData } = product;
-        // Convert camelCase to snake_case for Supabase
-        const dbData = {
-            brand: productData.brand,
-            title: productData.title,
-            price: productData.price,
-            old_price: productData.oldPrice,
-            is_express: productData.isExpress,
-            rating: productData.rating,
-            reviews: productData.reviews,
-            icon: productData.icon
-        };
+        const dbData = toDbRow(product);
+
         const data = await withRetry(async () => {
             const { data, error } = await supabase.from('products').insert([dbData]).select();
             if (error) throw error;
             return data;
         });
 
-        if (data) inventory.push(data[0]);
+        if (data) inventory.push(normalizeProduct(data[0]));
         return { data, error: null };
     } catch (err) {
         console.error('Error adding product:', err);
@@ -125,18 +156,9 @@ export async function updateProductInInventory(updatedProduct) {
     }
 
     try {
-        const { id, ...updateData } = updatedProduct;
-        // Convert camelCase to snake_case for Supabase
-        const dbData = {
-            brand: updateData.brand,
-            title: updateData.title,
-            price: updateData.price,
-            old_price: updateData.oldPrice,
-            is_express: updateData.isExpress,
-            rating: updateData.rating,
-            reviews: updateData.reviews,
-            icon: updateData.icon
-        };
+        const { id } = updatedProduct;
+        const dbData = toDbRow(updatedProduct);
+
         const data = await withRetry(async () => {
             const { data, error } = await supabase.from('products').update(dbData).eq('id', id).select();
             if (error) throw error;
@@ -145,7 +167,7 @@ export async function updateProductInInventory(updatedProduct) {
 
         if (data) {
             const index = inventory.findIndex(p => Number(p.id) === Number(id));
-            if (index !== -1) inventory[index] = data[0];
+            if (index !== -1) inventory[index] = normalizeProduct(data[0]);
         }
         return { data, error: null };
     } catch (err) {
@@ -165,19 +187,7 @@ export async function replaceInventory(products) {
     try {
         const rows = products
             .filter(p => p && (p.brand || p.title))
-            .map(({ id, ...rest }) => {
-                // Convert camelCase to snake_case for Supabase
-                return {
-                    brand: rest.brand,
-                    title: rest.title,
-                    price: rest.price,
-                    old_price: rest.oldPrice,
-                    is_express: rest.isExpress,
-                    rating: rest.rating,
-                    reviews: rest.reviews,
-                    icon: rest.icon
-                };
-            });
+            .map(toDbRow);
 
         await withRetry(async () => {
             const { error } = await supabase.from('products').delete().gte('id', 0);
@@ -192,7 +202,7 @@ export async function replaceInventory(products) {
 
         if (data) {
             inventory.length = 0;
-            inventory.push(...data);
+            inventory.push(...data.map(normalizeProduct));
         }
         return { data, error: null };
     } catch (err) {

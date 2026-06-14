@@ -614,11 +614,51 @@
             border-radius: 4px;
             background: rgba(250, 250, 250, 0.5);
             border-radius: 12px;
+            position: relative;
+            overflow: hidden;
         }
 
         .image-placeholder {
             font-size: 48px;
             color: #E2E5F1;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            mix-blend-mode: multiply;
+        }
+
+        /* Carousel for hovering image slideshow */
+        .carousel-wrap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        .carousel {
+            display: flex;
+            height: 100%;
+            transform: translateX(0);
+        }
+        .carousel.scrolling {
+            animation: none;
+        }
+        .carousel-img {
+            width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            object-fit: contain;
+            border-radius: 12px;
+            mix-blend-mode: multiply;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .image-stack .product-image {
+                transition: none;
+            }
         }
 
         .product-details {
@@ -1250,7 +1290,11 @@
                                 <i class="fa${isWishlisted ? 's' : 'r'} fa-heart wishlist-icon" aria-hidden="true" style="color: ${isWishlisted ? '#E61C38' : '#C2C6D1'};"></i>
                             </button>
                             <div class="image-container">
-                                <i class="fas ${escapeHtml(product.icon)} image-placeholder"></i>
+                                ${product.images && product.images.length > 0
+                                    ? (product.images.length > 1
+                                        ? `<div class="carousel-wrap"><div class="carousel" data-count="${product.images.length}">${product.images.map((url, i) => `<img src="${escapeHtml(url)}" alt="${escapeHtml(product.title)}" class="carousel-img" loading="lazy" onerror="this.style.display='none';">`).join('')}</div></div>`
+                                        : `<img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.title)}" class="product-image" loading="lazy" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)} image-placeholder\\'></i>';">`)
+                                    : `<i class="fas ${escapeHtml(product.icon)} image-placeholder"></i>`}
                             </div>
                             <div class="product-details">
                                 <span class="product-brand">${escapeHtml(product.brand)}</span>
@@ -1276,17 +1320,62 @@
                     </article>
                 `;
             }).join('');
+
+            setupHoverSlideshows();
+        }
+
+        // Carousel slideshow: continuously scroll through images on hover
+        function setupHoverSlideshows() {
+            document.querySelectorAll('.carousel').forEach(carousel => {
+                const card = carousel.closest('.product-card');
+                if (!card) return;
+                const count = parseInt(carousel.dataset.count) || 0;
+                if (count < 2) return;
+
+                let timer = null;
+                let currentPos = 0;
+
+                const scroll = () => {
+                    currentPos = (currentPos + 1) % count;
+                    const offset = -(currentPos * 100);
+                    carousel.style.transform = `translateX(${offset}%)`;
+                };
+
+                const start = () => {
+                    if (timer) return;
+                    carousel.classList.add('scrolling');
+                    // Scroll every 2.5s (matches animation duration)
+                    timer = setInterval(scroll, 2500);
+                };
+
+                const stop = () => {
+                    if (timer) {
+                        clearInterval(timer);
+                        timer = null;
+                    }
+                    carousel.classList.remove('scrolling');
+                    currentPos = 0;
+                    carousel.style.transform = 'translateX(0)';
+                };
+
+                card.addEventListener('mouseenter', start);
+                card.addEventListener('mouseleave', stop);
+            });
         }
 
         // 2. CART & WISHLIST LOGIC
         document.getElementById('productGrid').addEventListener('click', (e) => {
             const card = e.target.closest('.product-card');
+            if (!card) return;
             const productId = parseInt(card.dataset.id);
 
             if (e.target.classList.contains('add-to-cart-btn') || e.target.closest('.add-to-cart-btn')) {
                 addToCart(productId);
             } else if (e.target.classList.contains('wishlist-btn') || e.target.closest('.wishlist-btn')) {
                 toggleWishlist(productId);
+            } else {
+                // Clicking anywhere else on the card opens its product page
+                window.location.href = `product.html?id=${productId}`;
             }
         });
 

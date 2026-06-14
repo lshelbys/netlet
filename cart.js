@@ -38,12 +38,16 @@ function renderCart() {
         if (product) {
             const qty = counts[id];
             totalCost += product.price * qty;
+            const images = Array.isArray(product.images) ? product.images : [];
+            const imageMarkup = images.length > 0
+                ? `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply;" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)}\\'></i>';">`
+                : `<i class="fas ${escapeHtml(product.icon)}"></i>`;
             html += `
                 <div class="cart-item">
-                    <div class="item-image"><i class="fas ${escapeHtml(product.icon)}"></i></div>
+                    <a href="product.html?id=${product.id}" class="item-image" style="overflow:hidden;">${imageMarkup}</a>
                     <div class="item-details">
                         <div class="item-brand">${escapeHtml(product.brand)}</div>
-                        <h3 class="item-title">${escapeHtml(product.title)}</h3>
+                        <h3 class="item-title"><a href="product.html?id=${product.id}" style="color:inherit;">${escapeHtml(product.title)}</a></h3>
                         <div class="item-qty">Quantity: ${qty}</div>
                         <button class="remove-btn" onclick="removeFromCart(${product.id})">Remove</button>
                     </div>
