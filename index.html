@@ -1018,6 +1018,9 @@
                 flex: 1;
                 position: relative;
                 z-index: 1;
+                background: none;
+                border: none;
+                cursor: pointer;
             }
 
             .mobile-tab-item i {
@@ -1290,6 +1293,168 @@
             color: var(--netlet-red);
         }
 
+        /* Deals Modal */
+        .deals-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .deals-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .deals-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .deals-modal-content {
+            position: relative;
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-bottom: none;
+            border-radius: 24px 24px 0 0;
+            padding: 24px 20px;
+            box-shadow:
+                0 -8px 32px rgba(0, 0, 0, 0.08),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            animation: slideUpModal 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .deals-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .deals-modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .deals-close-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .deals-close-btn:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.95);
+        }
+
+        .deals-modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .deal-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-height: 140px;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+
+        .deal-item:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.95);
+            box-shadow:
+                0 8px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .deal-item-image {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #E2E5F1;
+            margin-bottom: 4px;
+        }
+
+        .deal-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .deal-item-badge {
+            background: var(--netlet-red);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: auto;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7E859B;
+        }
+
+        .loading-state i {
+            font-size: 36px;
+            opacity: 0.3;
+            display: block;
+            margin-bottom: 12px;
+            animation: spin 1s linear infinite;
+        }
+
         /* Logo Bounce Effect */
         @keyframes bounce {
             0%, 100% {
@@ -1440,10 +1605,10 @@
                 <i class="fas fa-th-large"></i>
                 <span>Categories</span>
             </a>
-            <a href="deals.html" class="mobile-tab-item">
+            <button class="mobile-tab-item" id="dealsTrigger">
                 <i class="fas fa-tags"></i>
                 <span>Deals</span>
-            </a>
+            </button>
             <a href="#" class="mobile-tab-item">
                 <i class="fas fa-user"></i>
                 <span>Account</span>
@@ -1525,6 +1690,23 @@
                     <i class="fas fa-box"></i>
                     <span>Other</span>
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deals Modal -->
+    <div id="dealsModal" class="deals-modal">
+        <div class="deals-modal-overlay"></div>
+        <div class="deals-modal-content">
+            <div class="deals-modal-header">
+                <h2>Deals & Discounts</h2>
+                <button class="deals-close-btn" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="dealsContainer" class="deals-modal-grid">
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading deals...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -1924,6 +2106,73 @@
                 if (categoriesModal) categoriesModal.classList.remove('active');
             });
         });
+
+        // Deals Modal
+        const dealsTrigger = document.getElementById('dealsTrigger');
+        const dealsModal = document.getElementById('dealsModal');
+        const dealsCloseBtn = document.querySelector('.deals-close-btn');
+        const dealsOverlay = document.querySelector('.deals-modal-overlay');
+        const dealsContainer = document.getElementById('dealsContainer');
+
+        function renderDealsModal() {
+            // Filter products that are on sale (have oldPrice > price)
+            const dealProducts = inventory.filter(p => {
+                const price = Number(p.price) || 0;
+                const oldPrice = p.oldPrice != null ? Number(p.oldPrice) : null;
+                return oldPrice && oldPrice > price;
+            });
+
+            if (dealProducts.length === 0) {
+                dealsContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #7E859B;">
+                        <i class="fas fa-tag" style="font-size: 36px; opacity: 0.3; display: block; margin-bottom: 12px;"></i>
+                        <p>No deals available right now</p>
+                    </div>
+                `;
+                return;
+            }
+
+            dealsContainer.innerHTML = dealProducts.map(product => {
+                const images = Array.isArray(product.images) ? product.images : [];
+                const imageMarkup = images.length > 0
+                    ? `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}">`
+                    : `<i class="fas ${escapeHtml(product.icon)}"></i>`;
+
+                const price = Number(product.price) || 0;
+                const oldPrice = Number(product.oldPrice) || 0;
+                const savePct = oldPrice > price ? Math.round((1 - price / oldPrice) * 100) : 0;
+
+                return `
+                    <a href="product.html?id=${product.id}" class="deal-item" data-id="${product.id}">
+                        <div class="deal-item-image">${imageMarkup}</div>
+                        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; width: 100%;">
+                            <div>${escapeHtml(product.brand)}</div>
+                            ${savePct > 0 ? `<div class="deal-item-badge">-${savePct}%</div>` : ''}
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        if (dealsTrigger) {
+            dealsTrigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                renderDealsModal();
+                if (dealsModal) dealsModal.classList.add('active');
+            });
+        }
+
+        if (dealsCloseBtn) {
+            dealsCloseBtn.addEventListener('click', () => {
+                if (dealsModal) dealsModal.classList.remove('active');
+            });
+        }
+
+        if (dealsOverlay) {
+            dealsOverlay.addEventListener('click', () => {
+                if (dealsModal) dealsModal.classList.remove('active');
+            });
+        }
 
         // Logo Bounce Effect
         const mainLogo = document.getElementById('mainLogo');
