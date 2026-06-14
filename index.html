@@ -130,6 +130,32 @@
 
         #mainLogo {
             display: inline-block;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #mainLogo:hover {
+            filter: drop-shadow(0 15px 25px rgba(30, 58, 138, 0.4)) drop-shadow(0 8px 12px rgba(255, 168, 110, 0.3));
+        }
+
+        #mainLogo::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 60px;
+            background: radial-gradient(ellipse at center, rgba(255, 168, 110, 0.4) 0%, rgba(255, 168, 110, 0.2) 40%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        #mainLogo:hover::after {
+            opacity: 1;
         }
 
         .delivery-location {
