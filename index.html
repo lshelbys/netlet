@@ -759,6 +759,7 @@
             display: flex;
             height: 100%;
             transform: translateX(0);
+            transition: transform 2s ease-in-out;
         }
         .carousel.scrolling {
             animation: none;
@@ -1915,8 +1916,8 @@
                 const start = () => {
                     if (timer) return;
                     carousel.classList.add('scrolling');
-                    // Scroll every 2.5s (matches animation duration)
-                    timer = setInterval(scroll, 2500);
+                    // Scroll every 2s
+                    timer = setInterval(scroll, 2000);
                 };
 
                 const stop = () => {
