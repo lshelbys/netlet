@@ -1144,6 +1144,149 @@
             color: var(--text-dark);
         }
 
+        /* Categories Modal */
+        .categories-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .categories-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .categories-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .categories-modal-content {
+            position: relative;
+            margin-top: auto;
+            background: rgba(247, 246, 242, 0.95);
+            backdrop-filter: blur(30px) saturate(210%);
+            -webkit-backdrop-filter: blur(30px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-bottom: none;
+            border-radius: 24px 24px 0 0;
+            padding: 24px 20px;
+            box-shadow:
+                0 -10px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            animation: slideUpModal 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUpModal {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .categories-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .categories-modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .categories-close-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .categories-close-btn:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.95);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+        }
+
+        .category-option {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-height: 100px;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+
+        .category-option i {
+            font-size: 28px;
+            color: var(--netlet-blue);
+            transition: all 0.3s ease;
+        }
+
+        .category-option:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.95);
+            box-shadow:
+                0 8px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .category-option[data-category=""] i {
+            color: var(--netlet-red);
+        }
+
         /* Logo Bounce Effect */
         @keyframes bounce {
             0%, 100% {
@@ -1340,6 +1483,59 @@
                 <option value="Mubarak Al-Kabeer">Mubarak Al-Kabeer</option>
             </select>
             <button id="saveLocation" class="add-to-cart-btn" style="margin-top: 0;">SAVE LOCATION</button>
+        </div>
+    </div>
+
+    <!-- Categories Modal -->
+    <div id="categoriesModal" class="categories-modal">
+        <div class="categories-modal-overlay"></div>
+        <div class="categories-modal-content">
+            <div class="categories-modal-header">
+                <h2>Shop by Category</h2>
+                <button class="categories-close-btn" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="categories-grid">
+                <a href="#" class="category-option" data-category="">
+                    <i class="fas fa-th"></i>
+                    <span>All Products</span>
+                </a>
+                <a href="#" class="category-option" data-category="Electronics">
+                    <i class="fas fa-microchip"></i>
+                    <span>Electronics</span>
+                </a>
+                <a href="#" class="category-option" data-category="Fashion">
+                    <i class="fas fa-tshirt"></i>
+                    <span>Fashion</span>
+                </a>
+                <a href="#" class="category-option" data-category="Home & Garden">
+                    <i class="fas fa-home"></i>
+                    <span>Home & Garden</span>
+                </a>
+                <a href="#" class="category-option" data-category="Beauty">
+                    <i class="fas fa-spa"></i>
+                    <span>Beauty</span>
+                </a>
+                <a href="#" class="category-option" data-category="Books">
+                    <i class="fas fa-book"></i>
+                    <span>Books</span>
+                </a>
+                <a href="#" class="category-option" data-category="Toys">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Toys</span>
+                </a>
+                <a href="#" class="category-option" data-category="Sports">
+                    <i class="fas fa-dumbbell"></i>
+                    <span>Sports</span>
+                </a>
+                <a href="#" class="category-option" data-category="Food & Beverage">
+                    <i class="fas fa-utensils"></i>
+                    <span>Food & Beverage</span>
+                </a>
+                <a href="#" class="category-option" data-category="Other">
+                    <i class="fas fa-box"></i>
+                    <span>Other</span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -1719,13 +1915,43 @@
             megaMenu.addEventListener('click', (e) => e.stopPropagation());
         }
 
+        // Categories Modal
         const mobileMegaTrigger = document.getElementById('mobileMegaTrigger');
+        const categoriesModal = document.getElementById('categoriesModal');
+        const categoriesCloseBtn = document.querySelector('.categories-close-btn');
+        const categoryOptions = document.querySelectorAll('.category-option');
+        const categoriesOverlay = document.querySelector('.categories-modal-overlay');
+
         if (mobileMegaTrigger) {
             mobileMegaTrigger.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (megaMenu) megaMenu.classList.toggle('active');
+                if (categoriesModal) categoriesModal.classList.add('active');
             });
         }
+
+        if (categoriesCloseBtn) {
+            categoriesCloseBtn.addEventListener('click', () => {
+                if (categoriesModal) categoriesModal.classList.remove('active');
+            });
+        }
+
+        if (categoriesOverlay) {
+            categoriesOverlay.addEventListener('click', () => {
+                if (categoriesModal) categoriesModal.classList.remove('active');
+            });
+        }
+
+        categoryOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = option.dataset.category || '';
+                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
+                if (correspondingChip) {
+                    correspondingChip.click();
+                }
+                if (categoriesModal) categoriesModal.classList.remove('active');
+            });
+        });
 
         // Logo Bounce Effect
         const mainLogo = document.getElementById('mainLogo');
