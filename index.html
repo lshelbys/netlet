@@ -130,34 +130,6 @@
 
         #mainLogo {
             display: inline-block;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        #mainLogo::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 80px;
-            background: rgba(30, 58, 138, 0.15);
-            backdrop-filter: blur(25px) saturate(210%);
-            -webkit-backdrop-filter: blur(25px) saturate(210%);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
-            box-shadow:
-                0 4px 30px rgba(30, 58, 138, 0.1),
-                inset 0 1px 1px rgba(255, 255, 255, 0.4);
-        }
-
-        #mainLogo:hover::after {
-            opacity: 1;
         }
 
         .delivery-location {
