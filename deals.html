@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Deals | NetLet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --netlet-blue: #1E3A8A;
+            --netlet-orange: #ffa86e;
+            --netlet-red: #E61C38;
+            --bg-gray: #F7F9FA;
+            --text-dark: #1F2229;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'system-ui', -apple-system, sans-serif;
+            background-color: var(--bg-gray);
+            color: #404553;
+            padding-top: 80px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Prevent iOS zoom on input focus */
+        input, textarea, select, button {
+            font-size: 16px;
+        }
+
+        /* Touch-friendly interactions */
+        button, a, input[type="button"], input[type="submit"] {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 44px;
+        }
+
+        /* Header */
+        .deals-header {
+            background: rgba(247, 246, 242, 0.75);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            position: fixed;
+            top: 0; width: 100%; z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-inner a { color: var(--netlet-blue); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title i { color: var(--netlet-red); font-size: 36px; }
+
+        /* Deals Items Grid */
+        .deals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        /* Liquid Glass Deal Card */
+        .deal-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .deal-card:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .sale-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--netlet-red);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: #E2E5F1;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+
+        .card-brand {
+            font-size: 11px;
+            font-weight: 700;
+            color: #7E859B;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            min-height: 36px;
+            line-height: 1.3;
+        }
+
+        .card-prices {
+            display: flex;
+            gap: 8px;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+
+        .card-price {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .card-old-price {
+            font-size: 14px;
+            color: #9EA4B5;
+            text-decoration: line-through;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+            background: var(--netlet-blue);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.2);
+        }
+
+        .btn-wishlist {
+            background: rgba(230, 28, 56, 0.15);
+            color: var(--netlet-red);
+            border: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-wishlist:hover {
+            background: rgba(230, 28, 56, 0.25);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            color: #E2E5F1;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .empty-state h2 {
+            font-size: 24px;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #7E859B;
+            margin-bottom: 30px;
+        }
+
+        .empty-state a {
+            display: inline-block;
+            background: var(--netlet-blue);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.2);
+        }
+
+        /* Loading state */
+        .loading-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #7E859B;
+        }
+
+        .loading-state i {
+            font-size: 56px;
+            opacity: 0.3;
+            display: block;
+            margin-bottom: 16px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Accessibility */
+        a:focus-visible, button:focus-visible {
+            outline: 2px solid var(--netlet-blue);
+            outline-offset: 2px;
+            border-radius: 8px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .deals-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 12px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 20px 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="deals-header">
+        <div class="header-inner">
+            <a href="index.html"><img src="logo.png" alt="NetLet home" style="height: 46px; width: auto;"></a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-title">
+            <i class="fas fa-tag"></i>
+            Deals & Discounts
+        </div>
+
+        <div id="dealsRoot">
+            <div class="loading-state">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading deals...</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="./deals.js"></script>
+</body>
+</html>

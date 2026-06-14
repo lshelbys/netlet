@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>NetLet Kuwait Marketplace</title>
@@ -24,6 +24,10 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        html, body {
+            touch-action: manipulation;
         }
 
         body {
@@ -275,6 +279,19 @@
             color: var(--text-dark);
         }
 
+        /* Desktop Categories */
+        .desktop-categories {
+            display: inline;
+        }
+
+        .mobile-wishlist-header {
+            display: none;
+            font-size: 20px;
+            color: var(--text-dark);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
         /* HEADER ACTIONS */
         .header-actions {
             display: flex;
@@ -410,6 +427,27 @@
             transform: translateY(0) scaleY(1);
         }
 
+        /* Mobile mega menu styles */
+        @media (max-width: 768px) {
+            .mega-menu {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                max-height: 60vh;
+                background: white;
+                border-radius: 24px 24px 0 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.3);
+                padding: 20px 0;
+                transform: translateY(100%);
+                overflow-y: auto;
+            }
+
+            .mega-menu.active {
+                transform: translateY(0);
+            }
+        }
+
         .mega-menu-item {
             padding: 12px 24px;
             font-size: 14px;
@@ -419,6 +457,15 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            min-height: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .mega-menu-item {
+                padding: 16px 20px;
+                font-size: 16px;
+                min-height: 56px;
+            }
         }
 
         .mega-menu-item:hover {
@@ -884,19 +931,39 @@
                 max-width: 100%;
                 width: 100%;
                 margin: 0;
+                padding: 0 12px;
+            }
+
+            .search-container input {
+                padding: 0 45px 0 16px !important;
+                font-size: 16px;
+            }
+
+            .search-icon, .search-clear-btn {
+                right: 12px;
             }
             .header-actions {
                 display: none; /* Hide desktop actions to declutter; use bottom tabs instead */
+            }
+            .desktop-categories {
+                display: none;
+            }
+            .mobile-wishlist-header {
+                display: inline;
             }
             .delivery-location {
                 display: none;
             }
             .mega-menu-trigger {
-                border-right: none;
-                margin-right: 0;
+                padding: 0;
+                border: none;
+                margin: 0;
             }
             .nav-links {
                 display: none;
+            }
+            .category-chips {
+                display: none !important;
             }
             .hero-banner-container {
                 justify-content: center;
@@ -975,6 +1042,9 @@
                 flex: 1;
                 position: relative;
                 z-index: 1;
+                background: none;
+                border: none;
+                cursor: pointer;
             }
 
             .mobile-tab-item i {
@@ -1104,6 +1174,311 @@
             color: var(--text-dark);
         }
 
+        /* Categories Modal */
+        .categories-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .categories-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .categories-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .categories-modal-content {
+            position: relative;
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-bottom: none;
+            border-radius: 24px 24px 0 0;
+            padding: 24px 20px;
+            box-shadow:
+                0 -8px 32px rgba(0, 0, 0, 0.08),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            animation: slideUpModal 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUpModal {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .categories-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .categories-modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .categories-close-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .categories-close-btn:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.95);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+        }
+
+        .category-option {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-height: 100px;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+
+        .category-option i {
+            font-size: 28px;
+            color: var(--netlet-blue);
+            transition: all 0.3s ease;
+        }
+
+        .category-option:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.95);
+            box-shadow:
+                0 8px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .category-option[data-category=""] i {
+            color: var(--netlet-red);
+        }
+
+        /* Deals Modal */
+        .deals-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .deals-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .deals-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .deals-modal-content {
+            position: relative;
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-bottom: none;
+            border-radius: 24px 24px 0 0;
+            padding: 24px 20px;
+            box-shadow:
+                0 -8px 32px rgba(0, 0, 0, 0.08),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            animation: slideUpModal 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .deals-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .deals-modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .deals-close-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .deals-close-btn:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.95);
+        }
+
+        .deals-modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .deal-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-height: 140px;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+
+        .deal-item:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.95);
+            box-shadow:
+                0 8px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .deal-item-image {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #E2E5F1;
+            margin-bottom: 4px;
+        }
+
+        .deal-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .deal-item-badge {
+            background: var(--netlet-red);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: auto;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7E859B;
+        }
+
+        .loading-state i {
+            font-size: 36px;
+            opacity: 0.3;
+            display: block;
+            margin-bottom: 12px;
+            animation: spin 1s linear infinite;
+        }
+
         /* Logo Bounce Effect */
         @keyframes bounce {
             0%, 100% {
@@ -1183,7 +1558,10 @@
     <nav class="nav-bar">
         <div class="nav-container">
             <div class="mega-menu-trigger" id="megaMenuTrigger">
-                <i class="fas fa-bars"></i> ALL CATEGORIES
+                <span class="desktop-categories"><i class="fas fa-bars"></i> ALL CATEGORIES</span>
+                <a href="wishlist.html" class="mobile-wishlist-header">
+                    <i class="far fa-heart"></i>
+                </a>
                 <div class="mega-menu" id="megaMenu">
                     <a href="#" class="mega-menu-item" data-category="Electronics">Electronics <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
                     <a href="#" class="mega-menu-item" data-category="Fashion">Fashion <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
@@ -1223,19 +1601,6 @@
     </section>
 
     <main class="section-wrapper">
-        <div class="category-chips">
-            <div class="chip active" data-category="">All</div>
-            <div class="chip" data-category="Electronics">Electronics</div>
-            <div class="chip" data-category="Fashion">Fashion</div>
-            <div class="chip" data-category="Home & Garden">Home &amp; Garden</div>
-            <div class="chip" data-category="Sports">Sports</div>
-            <div class="chip" data-category="Beauty">Beauty</div>
-            <div class="chip" data-category="Books">Books</div>
-            <div class="chip" data-category="Toys">Toys</div>
-            <div class="chip" data-category="Food & Beverage">Food &amp; Beverage</div>
-            <div class="chip" data-category="Other">Other</div>
-        </div>
-
         <div class="section-header">
             <h2 class="section-title">Trending Deals in Kuwait City</h2>
             <button class="view-all-btn">VIEW ALL</button>
@@ -1267,10 +1632,10 @@
                 <i class="fas fa-th-large"></i>
                 <span>Categories</span>
             </a>
-            <a href="#" class="mobile-tab-item">
+            <button class="mobile-tab-item" id="dealsTrigger">
                 <i class="fas fa-tags"></i>
                 <span>Deals</span>
-            </a>
+            </button>
             <a href="#" class="mobile-tab-item">
                 <i class="fas fa-user"></i>
                 <span>Account</span>
@@ -1303,9 +1668,96 @@
         </div>
     </div>
 
+    <!-- Categories Modal -->
+    <div id="categoriesModal" class="categories-modal">
+        <div class="categories-modal-overlay"></div>
+        <div class="categories-modal-content">
+            <div class="categories-modal-header">
+                <h2>Shop by Category</h2>
+                <button class="categories-close-btn" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="categories-grid">
+                <a href="#" class="category-option" data-category="">
+                    <i class="fas fa-th"></i>
+                    <span>All Products</span>
+                </a>
+                <a href="#" class="category-option" data-category="Electronics">
+                    <i class="fas fa-microchip"></i>
+                    <span>Electronics</span>
+                </a>
+                <a href="#" class="category-option" data-category="Fashion">
+                    <i class="fas fa-tshirt"></i>
+                    <span>Fashion</span>
+                </a>
+                <a href="#" class="category-option" data-category="Home & Garden">
+                    <i class="fas fa-home"></i>
+                    <span>Home & Garden</span>
+                </a>
+                <a href="#" class="category-option" data-category="Beauty">
+                    <i class="fas fa-spa"></i>
+                    <span>Beauty</span>
+                </a>
+                <a href="#" class="category-option" data-category="Books">
+                    <i class="fas fa-book"></i>
+                    <span>Books</span>
+                </a>
+                <a href="#" class="category-option" data-category="Toys">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Toys</span>
+                </a>
+                <a href="#" class="category-option" data-category="Sports">
+                    <i class="fas fa-dumbbell"></i>
+                    <span>Sports</span>
+                </a>
+                <a href="#" class="category-option" data-category="Food & Beverage">
+                    <i class="fas fa-utensils"></i>
+                    <span>Food & Beverage</span>
+                </a>
+                <a href="#" class="category-option" data-category="Other">
+                    <i class="fas fa-box"></i>
+                    <span>Other</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deals Modal -->
+    <div id="dealsModal" class="deals-modal">
+        <div class="deals-modal-overlay"></div>
+        <div class="deals-modal-content">
+            <div class="deals-modal-header">
+                <h2>Deals & Discounts</h2>
+                <button class="deals-close-btn" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="dealsContainer" class="deals-modal-grid">
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading deals...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { inventory, fetchInventory, escapeHtml } from './inventory.js';
         import { Toast, LoadingOverlay, handleError } from './utils.js';
+
+        // Disable pinch zoom on mobile
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Disable zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
 
         // State management
         let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
@@ -1318,7 +1770,6 @@
         const cartBadge = document.querySelector('.cart-badge');
         const mobileCartBadge = document.querySelector('.mobile-cart-badge');
         const searchInput = document.querySelector('.search-container input');
-        const categoryChips = document.querySelectorAll('.chip');
 
         // Debounce timer for search scrolling
         let searchScrollTimeout;
@@ -1601,40 +2052,37 @@
             }
         }
 
-        categoryChips.forEach(chip => {
-            chip.addEventListener('click', () => {
-                categoryChips.forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                selectedCategory = chip.dataset.category || '';
-                renderProducts();
-            });
-        });
+        // Declare megaMenu early for use in event listeners below
+        const megaMenu = document.getElementById('megaMenu');
 
         // Wire up mega menu category links
         document.querySelectorAll('.mega-menu-item').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const category = link.dataset.category || '';
-                // Find and click the corresponding chip
-                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
-                if (correspondingChip) {
-                    correspondingChip.click();
-                }
+                selectedCategory = category;
+                renderProducts();
                 // Close mega menu
-                megaMenu.classList.remove('active');
+                if (megaMenu) megaMenu.classList.remove('active');
             });
         });
+
+        // Close mega menu when clicking outside on mobile
+        if (megaMenu) {
+            megaMenu.addEventListener('click', (e) => {
+                if (e.target === megaMenu) {
+                    megaMenu.classList.remove('active');
+                }
+            });
+        }
 
         // Wire up top nav category links
         document.querySelectorAll('.nav-category-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const category = link.dataset.category || '';
-                // Find and click the corresponding chip
-                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
-                if (correspondingChip) {
-                    correspondingChip.click();
-                }
+                selectedCategory = category;
+                renderProducts();
             });
         });
 
@@ -1653,7 +2101,6 @@
 
         // Mega Menu Toggle Logic
         const megaMenuTrigger = document.getElementById('megaMenuTrigger');
-        const megaMenu = document.getElementById('megaMenu');
 
         if (megaMenuTrigger && megaMenu) {
             megaMenuTrigger.addEventListener('click', (e) => {
@@ -1668,11 +2115,106 @@
             megaMenu.addEventListener('click', (e) => e.stopPropagation());
         }
 
+        // Categories Modal
         const mobileMegaTrigger = document.getElementById('mobileMegaTrigger');
+        const categoriesModal = document.getElementById('categoriesModal');
+        const categoriesCloseBtn = document.querySelector('.categories-close-btn');
+        const categoryOptions = document.querySelectorAll('.category-option');
+        const categoriesOverlay = document.querySelector('.categories-modal-overlay');
+
         if (mobileMegaTrigger) {
             mobileMegaTrigger.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (megaMenu) megaMenu.classList.toggle('active');
+                if (categoriesModal) categoriesModal.classList.add('active');
+            });
+        }
+
+        if (categoriesCloseBtn) {
+            categoriesCloseBtn.addEventListener('click', () => {
+                if (categoriesModal) categoriesModal.classList.remove('active');
+            });
+        }
+
+        if (categoriesOverlay) {
+            categoriesOverlay.addEventListener('click', () => {
+                if (categoriesModal) categoriesModal.classList.remove('active');
+            });
+        }
+
+        categoryOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = option.dataset.category || '';
+                selectedCategory = category;
+                renderProducts();
+                if (categoriesModal) categoriesModal.classList.remove('active');
+            });
+        });
+
+        // Deals Modal
+        const dealsTrigger = document.getElementById('dealsTrigger');
+        const dealsModal = document.getElementById('dealsModal');
+        const dealsCloseBtn = document.querySelector('.deals-close-btn');
+        const dealsOverlay = document.querySelector('.deals-modal-overlay');
+        const dealsContainer = document.getElementById('dealsContainer');
+
+        function renderDealsModal() {
+            // Filter products that are on sale (have oldPrice > price)
+            const dealProducts = inventory.filter(p => {
+                const price = Number(p.price) || 0;
+                const oldPrice = p.oldPrice != null ? Number(p.oldPrice) : null;
+                return oldPrice && oldPrice > price;
+            });
+
+            if (dealProducts.length === 0) {
+                dealsContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #7E859B;">
+                        <i class="fas fa-tag" style="font-size: 36px; opacity: 0.3; display: block; margin-bottom: 12px;"></i>
+                        <p>No deals available right now</p>
+                    </div>
+                `;
+                return;
+            }
+
+            dealsContainer.innerHTML = dealProducts.map(product => {
+                const images = Array.isArray(product.images) ? product.images : [];
+                const imageMarkup = images.length > 0
+                    ? `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}">`
+                    : `<i class="fas ${escapeHtml(product.icon)}"></i>`;
+
+                const price = Number(product.price) || 0;
+                const oldPrice = Number(product.oldPrice) || 0;
+                const savePct = oldPrice > price ? Math.round((1 - price / oldPrice) * 100) : 0;
+
+                return `
+                    <a href="product.html?id=${product.id}" class="deal-item" data-id="${product.id}">
+                        <div class="deal-item-image">${imageMarkup}</div>
+                        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; width: 100%;">
+                            <div>${escapeHtml(product.brand)}</div>
+                            ${savePct > 0 ? `<div class="deal-item-badge">-${savePct}%</div>` : ''}
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        if (dealsTrigger) {
+            dealsTrigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                renderDealsModal();
+                if (dealsModal) dealsModal.classList.add('active');
+            });
+        }
+
+        if (dealsCloseBtn) {
+            dealsCloseBtn.addEventListener('click', () => {
+                if (dealsModal) dealsModal.classList.remove('active');
+            });
+        }
+
+        if (dealsOverlay) {
+            dealsOverlay.addEventListener('click', () => {
+                if (dealsModal) dealsModal.classList.remove('active');
             });
         }
 
