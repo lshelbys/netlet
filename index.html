@@ -549,6 +549,16 @@
             color: var(--netlet-blue);
         }
 
+        .chip.active {
+            background: var(--netlet-blue);
+            border-color: var(--netlet-blue);
+            color: #ffffff;
+        }
+
+        .chip.active:hover {
+            color: #ffffff;
+        }
+
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -1149,16 +1159,16 @@
 
     <main class="section-wrapper">
         <div class="category-chips">
-            <div class="chip">Mobile Phones</div>
-            <div class="chip">Laptops</div>
-            <div class="chip">Fragrances</div>
-            <div class="chip">Watches</div>
-            <div class="chip">Kitchen</div>
-            <div class="chip">Home Decor</div>
-            <div class="chip">Video Games</div>
-            <div class="chip">Toys</div>
-            <div class="chip">Eyewear</div>
-            <div class="chip">Personal Care</div>
+            <div class="chip active" data-category="">All</div>
+            <div class="chip" data-category="Electronics">Electronics</div>
+            <div class="chip" data-category="Fashion">Fashion</div>
+            <div class="chip" data-category="Home & Garden">Home &amp; Garden</div>
+            <div class="chip" data-category="Sports">Sports</div>
+            <div class="chip" data-category="Beauty">Beauty</div>
+            <div class="chip" data-category="Books">Books</div>
+            <div class="chip" data-category="Toys">Toys</div>
+            <div class="chip" data-category="Food & Beverage">Food &amp; Beverage</div>
+            <div class="chip" data-category="Other">Other</div>
         </div>
 
         <div class="section-header">
@@ -1251,7 +1261,8 @@
                 const matchesSearch = !searchQuery ||
                     p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     p.title.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesSearch;
+                const matchesCategory = !selectedCategory || p.category === selectedCategory;
+                return matchesSearch && matchesCategory;
             });
 
             // Sort products
@@ -1423,9 +1434,9 @@
 
         categoryChips.forEach(chip => {
             chip.addEventListener('click', () => {
-                categoryChips.forEach(c => c.style.opacity = '0.6');
-                chip.style.opacity = '1';
-                selectedCategory = chip.textContent;
+                categoryChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                selectedCategory = chip.dataset.category || '';
                 renderProducts();
             });
         });
