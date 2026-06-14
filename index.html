@@ -897,6 +897,72 @@
             gap: 16px;
         }
 
+        /* PROMOTIONAL BANNERS */
+        .promo-banners-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .promo-banner {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.15) 0%, rgba(230, 28, 56, 0.1) 100%);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(30, 58, 138, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .promo-banner:hover {
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.25) 0%, rgba(230, 28, 56, 0.15) 100%);
+            border-color: rgba(30, 58, 138, 0.4);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                inset 0 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .promo-banner-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--netlet-blue);
+            margin: 0;
+        }
+
+        .promo-banner-description {
+            font-size: 13px;
+            color: #404553;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .promo-banner-code {
+            background: rgba(30, 58, 138, 0.1);
+            border: 1px dashed rgba(30, 58, 138, 0.3);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--netlet-blue);
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .promo-banner-discount {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--netlet-red);
+        }
+
         /* PRODUCT CARD */
         .product-card {
             background-color: #FFFFFF;
@@ -2012,6 +2078,28 @@
 
         /* Mobile Cookie Banner */
         @media (max-width: 768px) {
+            .promo-banners-container {
+                grid-template-columns: 1fr;
+                margin-bottom: 16px;
+            }
+
+            .promo-banner {
+                padding: 16px;
+            }
+
+            .promo-banner-title {
+                font-size: 14px;
+            }
+
+            .promo-banner-description {
+                font-size: 12px;
+            }
+
+            .promo-banner-code {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+
             .cookie-banner {
                 padding: 16px;
                 bottom: 120px;
@@ -2275,6 +2363,12 @@
             <!-- Products Grid -->
             <div class="products-main">
                 <div class="active-filters" id="activeFilters"></div>
+
+                <!-- Promotional Banners -->
+                <div class="promo-banners-container" id="promoBannersContainer">
+                    <!-- Promotional banners injected dynamically -->
+                </div>
+
                 <div class="product-grid" id="productGrid">
                     <!-- Products injected from inventory.js -->
                 </div>
@@ -2536,9 +2630,53 @@
             });
         }
 
+        // Promotional codes data
+        const PROMO_CODES = {
+            'NETLET10': { discount: '10%', description: 'Get 10% off on any order' },
+            'NETLET20': { discount: '20%', description: 'Get 20% off on any order' },
+            'WELCOME15': { discount: '15%', description: 'Welcome offer - 15% discount' },
+            'SUMMER25': { discount: '25%', description: 'Summer special - 25% off' },
+            'SAVE5': { discount: 'KWD 5', description: 'Save KWD 5 on your purchase' }
+        };
+
+        function renderPromoBanners() {
+            const container = document.getElementById('promoBannersContainer');
+            if (!container) return;
+
+            // Only show banners on homepage (not during search)
+            if (searchQuery) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const bannerHTML = Object.entries(PROMO_CODES).slice(0, 3).map(([code, details]) => `
+                <div class="promo-banner">
+                    <div class="promo-banner-discount">${details.discount}</div>
+                    <p class="promo-banner-title">Limited Time Offer</p>
+                    <p class="promo-banner-description">${details.description}</p>
+                    <div class="promo-banner-code" onclick="copyToClipboard('${code}')" style="cursor: pointer; transition: all 0.3s;" title="Click to copy">
+                        ${code}
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = bannerHTML;
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                new Toast(`Code "${text}" copied to clipboard!`, 'success', 3000);
+            }).catch(() => {
+                new Toast('Failed to copy code', 'error', 3000);
+            });
+        }
+
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             if (!grid) return;
+
+            // Render promotional banners
+            renderPromoBanners();
 
             const products = getFilteredAndSortedProducts();
 
@@ -2574,10 +2712,14 @@
 
             grid.innerHTML = headerHTML + products.map(product => {
                 const isWishlisted = wishlist.includes(product.id);
+                let discountPercent = 0;
+                if (product.oldPrice) {
+                    discountPercent = Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100);
+                }
                 return `
                     <article class="product-card" data-id="${product.id}">
                         <div>
-                            <div class="discount-badge" style="display: ${product.oldPrice ? 'block' : 'none'}">SALE</div>
+                            <div class="discount-badge" style="display: ${product.oldPrice ? 'block' : 'none'}">${discountPercent}% OFF</div>
                             <button class="wishlist-btn" type="button" data-id="${product.id}" aria-label="Add ${escapeHtml(product.title)} to wishlist" style="background:none; border:none; padding:0;">
                                 <i class="fa${isWishlisted ? 's' : 'r'} fa-heart wishlist-icon" aria-hidden="true" style="color: ${isWishlisted ? '#E61C38' : '#C2C6D1'};"></i>
                             </button>
