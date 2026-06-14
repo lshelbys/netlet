@@ -70,13 +70,36 @@
 
         /* TOP PROMO BANNER AD */
         .top-promo-bar {
-            background-color: #000080;
+            background: rgba(19, 49, 84, 0.75);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
             color: #FFFFFF;
             text-align: center;
             padding: 8px 12px;
             font-size: 13px;
             font-weight: 600;
             letter-spacing: 0.5px;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .promo-message {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        .promo-message.active {
+            opacity: 1;
+            position: static;
+            pointer-events: auto;
         }
 
         /* MAIN HEADER */
@@ -1497,12 +1520,148 @@
         .logo-bounce {
             animation: bounce 0.6s ease-out;
         }
+
+        /* Footer */
+        footer {
+            background: rgba(247, 246, 242, 0.75);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            color: #404553;
+            margin-top: 80px;
+            padding: 60px 20px 20px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: #1F2229;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-section h3 i {
+            color: var(--netlet-blue);
+            font-size: 20px;
+        }
+
+        .footer-section a,
+        .footer-section p {
+            font-size: 14px;
+            color: #7E859B;
+            text-decoration: none;
+            margin-bottom: 12px;
+            display: block;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--netlet-blue);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .contact-item i {
+            color: var(--netlet-blue);
+            font-size: 18px;
+            min-width: 24px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            font-size: 18px;
+            color: var(--netlet-blue);
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+        }
+
+        .social-links a:hover {
+            background: var(--netlet-blue);
+            color: white;
+            border-color: var(--netlet-blue);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding-top: 30px;
+            text-align: center;
+            color: #9EA4B5;
+            font-size: 13px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .footer-links a {
+            color: #7E859B;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--netlet-blue);
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                margin-top: 40px;
+                padding: 40px 20px 20px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer-bottom {
+                padding-top: 20px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="top-promo-bar">
-        Use code NETLET for extra savings! Free Delivery over KWD 10
+    <div class="top-promo-bar" id="promoBar">
+        <span class="promo-message active" data-message="0">🎉 Use code NETLET for extra savings! Free Delivery over KWD 10</span>
+        <span class="promo-message" data-message="1">⚡ NetLet Express - Same day delivery on selected items!</span>
+        <span class="promo-message" data-message="2">🛍️ Up to 70% off on electronics and fashion! Limited time offer.</span>
+        <span class="promo-message" data-message="3">💎 Join NetLet One for exclusive deals and priority support.</span>
+        <span class="promo-message" data-message="4">🚚 Free shipping on all orders! No minimum purchase required.</span>
     </div>
 
     <header class="main-header">
@@ -1742,6 +1901,24 @@
         import { inventory, fetchInventory, escapeHtml } from './inventory.js';
         import { Toast, LoadingOverlay, handleError } from './utils.js';
 
+        // Promo Bar Message Rotation
+        let currentMessageIndex = 0;
+        const messages = document.querySelectorAll('.promo-message');
+        const totalMessages = messages.length;
+
+        if (totalMessages > 1) {
+            setInterval(() => {
+                // Remove active class from current message
+                messages[currentMessageIndex].classList.remove('active');
+
+                // Move to next message
+                currentMessageIndex = (currentMessageIndex + 1) % totalMessages;
+
+                // Add active class to new message
+                messages[currentMessageIndex].classList.add('active');
+            }, 5000);
+        }
+
         // Disable pinch zoom on mobile
         document.addEventListener('touchmove', (e) => {
             if (e.touches.length > 1) {
@@ -1915,8 +2092,8 @@
                 const start = () => {
                     if (timer) return;
                     carousel.classList.add('scrolling');
-                    // Scroll every 2.5s (matches animation duration)
-                    timer = setInterval(scroll, 2500);
+                    // Scroll every 1s
+                    timer = setInterval(scroll, 1000);
                 };
 
                 const stop = () => {
@@ -2285,5 +2462,70 @@
             }
         });
     </script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <!-- About Section -->
+            <div class="footer-section">
+                <h3><i class="fas fa-home"></i> About NetLet</h3>
+                <p>NetLet is your trusted online marketplace in Kuwait, offering a wide selection of products from electronics to fashion, delivered fast and reliably.</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h3><i class="fas fa-link"></i> Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="#deals">Deals</a>
+                <a href="#categories">Categories</a>
+                <a href="wishlist.html">Wishlist</a>
+                <a href="cart.html">Shopping Cart</a>
+            </div>
+
+            <!-- Support -->
+            <div class="footer-section">
+                <h3><i class="fas fa-headset"></i> Support</h3>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Track Order</a>
+                <a href="#">Returns</a>
+                <a href="#">FAQ</a>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="footer-section">
+                <h3><i class="fas fa-phone"></i> Contact Us</h3>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:+96525123456">+965 2512 3456</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:support@netlet.com">support@netlet.com</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Kuwait City, Kuwait</span>
+                </div>
+                <div class="social-links">
+                    <a href="#" title="Facebook" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" title="Twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Sitemap</a>
+            </div>
+            <p>&copy; 2026 NetLet. All rights reserved. | Made with <i class="fas fa-heart" style="color: var(--netlet-red);"></i> in Kuwait</p>
+        </div>
+    </footer>
 </body>
 </html>
