@@ -1680,6 +1680,195 @@
                 padding-top: 20px;
             }
         }
+
+        /* Cookie Policy Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow:
+                0 -8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            padding: 20px 24px;
+            z-index: 999;
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .cookie-banner.show {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .cookie-content {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .cookie-icon {
+            font-size: 24px;
+            color: var(--netlet-blue);
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .cookie-text {
+            flex: 1;
+        }
+
+        .cookie-text h4 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .cookie-text p {
+            margin: 0;
+            font-size: 14px;
+            color: #7E859B;
+            line-height: 1.5;
+        }
+
+        .cookie-text a {
+            color: var(--netlet-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .cookie-text a:hover {
+            color: var(--netlet-red);
+        }
+
+        .cookie-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .cookie-deny-btn,
+        .cookie-accept-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .cookie-deny-btn {
+            background: rgba(255, 255, 255, 0.3);
+            color: #7E859B;
+            border: 1px solid rgba(126, 133, 155, 0.3);
+        }
+
+        .cookie-deny-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(126, 133, 155, 0.5);
+        }
+
+        .cookie-accept-btn {
+            background: linear-gradient(135deg, var(--netlet-blue) 0%, #0F2550 100%);
+            color: white;
+        }
+
+        .cookie-accept-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+        }
+
+        /* Mobile Cookie Banner */
+        @media (max-width: 768px) {
+            .cookie-banner {
+                padding: 16px;
+                bottom: 120px;
+                left: 12px;
+                right: 12px;
+                border-radius: 16px;
+                width: calc(100% - 24px);
+            }
+
+            .cookie-content {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
+
+            .cookie-icon {
+                text-align: center;
+                margin-top: 0;
+                margin-bottom: 4px;
+            }
+
+            .cookie-text h4 {
+                font-size: 15px;
+                margin-bottom: 6px;
+            }
+
+            .cookie-text p {
+                font-size: 13px;
+            }
+
+            .cookie-actions {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .cookie-deny-btn,
+            .cookie-accept-btn {
+                width: 100%;
+                padding: 12px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cookie-banner {
+                padding: 14px;
+                border-radius: 12px;
+                bottom: 110px;
+            }
+
+            .cookie-text h4 {
+                font-size: 14px;
+            }
+
+            .cookie-text p {
+                font-size: 12px;
+            }
+
+            .cookie-icon {
+                font-size: 20px;
+            }
+
+            .cookie-deny-btn,
+            .cookie-accept-btn {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2568,5 +2757,49 @@
             <p>&copy; 2026 NetLet. All rights reserved. | Made with <i class="fas fa-heart" style="color: var(--netlet-red);"></i> in Kuwait</p>
         </div>
     </footer>
+
+    <!-- Cookie Policy Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-content">
+            <div class="cookie-icon">
+                <i class="fas fa-cookie"></i>
+            </div>
+            <div class="cookie-text">
+                <h4>Cookie Preferences</h4>
+                <p>We use cookies to enhance your browsing experience, personalize content, and analyze website traffic. By clicking "Accept," you consent to the use of cookies as described in our <a href="#" onclick="event.preventDefault();">Cookie Policy</a>.</p>
+            </div>
+        </div>
+        <div class="cookie-actions">
+            <button class="cookie-deny-btn" onclick="denyCookes()">Deny</button>
+            <button class="cookie-accept-btn" onclick="acceptCookies()">Accept Cookies</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize cookie banner
+        function initCookieBanner() {
+            const cookieConsent = localStorage.getItem('netletCookieConsent');
+            if (!cookieConsent) {
+                document.getElementById('cookieBanner').classList.add('show');
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('netletCookieConsent', 'accepted');
+            document.getElementById('cookieBanner').classList.remove('show');
+            // Add your cookie tracking code here
+            console.log('Cookies accepted');
+        }
+
+        function denyCookes() {
+            localStorage.setItem('netletCookieConsent', 'denied');
+            document.getElementById('cookieBanner').classList.remove('show');
+            console.log('Cookies denied');
+        }
+
+        // Show banner on page load if no consent given
+        document.addEventListener('DOMContentLoaded', initCookieBanner);
+    </script>
+
 </body>
 </html>
