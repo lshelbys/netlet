@@ -1,6 +1,7 @@
 import { inventory, fetchInventory, addProductToInventory, deleteProductFromInventory, updateProductInInventory, replaceInventory, escapeHtml } from './inventory.js';
 import { Toast, LoadingOverlay } from './utils.js';
 
+// Get DOM elements - safely check if they exist
 const productForm = document.getElementById('productForm');
 const inventoryTableBody = document.querySelector('#inventoryTable tbody');
 const alertMessage = document.getElementById('alertMessage');
@@ -16,7 +17,26 @@ const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const importFile = document.getElementById('importFile');
 const imagesContainer = document.getElementById('imagesContainer');
-const addImageBtn = document.getElementById('addImageBtn');
+let addImageBtn = document.getElementById('addImageBtn');
+
+// Ensure addImageBtn is available and set up with timeout as fallback
+if (!addImageBtn) {
+    setTimeout(() => {
+        addImageBtn = document.getElementById('addImageBtn');
+        if (addImageBtn) {
+            attachAddImageListener();
+        }
+    }, 100);
+}
+
+function attachAddImageListener() {
+    if (!addImageBtn) return;
+    addImageBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addImageSlot();
+    });
+}
 
 let editingProductId = null;
 
@@ -66,13 +86,23 @@ function clearImageSlots() {
     imagesContainer.innerHTML = '';
 }
 
-// Initialize with one empty slot
-addImageSlot();
+// Initialize button listener
+if (addImageBtn) {
+    attachAddImageListener();
+}
 
-addImageBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    addImageSlot();
-});
+// Initialize with one empty slot when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (imagesContainer && imagesContainer.children.length === 0) {
+            addImageSlot();
+        }
+    });
+} else {
+    if (imagesContainer && imagesContainer.children.length === 0) {
+        addImageSlot();
+    }
+}
 
 // Use toast notifications instead of inline alerts
 function showAlert(message, type = 'success') {
