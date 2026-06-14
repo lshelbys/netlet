@@ -1564,6 +1564,30 @@
                 }
             });
 
+            // Handle Enter key on mobile - close keyboard and scroll to products
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+
+                    // Close keyboard by blurring input
+                    searchInput.blur();
+
+                    // Render products immediately
+                    clearTimeout(searchScrollTimeout);
+                    renderProducts();
+
+                    // Scroll to products on mobile
+                    if (isMobile()) {
+                        setTimeout(() => {
+                            const grid = document.getElementById('productGrid');
+                            if (grid) {
+                                grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }, 100);
+                    }
+                }
+            });
+
             // Clear search button
             const clearBtn = document.querySelector('.search-clear-btn');
             if (clearBtn) {
