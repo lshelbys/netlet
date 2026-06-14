@@ -1350,6 +1350,13 @@
 
             const products = getFilteredAndSortedProducts();
 
+            // Auto-scroll to products when searching or filtering
+            if (searchQuery || selectedCategory) {
+                setTimeout(() => {
+                    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+
             // Build search header
             let headerHTML = '';
             if (searchQuery || selectedCategory) {
