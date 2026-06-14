@@ -52,17 +52,30 @@ function renderProduct(product) {
     const thumbsMarkup = images.length > 1
         ? `<div class="thumbs">
             ${images.map((url, i) => `
-                <div class="thumb ${i === 0 ? 'active' : ''}" data-src="${escapeHtml(url)}">
+                <div class="thumb ${i === 0 ? 'active' : ''}" data-src="${escapeHtml(url)}" data-index="${i}">
                     <img src="${escapeHtml(url)}" alt="${escapeHtml(product.title)} image ${i + 1}"
                          onerror="this.parentElement.style.display='none';">
                 </div>`).join('')}
            </div>`
         : '';
 
+    const navMarkup = images.length > 1
+        ? `<button class="gallery-nav-btn prev" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
+           <button class="gallery-nav-btn next" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>`
+        : '';
+
+    const fullscreenMarkup = hasImages
+        ? `<button class="fullscreen-btn" id="fullscreenBtn" aria-label="Fullscreen"><i class="fas fa-expand"></i></button>`
+        : '';
+
     root.innerHTML = `
         <div class="product-layout">
             <div class="gallery">
-                <div class="main-image-wrap">${mainImageMarkup}</div>
+                <div class="gallery-nav-wrapper">
+                    <div class="main-image-wrap" id="mainImageWrap">${mainImageMarkup}</div>
+                    ${navMarkup}
+                    ${fullscreenMarkup}
+                </div>
                 ${thumbsMarkup}
             </div>
             <div class="info-box">
@@ -93,17 +106,117 @@ function renderProduct(product) {
                 </div>
             </div>
         </div>
+
+        <div class="gallery-fullscreen" id="galleryFullscreen">
+            <div class="fullscreen-image-wrap">
+                <img id="fullscreenImage" src="${hasImages ? escapeHtml(images[0]) : ''}" alt="Fullscreen view" style="display:${hasImages ? 'block' : 'none'};">
+                ${images.length > 1 ? `
+                    <button class="fullscreen-nav-btn prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+                    <button class="fullscreen-nav-btn next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+                    <div class="fullscreen-counter"><span id="imageCounter">1</span> / <span id="imageTotal">${images.length}</span></div>
+                ` : ''}
+                <button class="fullscreen-close" aria-label="Close fullscreen"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
     `;
+
+    // Track current image index
+    let currentIndex = 0;
+
+    const switchImage = (index) => {
+        if (index < 0 || index >= images.length) return;
+        currentIndex = index;
+
+        const mainImage = document.getElementById('mainImage');
+        const fullscreenImage = document.getElementById('fullscreenImage');
+        const url = images[index];
+
+        if (mainImage) mainImage.src = url;
+        if (fullscreenImage) fullscreenImage.src = url;
+
+        root.querySelectorAll('.thumb').forEach((t, i) => {
+            t.classList.toggle('active', i === index);
+        });
+
+        updateNavButtons();
+        const counter = document.getElementById('imageCounter');
+        if (counter) counter.textContent = index + 1;
+    };
+
+    const updateNavButtons = () => {
+        const prevBtns = root.querySelectorAll('.gallery-nav-btn.prev, .fullscreen-nav-btn.prev');
+        const nextBtns = root.querySelectorAll('.gallery-nav-btn.next, .fullscreen-nav-btn.next');
+
+        prevBtns.forEach(btn => btn.disabled = currentIndex === 0);
+        nextBtns.forEach(btn => btn.disabled = currentIndex === images.length - 1);
+    };
 
     // Thumbnail switching
     root.querySelectorAll('.thumb').forEach(thumb => {
         thumb.addEventListener('click', () => {
-            const mainImage = document.getElementById('mainImage');
-            if (mainImage) mainImage.src = thumb.dataset.src;
-            root.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-            thumb.classList.add('active');
+            switchImage(parseInt(thumb.dataset.index));
         });
     });
+
+    // Gallery navigation buttons
+    root.querySelectorAll('.gallery-nav-btn.prev').forEach(btn => {
+        btn.addEventListener('click', () => switchImage(currentIndex - 1));
+    });
+    root.querySelectorAll('.gallery-nav-btn.next').forEach(btn => {
+        btn.addEventListener('click', () => switchImage(currentIndex + 1));
+    });
+
+    // Fullscreen navigation
+    const fullscreenModal = document.getElementById('galleryFullscreen');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const fullscreenClose = document.querySelector('.fullscreen-close');
+
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', () => {
+            fullscreenModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (fullscreenClose) {
+        fullscreenClose.addEventListener('click', () => {
+            fullscreenModal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    fullscreenModal.addEventListener('click', (e) => {
+        if (e.target === fullscreenModal) {
+            fullscreenModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    root.querySelectorAll('.fullscreen-nav-btn.prev').forEach(btn => {
+        btn.addEventListener('click', () => switchImage(currentIndex - 1));
+    });
+    root.querySelectorAll('.fullscreen-nav-btn.next').forEach(btn => {
+        btn.addEventListener('click', () => switchImage(currentIndex + 1));
+    });
+
+    // Keyboard navigation
+    const handleKeyDown = (e) => {
+        if (fullscreenModal.classList.contains('active')) {
+            if (e.key === 'ArrowLeft') switchImage(currentIndex - 1);
+            if (e.key === 'ArrowRight') switchImage(currentIndex + 1);
+            if (e.key === 'Escape') {
+                fullscreenModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        } else if (images.length > 1) {
+            if (e.key === 'ArrowLeft') switchImage(currentIndex - 1);
+            if (e.key === 'ArrowRight') switchImage(currentIndex + 1);
+        }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    updateNavButtons();
 
     // Add to cart
     document.getElementById('addCartBtn').addEventListener('click', () => {
