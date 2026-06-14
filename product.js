@@ -261,11 +261,11 @@ function renderProduct(product) {
         if (idx > -1) {
             wishlist.splice(idx, 1);
             icon.className = 'far fa-heart';
-            new Toast('Removed from wishlist', 'info', 6000);
+            new Toast('Removed from wishlist', 'info', 4000);
         } else {
             wishlist.push(product.id);
             icon.className = 'fas fa-heart';
-            new Toast('Added to wishlist', 'success', 6000);
+            new Toast('Added to wishlist', 'success', 4000);
         }
         localStorage.setItem('netletWishlist', JSON.stringify(wishlist));
     });

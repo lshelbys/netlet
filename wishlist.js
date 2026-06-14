@@ -95,7 +95,7 @@ function renderWishlist() {
             const wishlist = getWishlist();
             const newWishlist = wishlist.filter(id => id !== productId);
             saveWishlist(newWishlist);
-            new Toast('Removed from wishlist', 'info', 6000);
+            new Toast('Removed from wishlist', 'info', 4000);
             renderWishlist();
         });
     });

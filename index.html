@@ -1972,10 +1972,10 @@
             const index = wishlist.indexOf(productId);
             if (index > -1) {
                 wishlist.splice(index, 1);
-                new Toast('Removed from wishlist', 'info', 6000);
+                new Toast('Removed from wishlist', 'info', 4000);
             } else {
                 wishlist.push(productId);
-                new Toast('Added to wishlist', 'success', 6000);
+                new Toast('Added to wishlist', 'success', 4000);
             }
             localStorage.setItem('netletWishlist', JSON.stringify(wishlist));
             renderProducts();

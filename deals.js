@@ -111,11 +111,11 @@ function renderDeals() {
             if (idx > -1) {
                 wishlist.splice(idx, 1);
                 icon.className = 'far fa-heart';
-                new Toast('Removed from wishlist', 'info', 6000);
+                new Toast('Removed from wishlist', 'info', 4000);
             } else {
                 wishlist.push(productId);
                 icon.className = 'fas fa-heart';
-                new Toast('Added to wishlist', 'success', 6000);
+                new Toast('Added to wishlist', 'success', 4000);
             }
             saveWishlist(wishlist);
         });
