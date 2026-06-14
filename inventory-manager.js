@@ -157,6 +157,7 @@ productForm.addEventListener('submit', async (e) => {
         brand: document.getElementById('brand').value,
         sku: document.getElementById('sku').value || null,
         title: document.getElementById('title').value,
+        description: document.getElementById('description').value || null,
         price: parseFloat(document.getElementById('price').value),
         oldPrice: document.getElementById('oldPrice').value ? parseFloat(document.getElementById('oldPrice').value) : null,
         isExpress: document.getElementById('isExpress').checked,
@@ -210,6 +211,7 @@ function startEdit(id) {
     document.getElementById('brand').value = product.brand;
     document.getElementById('sku').value = product.sku || '';
     document.getElementById('title').value = product.title;
+    document.getElementById('description').value = product.description || '';
     document.getElementById('price').value = product.price;
     document.getElementById('oldPrice').value = product.oldPrice || '';
     document.getElementById('isExpress').checked = product.isExpress;
@@ -265,7 +267,7 @@ toggleFormBtn.addEventListener('click', () => {
 exportBtn.addEventListener('click', () => {
     if (inventory.length === 0) return showAlert('Inventory is empty!', 'error');
 
-    const headers = ['id', 'brand', 'sku', 'title', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'images'];
+    const headers = ['id', 'brand', 'sku', 'title', 'description', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'images'];
 
     const csvRows = [
         headers.join(','), // Header row
