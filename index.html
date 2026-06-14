@@ -1178,6 +1178,10 @@
         }
 
         /* MODAL STYLES */
+        body.no-scroll {
+            overflow: hidden;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -2681,15 +2685,18 @@
 
             deliveryLocation.addEventListener('click', () => {
                 locationModal.style.display = 'block';
+                document.body.classList.add('no-scroll');
             });
 
             closeModal.addEventListener('click', () => {
                 locationModal.style.display = 'none';
+                document.body.classList.remove('no-scroll');
             });
 
             window.addEventListener('click', (event) => {
                 if (event.target === locationModal) {
                     locationModal.style.display = 'none';
+                    document.body.classList.remove('no-scroll');
                 }
             });
 
@@ -2704,6 +2711,7 @@
 
                 locationName.innerHTML = `${selectedCity}, ${selectedGovernorate} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>`;
                 locationModal.style.display = 'none';
+                document.body.classList.remove('no-scroll');
                 new Toast(`Delivery location set to ${selectedCity}, ${selectedGovernorate}`, 'success', 6000);
             });
         }
