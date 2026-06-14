@@ -9,6 +9,16 @@ class Toast {
 
     show() {
         const container = document.getElementById('toast-container') || this.createContainer();
+
+        // Remove any existing toast with the same message
+        const existingToasts = container.querySelectorAll('.toast');
+        for (const existingToast of existingToasts) {
+            if (existingToast.textContent === this.message) {
+                existingToast.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => existingToast.remove(), 300);
+            }
+        }
+
         const toast = document.createElement('div');
         toast.className = `toast toast-${this.type}`;
         toast.textContent = this.message;
@@ -126,7 +136,7 @@ class RateLimiter {
 function handleError(error, context = '') {
     console.error(`[${context}]`, error);
     const message = error.message || 'An unexpected error occurred.';
-    new Toast(`Error${context ? ` (${context})` : ''}: ${message}`, 'error', 5000);
+    new Toast(`Error${context ? ` (${context})` : ''}: ${message}`, 'error', 6000);
 }
 
 // Global toast styles (inject once)
@@ -137,40 +147,54 @@ function injectToastStyles() {
     styles.id = 'toast-styles';
     styles.textContent = `
         .toast {
-            background: white;
-            color: #404553;
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
             padding: 14px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            font-weight: 500;
+            border-radius: 12px;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            font-weight: 600;
             font-size: 14px;
-            border-left: 4px solid #999;
             max-width: 100%;
             word-break: break-word;
+            border-left: 4px solid;
         }
 
         .toast-success {
+            background: rgba(40, 167, 69, 0.2);
+            color: #1F2229;
             border-left-color: #28a745;
-            background: #d4edda;
-            color: #155724;
+            border-color: rgba(40, 167, 69, 0.3);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            border-left: 4px solid #28a745;
         }
 
         .toast-error {
+            background: rgba(230, 28, 56, 0.2);
+            color: #1F2229;
             border-left-color: #E61C38;
-            background: #f8d7da;
-            color: #721c24;
+            border-color: rgba(230, 28, 56, 0.3);
+            border: 1px solid rgba(230, 28, 56, 0.3);
+            border-left: 4px solid #E61C38;
         }
 
         .toast-info {
+            background: rgba(30, 58, 138, 0.2);
+            color: #1F2229;
             border-left-color: #1E3A8A;
-            background: #d1ecf1;
-            color: #0c5460;
+            border-color: rgba(30, 58, 138, 0.3);
+            border: 1px solid rgba(30, 58, 138, 0.3);
+            border-left: 4px solid #1E3A8A;
         }
 
         .toast-warning {
-            border-left-color: #ffc107;
-            background: #fff3cd;
-            color: #856404;
+            background: rgba(255, 193, 7, 0.2);
+            color: #1F2229;
+            border-left-color: #FFC107;
+            border-color: rgba(255, 193, 7, 0.3);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-left: 4px solid #FFC107;
         }
 
         @keyframes slideIn {

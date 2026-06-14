@@ -72,7 +72,7 @@ function renderWishlist() {
             const product = inventory.find(p => p.id === productId);
             if (product) {
                 if (product.stockStatus === 'Out of Stock') {
-                    new Toast('This product is out of stock', 'error', 2000);
+                    new Toast('This product is out of stock', 'error', 6000);
                     return;
                 }
                 const cart = getCart();
@@ -83,7 +83,7 @@ function renderWishlist() {
                     cart.push({ id: productId, quantity: 1 });
                 }
                 saveCart(cart);
-                new Toast(`Added ${product.brand} to cart`, 'success', 2000);
+                new Toast(`Added ${product.brand} to cart`, 'success', 6000);
             }
         });
     });
@@ -95,7 +95,7 @@ function renderWishlist() {
             const wishlist = getWishlist();
             const newWishlist = wishlist.filter(id => id !== productId);
             saveWishlist(newWishlist);
-            new Toast('Removed from wishlist', 'info', 1500);
+            new Toast('Removed from wishlist', 'info', 4000);
             renderWishlist();
         });
     });
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => LoadingOverlay.hide(), elapsed);
     } catch (err) {
         LoadingOverlay.hide();
-        new Toast('Error loading wishlist. Please refresh the page.', 'error', 4000);
+        new Toast('Error loading wishlist. Please refresh the page.', 'error', 6000);
         console.error('Wishlist loading error:', err);
     }
 });

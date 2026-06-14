@@ -107,7 +107,7 @@ if (document.readyState === 'loading') {
 // Use toast notifications instead of inline alerts
 function showAlert(message, type = 'success') {
     const toastType = type === 'error' ? 'error' : 'success';
-    new Toast(message, toastType, 3000);
+    new Toast(message, toastType, 6000);
 }
 
 // Function to render the inventory table
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => LoadingOverlay.hide(), elapsed);
     } catch (err) {
         LoadingOverlay.hide();
-        new Toast('Error loading inventory. Please refresh the page.', 'error', 4000);
+        new Toast('Error loading inventory. Please refresh the page.', 'error', 6000);
         console.error('Inventory loading error:', err);
     }
 });
