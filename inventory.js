@@ -17,6 +17,17 @@ function normalizeProduct(row) {
         try { images = JSON.parse(images); } catch { images = images ? [images] : []; }
     }
     if (!Array.isArray(images)) images = [];
+
+    const stockQuantity = row.stock_quantity ?? 0;
+    const lowStockThreshold = row.low_stock_threshold ?? 5;
+
+    let stockStatus = 'Out of Stock';
+    if (stockQuantity > lowStockThreshold) {
+        stockStatus = 'In Stock';
+    } else if (stockQuantity > 0) {
+        stockStatus = 'Low Stock';
+    }
+
     return {
         id: row.id,
         brand: row.brand,
@@ -30,7 +41,10 @@ function normalizeProduct(row) {
         rating: row.rating,
         reviews: row.reviews,
         icon: row.icon,
-        images
+        images,
+        stockQuantity,
+        lowStockThreshold,
+        stockStatus
     };
 }
 
@@ -49,7 +63,9 @@ function toDbRow(product) {
         rating: product.rating,
         reviews: product.reviews,
         icon: product.icon,
-        images: JSON.stringify(images)
+        images: JSON.stringify(images),
+        stock_quantity: product.stockQuantity ?? 0,
+        low_stock_threshold: product.lowStockThreshold ?? 5
     };
 }
 

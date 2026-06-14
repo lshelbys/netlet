@@ -112,6 +112,10 @@ function showAlert(message, type = 'success') {
 
 // Function to render the inventory table
 function renderInventory(filterText = '') {
+    if (!inventoryTableBody) {
+        console.warn('Inventory table not found');
+        return;
+    }
     inventoryTableBody.innerHTML = ''; // Clear existing rows
 
     const filtered = inventory.filter(p =>
@@ -127,6 +131,17 @@ function renderInventory(filterText = '') {
         const thumb = images.length > 0
             ? `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}" style="width:40px; height:40px; object-fit:cover; border-radius:4px;" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)}\\'></i>';">`
             : `<i class="fas ${escapeHtml(product.icon)}"></i>`;
+        const stockStatus = product.stockStatus || 'Out of Stock';
+        let statusColor = '#E61C38'; // Red for Out of Stock
+        let statusIcon = 'fa-times-circle';
+        if (stockStatus === 'In Stock') {
+            statusColor = '#28a745'; // Green
+            statusIcon = 'fa-check-circle';
+        } else if (stockStatus === 'Low Stock') {
+            statusColor = '#FFC107'; // Yellow
+            statusIcon = 'fa-exclamation-triangle';
+        }
+
         row.innerHTML = `
             <td>${product.id}</td>
             <td>${escapeHtml(product.brand)}</td>
@@ -138,6 +153,9 @@ function renderInventory(filterText = '') {
             <td>${product.isExpress ? 'Yes' : 'No'}</td>
             <td>${escapeHtml(product.rating)}</td>
             <td>${escapeHtml(product.reviews)}</td>
+            <td style="font-weight: 600; color: ${statusColor};">${product.stockQuantity || 0}</td>
+            <td>${product.lowStockThreshold || 5}</td>
+            <td style="color: ${statusColor}; font-weight: 600;"><i class="fas ${statusIcon}"></i> ${stockStatus}</td>
             <td><i class="fas ${escapeHtml(product.icon)}"></i> ${escapeHtml(product.icon)}</td>
             <td class="product-actions">
                 <button class="btn btn-edit" data-id="${product.id}" style="background-color: #ffc107; color: black;">Edit</button>
@@ -150,23 +168,45 @@ function renderInventory(filterText = '') {
 }
 
 // Event listener for adding a new product
-productForm.addEventListener('submit', async (e) => {
+if (productForm) {
+    productForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // Validate form elements exist
+    const requiredElements = {
+        brand: document.getElementById('brand'),
+        title: document.getElementById('title'),
+        price: document.getElementById('price'),
+        rating: document.getElementById('rating'),
+        reviews: document.getElementById('reviews'),
+        icon: document.getElementById('icon'),
+        stockQuantity: document.getElementById('stockQuantity'),
+        lowStockThreshold: document.getElementById('lowStockThreshold')
+    };
+
+    for (const [name, element] of Object.entries(requiredElements)) {
+        if (!element) {
+            showAlert(`Form field "${name}" not found. Please refresh the page.`, 'error');
+            return;
+        }
+    }
+
     const productData = {
-        id: editingProductId, // Supabase handles new ID generation
-        brand: document.getElementById('brand').value,
-        sku: document.getElementById('sku').value || null,
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value || null,
-        category: document.getElementById('category').value || null,
-        price: parseFloat(document.getElementById('price').value),
-        oldPrice: document.getElementById('oldPrice').value ? parseFloat(document.getElementById('oldPrice').value) : null,
-        isExpress: document.getElementById('isExpress').checked,
-        rating: parseFloat(document.getElementById('rating').value),
-        reviews: parseInt(document.getElementById('reviews').value, 10),
-        icon: document.getElementById('icon').value,
-        images: getImageUrls()
+        id: editingProductId,
+        brand: requiredElements.brand.value,
+        sku: document.getElementById('sku')?.value || null,
+        title: requiredElements.title.value,
+        description: document.getElementById('description')?.value || null,
+        category: document.getElementById('category')?.value || null,
+        price: parseFloat(requiredElements.price.value),
+        oldPrice: document.getElementById('oldPrice')?.value ? parseFloat(document.getElementById('oldPrice').value) : null,
+        isExpress: document.getElementById('isExpress')?.checked || false,
+        rating: parseFloat(requiredElements.rating.value),
+        reviews: parseInt(requiredElements.reviews.value, 10),
+        icon: requiredElements.icon.value,
+        images: getImageUrls(),
+        stockQuantity: parseInt(requiredElements.stockQuantity.value, 10) || 0,
+        lowStockThreshold: parseInt(requiredElements.lowStockThreshold.value, 10) || 5
     };
 
     if (isNaN(productData.price) || (productData.oldPrice !== null && isNaN(productData.oldPrice)) || isNaN(productData.rating) || isNaN(productData.reviews)) {
@@ -187,10 +227,12 @@ productForm.addEventListener('submit', async (e) => {
     // Pass search value to maintain current filter after adding/editing
     renderInventory(searchInput.value);
     resetForm();
-});
+    });
+}
 
 // Event listener for actions (using event delegation)
-inventoryTableBody.addEventListener('click', async (e) => {
+if (inventoryTableBody) {
+    inventoryTableBody.addEventListener('click', async (e) => {
     if (e.target.classList.contains('btn-delete')) {
         const productId = parseInt(e.target.dataset.id, 10);
         if (confirm(`Are you sure you want to delete product ID ${productId}?`)) {
@@ -202,25 +244,41 @@ inventoryTableBody.addEventListener('click', async (e) => {
         const productId = parseInt(e.target.dataset.id, 10);
         startEdit(productId);
     }
-});
+    });
+}
 
 function startEdit(id) {
     const product = inventory.find(p => p.id === id);
     if (!product) return;
 
     editingProductId = id;
-    formContainer.style.display = 'block';
-    document.getElementById('brand').value = product.brand;
-    document.getElementById('sku').value = product.sku || '';
-    document.getElementById('title').value = product.title;
-    document.getElementById('description').value = product.description || '';
-    document.getElementById('category').value = product.category || '';
-    document.getElementById('price').value = product.price;
-    document.getElementById('oldPrice').value = product.oldPrice || '';
-    document.getElementById('isExpress').checked = product.isExpress;
-    document.getElementById('rating').value = product.rating;
-    document.getElementById('reviews').value = product.reviews;
-    document.getElementById('icon').value = product.icon;
+    if (formContainer) formContainer.style.display = 'block';
+
+    // Safely set form values
+    const setFormValue = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) {
+            if (el.type === 'checkbox') {
+                el.checked = value;
+            } else {
+                el.value = value;
+            }
+        }
+    };
+
+    setFormValue('brand', product.brand);
+    setFormValue('sku', product.sku || '');
+    setFormValue('title', product.title);
+    setFormValue('description', product.description || '');
+    setFormValue('category', product.category || '');
+    setFormValue('price', product.price);
+    setFormValue('oldPrice', product.oldPrice || '');
+    setFormValue('isExpress', product.isExpress);
+    setFormValue('rating', product.rating);
+    setFormValue('reviews', product.reviews);
+    setFormValue('icon', product.icon);
+    setFormValue('stockQuantity', product.stockQuantity || 0);
+    setFormValue('lowStockThreshold', product.lowStockThreshold || 5);
 
     // Populate image slots
     clearImageSlots();
@@ -231,46 +289,53 @@ function startEdit(id) {
         addImageSlot(); // Add one empty slot if no images
     }
 
-    formTitle.textContent = 'Edit Product';
-    submitBtn.textContent = 'Update Product';
-    cancelBtn.style.display = 'inline-block';
-    formContainer.scrollIntoView({ behavior: 'smooth' });
+    if (formTitle) formTitle.textContent = 'Edit Product';
+    if (submitBtn) submitBtn.textContent = 'Update Product';
+    if (cancelBtn) cancelBtn.style.display = 'inline-block';
+    if (formContainer) formContainer.scrollIntoView({ behavior: 'smooth' });
 }
 
 function resetForm() {
     editingProductId = null;
-    productForm.reset();
+    if (productForm) productForm.reset();
     clearImageSlots();
     addImageSlot(); // Add one empty slot
-    formTitle.textContent = 'Add New Product';
-    submitBtn.textContent = 'Add Product';
-    cancelBtn.style.display = 'none';
-    formContainer.style.display = 'none';
+    if (formTitle) formTitle.textContent = 'Add New Product';
+    if (submitBtn) submitBtn.textContent = 'Add Product';
+    if (cancelBtn) cancelBtn.style.display = 'none';
+    if (formContainer) formContainer.style.display = 'none';
 }
 
 function updateStats() {
     const totalValue = inventory.reduce((sum, p) => sum + p.price, 0);
-    totalItemsEl.textContent = inventory.length;
-    totalValueEl.textContent = totalValue.toFixed(2);
+    if (totalItemsEl) totalItemsEl.textContent = inventory.length;
+    if (totalValueEl) totalValueEl.textContent = totalValue.toFixed(2);
 }
 
-cancelBtn.addEventListener('click', resetForm);
+if (cancelBtn) {
+    cancelBtn.addEventListener('click', resetForm);
+}
 
-searchInput.addEventListener('input', (e) => {
-    renderInventory(e.target.value);
-});
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        renderInventory(e.target.value);
+    });
+}
 
-toggleFormBtn.addEventListener('click', () => {
-    resetForm();
-    formContainer.style.display = 'block';
-    formContainer.scrollIntoView({ behavior: 'smooth' });
-});
+if (toggleFormBtn) {
+    toggleFormBtn.addEventListener('click', () => {
+        resetForm();
+        formContainer.style.display = 'block';
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+    });
+}
 
 // --- EXPORT TO CSV (EXCEL) ---
-exportBtn.addEventListener('click', () => {
+if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
     if (inventory.length === 0) return showAlert('Inventory is empty!', 'error');
 
-    const headers = ['id', 'brand', 'sku', 'title', 'description', 'category', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'images'];
+    const headers = ['id', 'brand', 'sku', 'title', 'description', 'category', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'stockQuantity', 'lowStockThreshold', 'images'];
 
     const csvRows = [
         headers.join(','), // Header row
@@ -294,12 +359,16 @@ exportBtn.addEventListener('click', () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-});
+    });
+}
 
 // --- IMPORT FROM CSV ---
-importBtn.addEventListener('click', () => importFile.click());
+if (importBtn) {
+    importBtn.addEventListener('click', () => importFile.click());
+}
 
-importFile.addEventListener('change', (e) => {
+if (importFile) {
+    importFile.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -319,7 +388,7 @@ importFile.addEventListener('change', (e) => {
                 headers.forEach((header, index) => {
                     let val = cleanedValues[index];
                     // Type conversion
-                    if (header === 'id' || header === 'reviews') product[header] = parseInt(val, 10);
+                    if (header === 'id' || header === 'reviews' || header === 'stockQuantity' || header === 'lowStockThreshold') product[header] = parseInt(val, 10);
                     else if (header === 'price' || header === 'rating') product[header] = parseFloat(val);
                     else if (header === 'oldPrice') product[header] = val ? parseFloat(val) : null;
                     else if (header === 'isExpress') product[header] = (val || '').toLowerCase() === 'true';
@@ -348,7 +417,8 @@ importFile.addEventListener('change', (e) => {
         importFile.value = ''; // Reset input
     };
     reader.readAsText(file);
-});
+    });
+}
 
 // Initial render when the page loads
 document.addEventListener('DOMContentLoaded', async () => {

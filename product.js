@@ -20,7 +20,13 @@ function getWishlist() {
 }
 
 function updateCartBadge() {
-    if (cartBadge) cartBadge.textContent = getCart().length;
+    if (cartBadge) {
+        const cart = getCart();
+        const totalItems = cart.reduce((sum, item) => {
+            return sum + (typeof item === 'object' ? (item.quantity || 1) : 1);
+        }, 0);
+        cartBadge.textContent = totalItems;
+    }
 }
 
 function renderError(message) {
@@ -95,13 +101,20 @@ function renderProduct(product) {
                     ${savePct > 0 ? `<span class="price-save">Save ${savePct}%</span>` : ''}
                 </div>
                 <hr class="divider">
+                <div style="margin-bottom: 16px;">
+                    ${product.stockStatus === 'In Stock'
+                        ? `<div style="color: #28a745; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-check-circle"></i> In Stock (${product.stockQuantity} available)</div>`
+                        : product.stockStatus === 'Low Stock'
+                        ? `<div style="color: #FFC107; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-exclamation-triangle"></i> Low Stock (${product.stockQuantity} left)</div>`
+                        : `<div style="color: #E61C38; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-times-circle"></i> Out of Stock</div>`}
+                </div>
                 ${product.description
                     ? `<p class="info-desc" style="white-space: pre-wrap;">${escapeHtml(product.description)}</p>`
                     : `<p class="info-desc">${escapeHtml(product.title)} by ${escapeHtml(product.brand)}.
                         ${product.isExpress ? 'Eligible for fast NetLet Express delivery.' : 'Standard delivery available.'}
                         Backed by ${escapeHtml(product.reviews)} customer reviews with an average rating of ${escapeHtml(product.rating)} out of 5.</p>`}
                 <div class="actions">
-                    <button class="add-cart-btn" id="addCartBtn">
+                    <button class="add-cart-btn" id="addCartBtn" ${product.stockStatus === 'Out of Stock' ? 'disabled' : ''} style="${product.stockStatus === 'Out of Stock' ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
                         <i class="fas fa-shopping-cart"></i> ADD TO CART
                     </button>
                     <button class="wishlist-btn" id="wishlistBtn" aria-label="Toggle wishlist">
@@ -224,8 +237,17 @@ function renderProduct(product) {
 
     // Add to cart
     document.getElementById('addCartBtn').addEventListener('click', () => {
+        if (product.stockStatus === 'Out of Stock') {
+            new Toast('This product is out of stock', 'error', 2000);
+            return;
+        }
         const cart = getCart();
-        cart.push(product.id);
+        const existingItem = cart.find(item => item.id === product.id);
+        if (existingItem) {
+            existingItem.quantity = (existingItem.quantity || 1) + 1;
+        } else {
+            cart.push({ id: product.id, quantity: 1 });
+        }
         localStorage.setItem('netletCart', JSON.stringify(cart));
         updateCartBadge();
         new Toast(`Added ${product.brand} to cart`, 'success', 2000);

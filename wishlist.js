@@ -71,8 +71,17 @@ function renderWishlist() {
             const productId = parseInt(btn.dataset.id);
             const product = inventory.find(p => p.id === productId);
             if (product) {
+                if (product.stockStatus === 'Out of Stock') {
+                    new Toast('This product is out of stock', 'error', 2000);
+                    return;
+                }
                 const cart = getCart();
-                cart.push(productId);
+                const existingItem = cart.find(item => item.id === productId);
+                if (existingItem) {
+                    existingItem.quantity = (existingItem.quantity || 1) + 1;
+                } else {
+                    cart.push({ id: productId, quantity: 1 });
+                }
                 saveCart(cart);
                 new Toast(`Added ${product.brand} to cart`, 'success', 2000);
             }
