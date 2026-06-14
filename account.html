@@ -724,6 +724,18 @@
                 }, 0);
                 cartBadge.textContent = totalItems;
             }
+
+            // Mobile Tab Switching
+            const mobileTabs = document.querySelectorAll('.mobile-tab-item');
+            const indicator = document.querySelector('.tab-indicator');
+
+            mobileTabs.forEach((tab, index) => {
+                tab.addEventListener('click', function() {
+                    mobileTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    if (indicator) indicator.style.transform = `translateX(${index * 100}%)`;
+                });
+            });
         });
     </script>
 </body>
