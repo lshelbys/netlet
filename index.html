@@ -1320,6 +1320,20 @@
         const searchInput = document.querySelector('.search-container input');
         const categoryChips = document.querySelectorAll('.chip');
 
+        // Debounce timer for search scrolling
+        let searchScrollTimeout;
+        const isMobile = () => window.innerWidth <= 768;
+
+        function scrollToProducts() {
+            if (isMobile()) return; // Don't auto-scroll on mobile
+            const grid = document.getElementById('productGrid');
+            if (grid) {
+                setTimeout(() => {
+                    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+
         // 1. RENDER LOGIC
         function getFilteredAndSortedProducts() {
             let filtered = inventory.filter(p => {
@@ -1350,11 +1364,9 @@
 
             const products = getFilteredAndSortedProducts();
 
-            // Auto-scroll to products when searching or filtering
-            if (searchQuery || selectedCategory) {
-                setTimeout(() => {
-                    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
+            // Auto-scroll to products when searching or filtering (desktop only)
+            if ((searchQuery || selectedCategory) && !isMobile()) {
+                scrollToProducts();
             }
 
             // Build search header
@@ -1539,7 +1551,17 @@
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 searchQuery = e.target.value;
-                renderProducts();
+
+                // Debounce search rendering on mobile (300ms delay)
+                if (isMobile()) {
+                    clearTimeout(searchScrollTimeout);
+                    searchScrollTimeout = setTimeout(() => {
+                        renderProducts();
+                    }, 300);
+                } else {
+                    // Desktop: render immediately
+                    renderProducts();
+                }
             });
 
             // Clear search button
@@ -1549,6 +1571,7 @@
                     e.preventDefault();
                     searchInput.value = '';
                     searchQuery = '';
+                    clearTimeout(searchScrollTimeout);
                     renderProducts();
                     searchInput.focus();
                 });
