@@ -2383,7 +2383,7 @@
             }
             localStorage.setItem('netletCart', JSON.stringify(cart));
             updateCartUI();
-            new Toast(`Added ${product.brand} to cart`, 'success', 6000);
+            new Toast(`Added ${product.title} to cart`, 'success', 6000);
         }
 
         function toggleWishlist(productId) {
