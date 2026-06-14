@@ -112,6 +112,10 @@ function showAlert(message, type = 'success') {
 
 // Function to render the inventory table
 function renderInventory(filterText = '') {
+    if (!inventoryTableBody) {
+        console.warn('Inventory table not found');
+        return;
+    }
     inventoryTableBody.innerHTML = ''; // Clear existing rows
 
     const filtered = inventory.filter(p =>
@@ -248,20 +252,33 @@ function startEdit(id) {
     if (!product) return;
 
     editingProductId = id;
-    formContainer.style.display = 'block';
-    document.getElementById('brand').value = product.brand;
-    document.getElementById('sku').value = product.sku || '';
-    document.getElementById('title').value = product.title;
-    document.getElementById('description').value = product.description || '';
-    document.getElementById('category').value = product.category || '';
-    document.getElementById('price').value = product.price;
-    document.getElementById('oldPrice').value = product.oldPrice || '';
-    document.getElementById('isExpress').checked = product.isExpress;
-    document.getElementById('rating').value = product.rating;
-    document.getElementById('reviews').value = product.reviews;
-    document.getElementById('icon').value = product.icon;
-    document.getElementById('stockQuantity').value = product.stockQuantity || 0;
-    document.getElementById('lowStockThreshold').value = product.lowStockThreshold || 5;
+    if (formContainer) formContainer.style.display = 'block';
+
+    // Safely set form values
+    const setFormValue = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) {
+            if (el.type === 'checkbox') {
+                el.checked = value;
+            } else {
+                el.value = value;
+            }
+        }
+    };
+
+    setFormValue('brand', product.brand);
+    setFormValue('sku', product.sku || '');
+    setFormValue('title', product.title);
+    setFormValue('description', product.description || '');
+    setFormValue('category', product.category || '');
+    setFormValue('price', product.price);
+    setFormValue('oldPrice', product.oldPrice || '');
+    setFormValue('isExpress', product.isExpress);
+    setFormValue('rating', product.rating);
+    setFormValue('reviews', product.reviews);
+    setFormValue('icon', product.icon);
+    setFormValue('stockQuantity', product.stockQuantity || 0);
+    setFormValue('lowStockThreshold', product.lowStockThreshold || 5);
 
     // Populate image slots
     clearImageSlots();
@@ -272,27 +289,27 @@ function startEdit(id) {
         addImageSlot(); // Add one empty slot if no images
     }
 
-    formTitle.textContent = 'Edit Product';
-    submitBtn.textContent = 'Update Product';
-    cancelBtn.style.display = 'inline-block';
-    formContainer.scrollIntoView({ behavior: 'smooth' });
+    if (formTitle) formTitle.textContent = 'Edit Product';
+    if (submitBtn) submitBtn.textContent = 'Update Product';
+    if (cancelBtn) cancelBtn.style.display = 'inline-block';
+    if (formContainer) formContainer.scrollIntoView({ behavior: 'smooth' });
 }
 
 function resetForm() {
     editingProductId = null;
-    productForm.reset();
+    if (productForm) productForm.reset();
     clearImageSlots();
     addImageSlot(); // Add one empty slot
-    formTitle.textContent = 'Add New Product';
-    submitBtn.textContent = 'Add Product';
-    cancelBtn.style.display = 'none';
-    formContainer.style.display = 'none';
+    if (formTitle) formTitle.textContent = 'Add New Product';
+    if (submitBtn) submitBtn.textContent = 'Add Product';
+    if (cancelBtn) cancelBtn.style.display = 'none';
+    if (formContainer) formContainer.style.display = 'none';
 }
 
 function updateStats() {
     const totalValue = inventory.reduce((sum, p) => sum + p.price, 0);
-    totalItemsEl.textContent = inventory.length;
-    totalValueEl.textContent = totalValue.toFixed(2);
+    if (totalItemsEl) totalItemsEl.textContent = inventory.length;
+    if (totalValueEl) totalValueEl.textContent = totalValue.toFixed(2);
 }
 
 if (cancelBtn) {
