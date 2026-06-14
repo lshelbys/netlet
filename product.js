@@ -103,7 +103,9 @@ function renderProduct(product) {
                 <hr class="divider">
                 <div style="margin-bottom: 16px;">
                     ${product.stockStatus === 'In Stock'
-                        ? `<div style="color: #28a745; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-check-circle"></i> In Stock (${product.stockQuantity} available)</div>`
+                        ? product.stockQuantity < 5
+                            ? `<div style="color: #28a745; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-check-circle"></i> In Stock (${product.stockQuantity} left)</div>`
+                            : `<div style="color: #28a745; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-check-circle"></i> In Stock</div>`
                         : product.stockStatus === 'Low Stock'
                         ? `<div style="color: #FFC107; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-exclamation-triangle"></i> Low Stock (${product.stockQuantity} left)</div>`
                         : `<div style="color: #E61C38; font-weight: 600; display: flex; align-items: center; gap: 8px;"><i class="fas fa-times-circle"></i> Out of Stock</div>`}
