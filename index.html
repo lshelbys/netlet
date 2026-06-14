@@ -275,34 +275,17 @@
             color: var(--text-dark);
         }
 
-        /* Mobile Wishlist Button */
-        .mobile-wishlist-btn {
+        /* Desktop Categories */
+        .desktop-categories {
+            display: inline;
+        }
+
+        .mobile-wishlist-header {
             display: none;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(25px) saturate(210%);
-            -webkit-backdrop-filter: blur(25px) saturate(210%);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 16px;
-            width: 46px;
-            height: 46px;
-            align-items: center;
-            justify-content: center;
-            margin: 10px 12px 0 0;
-            font-size: 18px;
+            font-size: 20px;
             color: var(--text-dark);
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow:
-                0 4px 30px rgba(0, 0, 0, 0.05),
-                inset 0 1px 1px rgba(255, 255, 255, 0.4);
-            min-height: 44px;
-            min-width: 44px;
-        }
-
-        .mobile-wishlist-btn:active {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(0.95);
         }
 
         /* HEADER ACTIONS */
@@ -958,8 +941,11 @@
             .header-actions {
                 display: none; /* Hide desktop actions to declutter; use bottom tabs instead */
             }
-            .mobile-wishlist-btn {
-                display: flex;
+            .desktop-categories {
+                display: none;
+            }
+            .mobile-wishlist-header {
+                display: inline;
             }
             .delivery-location {
                 display: none;
@@ -1538,10 +1524,6 @@
                 </button>
             </div>
 
-            <a href="wishlist.html" class="mobile-wishlist-btn" title="Wishlist">
-                <i class="far fa-heart"></i>
-            </a>
-
             <div class="header-actions">
                 <div class="lang-toggle">العربية</div>
                 
@@ -1570,7 +1552,10 @@
     <nav class="nav-bar">
         <div class="nav-container">
             <div class="mega-menu-trigger" id="megaMenuTrigger">
-                <i class="fas fa-bars"></i> ALL CATEGORIES
+                <span class="desktop-categories"><i class="fas fa-bars"></i> ALL CATEGORIES</span>
+                <a href="wishlist.html" class="mobile-wishlist-header">
+                    <i class="far fa-heart"></i>
+                </a>
                 <div class="mega-menu" id="megaMenu">
                     <a href="#" class="mega-menu-item" data-category="Electronics">Electronics <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
                     <a href="#" class="mega-menu-item" data-category="Fashion">Fashion <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
