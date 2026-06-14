@@ -642,7 +642,7 @@
             top: 0;
             left: 0;
             opacity: 0;
-            transition: opacity 0.7s ease-in-out;
+            transition: opacity 2.5s ease-in-out;
         }
         .image-stack .product-image.active {
             opacity: 1;
@@ -1334,11 +1334,11 @@
 
                 const start = () => {
                     if (timer) return;
-                    // Advance roughly in step with the 0.7s fade so it changes "slowly and smoothly".
+                    // Advance every 2.5s to match the fade transition time
                     timer = setInterval(() => {
                         index = (index + 1) % imgs.length;
                         show(index);
-                    }, 900);
+                    }, 2500);
                 };
 
                 const stop = () => {
