@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cookie Policy - NetLet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --netlet-blue: #1E3A8A;
+            --netlet-red: #E61C38;
+            --text-dark: #1F2229;
+            --bg-light: #F7F6F2;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #F7F6F2 0%, #F0EFE8 100%);
+            color: #404553;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .policy-header {
+            background: rgba(247, 246, 242, 0.75);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            height: 40px;
+        }
+
+        .logo-link img {
+            height: 100%;
+            width: auto;
+            max-width: 120px;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--netlet-blue);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s;
+        }
+
+        .back-link:hover {
+            gap: 10px;
+        }
+
+        /* Main Container */
+        .policy-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .policy-header-section {
+            margin-bottom: 40px;
+        }
+
+        .policy-header-section h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .policy-header-section p {
+            font-size: 16px;
+            color: #7E859B;
+            font-weight: 500;
+        }
+
+        /* Content Card */
+        .policy-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 40px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            margin-bottom: 24px;
+        }
+
+        .policy-card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .policy-card h2 i {
+            color: var(--netlet-blue);
+            font-size: 28px;
+        }
+
+        .policy-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .policy-card h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .policy-card p {
+            font-size: 15px;
+            color: #404553;
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .policy-card ul {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .policy-card li {
+            font-size: 15px;
+            color: #404553;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            background: rgba(30, 58, 138, 0.08);
+            border-left: 4px solid var(--netlet-blue);
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .highlight p {
+            margin: 0;
+            font-weight: 500;
+            color: var(--netlet-blue);
+        }
+
+        /* Table Styles */
+        .cookie-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .cookie-table th {
+            background: rgba(30, 58, 138, 0.1);
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+            color: var(--text-dark);
+            border-bottom: 2px solid rgba(30, 58, 138, 0.2);
+        }
+
+        .cookie-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            color: #404553;
+        }
+
+        .cookie-table tr:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: rgba(30, 58, 138, 0.05);
+            border: 1px solid rgba(30, 58, 138, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .contact-section h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .contact-section p {
+            font-size: 14px;
+            color: #404553;
+            margin-bottom: 8px;
+        }
+
+        .contact-section a {
+            color: var(--netlet-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-section a:hover {
+            color: var(--netlet-red);
+        }
+
+        /* Mobile Navigation */
+        .mobile-bottom-ui {
+            display: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .policy-container {
+                padding: 24px 16px 160px;
+            }
+
+            .policy-header-section h1 {
+                font-size: 28px;
+            }
+
+            .policy-card {
+                padding: 24px;
+            }
+
+            .policy-card h2 {
+                font-size: 20px;
+            }
+
+            .policy-card h3 {
+                font-size: 16px;
+                margin-top: 20px;
+            }
+
+            .policy-card p,
+            .policy-card li {
+                font-size: 14px;
+            }
+
+            .cookie-table {
+                font-size: 13px;
+            }
+
+            .cookie-table th,
+            .cookie-table td {
+                padding: 10px;
+            }
+
+            /* Mobile bottom UI */
+            .mobile-bottom-ui {
+                display: block;
+                position: fixed;
+                bottom: 30px;
+                left: 15px;
+                right: 15px;
+                width: calc(100% - 30px);
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(25px) saturate(210%);
+                -webkit-backdrop-filter: blur(25px) saturate(210%);
+                z-index: 2000;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 24px;
+                box-shadow:
+                    0 -8px 32px rgba(0, 0, 0, 0.1),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+
+            .mobile-search-logo-area {
+                display: none;
+            }
+
+            .mobile-tabs {
+                display: flex;
+                position: relative;
+                justify-content: space-around;
+                align-items: center;
+                padding: 6px 4px;
+            }
+
+            .tab-indicator {
+                position: absolute;
+                top: 6px;
+                left: 0;
+                width: 20%;
+                height: calc(100% - 12px);
+                z-index: 0;
+                pointer-events: none;
+                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            .tab-indicator::after {
+                content: '';
+                display: block;
+                margin: 0 4px;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                border-radius: 22px;
+                box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+            }
+
+            .mobile-tab-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                padding: 12px 0;
+                color: #7E859B;
+                font-size: 10px;
+                font-weight: 600;
+                text-decoration: none;
+                flex: 1;
+                position: relative;
+                z-index: 1;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+
+            .mobile-tab-item i {
+                font-size: 20px;
+                transition: transform 0.3s ease;
+            }
+
+            .mobile-tab-item.active {
+                color: var(--netlet-blue);
+                transform: translateY(-2px);
+            }
+
+            .mobile-tab-item:active {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+            }
+
+            .mobile-cart-badge {
+                position: absolute;
+                top: -6px;
+                right: 20%;
+                background-color: var(--netlet-red);
+                color: white;
+                font-size: 9px;
+                font-weight: 700;
+                padding: 2px 5px;
+                border-radius: 10px;
+                min-width: 16px;
+                text-align: center;
+            }
+
+            body {
+                padding-bottom: 0;
+            }
+
+            .header-content {
+                gap: 12px;
+            }
+
+            .back-link span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .policy-container {
+                padding: 16px 12px 160px;
+            }
+
+            .policy-header-section h1 {
+                font-size: 24px;
+            }
+
+            .policy-card {
+                padding: 20px;
+            }
+
+            .highlight {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="policy-header">
+        <div class="header-content">
+            <a href="index.html" class="logo-link">
+                <img src="logo.png" alt="NetLet home" width="3130" height="1725" decoding="async">
+            </a>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Home</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="policy-container">
+        <div class="policy-header-section">
+            <h1>Cookie Policy</h1>
+            <p>Last updated: June 14, 2026</p>
+        </div>
+
+        <!-- Introduction -->
+        <div class="policy-card">
+            <h2><i class="fas fa-cookie"></i> What Are Cookies?</h2>
+            <p>Cookies are small text files that are stored on your device when you visit our website. They help us remember your preferences, improve your browsing experience, and provide you with personalized content. Cookies can be either temporary (session cookies) or permanent (persistent cookies).</p>
+            <div class="highlight">
+                <p><strong>💡 Important:</strong> We are committed to respecting your privacy. This policy explains what cookies we use and how you can manage them.</p>
+            </div>
+        </div>
+
+        <!-- Types of Cookies -->
+        <div class="policy-card">
+            <h2><i class="fas fa-list"></i> Types of Cookies We Use</h2>
+
+            <h3>1. Essential Cookies</h3>
+            <p>These cookies are necessary for the website to function properly. They enable basic functionality such as:</p>
+            <ul>
+                <li>User authentication and login</li>
+                <li>Shopping cart functionality</li>
+                <li>Security features and fraud prevention</li>
+                <li>Cookie consent preferences</li>
+            </ul>
+
+            <h3>2. Performance Cookies</h3>
+            <p>These cookies help us understand how visitors use our website by collecting anonymous information about:</p>
+            <ul>
+                <li>Page views and user interactions</li>
+                <li>Website performance metrics</li>
+                <li>Error tracking and debugging</li>
+                <li>Usage patterns and trends</li>
+            </ul>
+
+            <h3>3. Functional Cookies</h3>
+            <p>These cookies remember your preferences and settings to provide a personalized experience:</p>
+            <ul>
+                <li>Language and region preferences</li>
+                <li>Product wishlist and saved items</li>
+                <li>Search history and filters</li>
+                <li>User interface preferences</li>
+            </ul>
+
+            <h3>4. Marketing Cookies</h3>
+            <p>These cookies are used to track your interests and deliver relevant advertisements:</p>
+            <ul>
+                <li>Personalized product recommendations</li>
+                <li>Targeted advertising campaigns</li>
+                <li>Social media sharing integration</li>
+                <li>Conversion tracking</li>
+            </ul>
+        </div>
+
+        <!-- Cookie Table -->
+        <div class="policy-card">
+            <h2><i class="fas fa-table"></i> Cookie Details</h2>
+            <table class="cookie-table">
+                <thead>
+                    <tr>
+                        <th>Cookie Name</th>
+                        <th>Purpose</th>
+                        <th>Duration</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>netletCart</td>
+                        <td>Stores shopping cart items</td>
+                        <td>Session</td>
+                        <td>Essential</td>
+                    </tr>
+                    <tr>
+                        <td>netletWishlist</td>
+                        <td>Saves wishlist items</td>
+                        <td>1 year</td>
+                        <td>Functional</td>
+                    </tr>
+                    <tr>
+                        <td>netletCookieConsent</td>
+                        <td>Remembers cookie preferences</td>
+                        <td>1 year</td>
+                        <td>Essential</td>
+                    </tr>
+                    <tr>
+                        <td>netlet_session</td>
+                        <td>User authentication</td>
+                        <td>Session</td>
+                        <td>Essential</td>
+                    </tr>
+                    <tr>
+                        <td>_ga</td>
+                        <td>Google Analytics tracking</td>
+                        <td>2 years</td>
+                        <td>Performance</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- How to Manage Cookies -->
+        <div class="policy-card">
+            <h2><i class="fas fa-cog"></i> How to Manage Cookies</h2>
+
+            <h3>Through Our Website</h3>
+            <p>You can manage your cookie preferences by:</p>
+            <ul>
+                <li>Using the cookie consent banner that appears on first visit</li>
+                <li>Clicking "Accept Cookies" to enable all cookies</li>
+                <li>Clicking "Deny" to disable non-essential cookies</li>
+                <li>Clearing your browser cache and cookies at any time</li>
+            </ul>
+
+            <h3>Through Your Browser</h3>
+            <p>Most browsers allow you to control cookies through settings:</p>
+            <ul>
+                <li><strong>Chrome:</strong> Settings → Privacy and security → Cookies and other site data</li>
+                <li><strong>Firefox:</strong> Preferences → Privacy & Security → Cookies and Site Data</li>
+                <li><strong>Safari:</strong> Preferences → Privacy → Cookies and website data</li>
+                <li><strong>Edge:</strong> Settings → Privacy → Cookies and other site permissions</li>
+            </ul>
+
+            <div class="highlight">
+                <p><strong>⚠️ Note:</strong> Disabling essential cookies may affect website functionality and your shopping experience.</p>
+            </div>
+        </div>
+
+        <!-- Third-Party Cookies -->
+        <div class="policy-card">
+            <h2><i class="fas fa-share-alt"></i> Third-Party Cookies</h2>
+            <p>We may allow third-party service providers to place cookies on our website for:</p>
+            <ul>
+                <li>Analytics and performance monitoring</li>
+                <li>Payment processing</li>
+                <li>Social media integration</li>
+                <li>Advertising and marketing</li>
+            </ul>
+            <p>These third parties have their own privacy policies and are responsible for their own cookie practices. We encourage you to review their privacy policies.</p>
+        </div>
+
+        <!-- Your Privacy Rights -->
+        <div class="policy-card">
+            <h2><i class="fas fa-shield-alt"></i> Your Privacy Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access information about cookies stored on your device</li>
+                <li>Delete cookies at any time</li>
+                <li>Opt-out of non-essential cookies</li>
+                <li>Request information about how your data is used</li>
+                <li>Ask for deletion of your personal data</li>
+            </ul>
+            <p>For more information about your privacy rights, please refer to our <a href="#" style="color: var(--netlet-blue); font-weight: 600;">Privacy Policy</a>.</p>
+        </div>
+
+        <!-- Updates to Policy -->
+        <div class="policy-card">
+            <h2><i class="fas fa-refresh"></i> Updates to This Policy</h2>
+            <p>We may update this cookie policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of any material changes by posting the new policy on this page and updating the "Last updated" date.</p>
+            <p>Your continued use of our website after any changes constitutes your acceptance of the updated policy.</p>
+        </div>
+
+        <!-- Contact Us -->
+        <div class="policy-card">
+            <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+            <p>If you have any questions or concerns about our cookie policy, please don't hesitate to reach out:</p>
+            <div class="contact-section">
+                <h4>NetLet Support</h4>
+                <p><i class="fas fa-envelope"></i> Email: <a href="mailto:support@netlet.com">support@netlet.com</a></p>
+                <p><i class="fas fa-phone"></i> Phone: <a href="tel:+96525123456">+965 2512 3456</a></p>
+                <p><i class="fas fa-map-marker-alt"></i> Location: Kuwait City, Kuwait</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-ui">
+        <nav class="mobile-tabs">
+            <div class="tab-indicator"></div>
+            <a href="index.html" class="mobile-tab-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="mobile-tab-item" id="mobileMegaTrigger">
+                <i class="fas fa-th-large"></i>
+                <span>Categories</span>
+            </a>
+            <a href="#" class="mobile-tab-item" id="dealsTrigger">
+                <i class="fas fa-tags"></i>
+                <span>Deals</span>
+            </a>
+            <a href="account.html" class="mobile-tab-item">
+                <i class="fas fa-user"></i>
+                <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-tab-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Cart</span>
+                <span class="mobile-cart-badge">0</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // Update cart badge from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartBadge = document.querySelector('.mobile-cart-badge');
+            if (cartBadge) {
+                const cart = JSON.parse(localStorage.getItem('netletCart')) || [];
+                const totalItems = cart.reduce((sum, item) => {
+                    return sum + (typeof item === 'object' ? (item.quantity || 1) : 1);
+                }, 0);
+                cartBadge.textContent = totalItems;
+            }
+        });
+    </script>
+</body>
+</html>
