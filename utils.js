@@ -9,6 +9,16 @@ class Toast {
 
     show() {
         const container = document.getElementById('toast-container') || this.createContainer();
+
+        // Remove any existing toast with the same message
+        const existingToasts = container.querySelectorAll('.toast');
+        for (const existingToast of existingToasts) {
+            if (existingToast.textContent === this.message) {
+                existingToast.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => existingToast.remove(), 300);
+            }
+        }
+
         const toast = document.createElement('div');
         toast.className = `toast toast-${this.type}`;
         toast.textContent = this.message;
