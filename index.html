@@ -2279,7 +2279,6 @@
 
                 const elapsed = Math.max(300 - (performance.now() - start), 0);
                 setTimeout(() => LoadingOverlay.hide(), elapsed);
-                new Toast('Products loaded successfully', 'success', 1500);
             } catch (err) {
                 LoadingOverlay.hide();
                 handleError(err, 'initialization');
