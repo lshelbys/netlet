@@ -1122,23 +1122,25 @@
             <div class="mega-menu-trigger" id="megaMenuTrigger">
                 <i class="fas fa-bars"></i> ALL CATEGORIES
                 <div class="mega-menu" id="megaMenu">
-                    <a href="#" class="mega-menu-item">Electronics <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Fashion <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Home & Kitchen <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Beauty & Fragrance <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Baby Products <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Toys <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Sports & Outdoors <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Electronics">Electronics <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Fashion">Fashion <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Home & Garden">Home & Garden <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Beauty">Beauty <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Books">Books <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Toys">Toys <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Sports">Sports <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Food & Beverage">Food & Beverage <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Other">Other <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
                 </div>
             </div>
             <ul class="nav-links">
-                <li><a href="#">ELECTRONICS</a></li>
-                <li><a href="#">FASHION</a></li>
-                <li><a href="#">HOME & KITCHEN</a></li>
-                <li><a href="#">BEAUTY & FRAGRANCE</a></li>
-                <li><a href="#">BABY PRODUCTS</a></li>
-                <li><a href="#">TOYS</a></li>
-                <li><a href="#">SPORTS & OUTDOORS</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Electronics">ELECTRONICS</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Fashion">FASHION</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Home & Garden">HOME & GARDEN</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Beauty">BEAUTY</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Books">BOOKS</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Toys">TOYS</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Sports">SPORTS</a></li>
                 <li><a href="#" class="highlight-netletone"><i class="fas fa-bolt"></i> NetLet One</a></li>
             </ul>
         </div>
@@ -1453,6 +1455,34 @@
                     console.log('First few products:', inventory.slice(0, 3).map(p => ({ id: p.id, brand: p.brand, category: p.category })));
                 }
                 renderProducts();
+            });
+        });
+
+        // Wire up mega menu category links
+        document.querySelectorAll('.mega-menu-item').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = link.dataset.category || '';
+                // Find and click the corresponding chip
+                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
+                if (correspondingChip) {
+                    correspondingChip.click();
+                }
+                // Close mega menu
+                megaMenu.classList.remove('active');
+            });
+        });
+
+        // Wire up top nav category links
+        document.querySelectorAll('.nav-category-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = link.dataset.category || '';
+                // Find and click the corresponding chip
+                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
+                if (correspondingChip) {
+                    correspondingChip.click();
+                }
             });
         });
 
