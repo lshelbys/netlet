@@ -164,25 +164,45 @@ function renderInventory(filterText = '') {
 }
 
 // Event listener for adding a new product
-productForm.addEventListener('submit', async (e) => {
+if (productForm) {
+    productForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // Validate form elements exist
+    const requiredElements = {
+        brand: document.getElementById('brand'),
+        title: document.getElementById('title'),
+        price: document.getElementById('price'),
+        rating: document.getElementById('rating'),
+        reviews: document.getElementById('reviews'),
+        icon: document.getElementById('icon'),
+        stockQuantity: document.getElementById('stockQuantity'),
+        lowStockThreshold: document.getElementById('lowStockThreshold')
+    };
+
+    for (const [name, element] of Object.entries(requiredElements)) {
+        if (!element) {
+            showAlert(`Form field "${name}" not found. Please refresh the page.`, 'error');
+            return;
+        }
+    }
 
     const productData = {
         id: editingProductId,
-        brand: document.getElementById('brand').value,
-        sku: document.getElementById('sku').value || null,
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value || null,
-        category: document.getElementById('category').value || null,
-        price: parseFloat(document.getElementById('price').value),
-        oldPrice: document.getElementById('oldPrice').value ? parseFloat(document.getElementById('oldPrice').value) : null,
-        isExpress: document.getElementById('isExpress').checked,
-        rating: parseFloat(document.getElementById('rating').value),
-        reviews: parseInt(document.getElementById('reviews').value, 10),
-        icon: document.getElementById('icon').value,
+        brand: requiredElements.brand.value,
+        sku: document.getElementById('sku')?.value || null,
+        title: requiredElements.title.value,
+        description: document.getElementById('description')?.value || null,
+        category: document.getElementById('category')?.value || null,
+        price: parseFloat(requiredElements.price.value),
+        oldPrice: document.getElementById('oldPrice')?.value ? parseFloat(document.getElementById('oldPrice').value) : null,
+        isExpress: document.getElementById('isExpress')?.checked || false,
+        rating: parseFloat(requiredElements.rating.value),
+        reviews: parseInt(requiredElements.reviews.value, 10),
+        icon: requiredElements.icon.value,
         images: getImageUrls(),
-        stockQuantity: parseInt(document.getElementById('stockQuantity').value, 10) || 0,
-        lowStockThreshold: parseInt(document.getElementById('lowStockThreshold').value, 10) || 5
+        stockQuantity: parseInt(requiredElements.stockQuantity.value, 10) || 0,
+        lowStockThreshold: parseInt(requiredElements.lowStockThreshold.value, 10) || 5
     };
 
     if (isNaN(productData.price) || (productData.oldPrice !== null && isNaN(productData.oldPrice)) || isNaN(productData.rating) || isNaN(productData.reviews)) {
@@ -203,10 +223,12 @@ productForm.addEventListener('submit', async (e) => {
     // Pass search value to maintain current filter after adding/editing
     renderInventory(searchInput.value);
     resetForm();
-});
+    });
+}
 
 // Event listener for actions (using event delegation)
-inventoryTableBody.addEventListener('click', async (e) => {
+if (inventoryTableBody) {
+    inventoryTableBody.addEventListener('click', async (e) => {
     if (e.target.classList.contains('btn-delete')) {
         const productId = parseInt(e.target.dataset.id, 10);
         if (confirm(`Are you sure you want to delete product ID ${productId}?`)) {
@@ -218,7 +240,8 @@ inventoryTableBody.addEventListener('click', async (e) => {
         const productId = parseInt(e.target.dataset.id, 10);
         startEdit(productId);
     }
-});
+    });
+}
 
 function startEdit(id) {
     const product = inventory.find(p => p.id === id);
@@ -272,20 +295,27 @@ function updateStats() {
     totalValueEl.textContent = totalValue.toFixed(2);
 }
 
-cancelBtn.addEventListener('click', resetForm);
+if (cancelBtn) {
+    cancelBtn.addEventListener('click', resetForm);
+}
 
-searchInput.addEventListener('input', (e) => {
-    renderInventory(e.target.value);
-});
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        renderInventory(e.target.value);
+    });
+}
 
-toggleFormBtn.addEventListener('click', () => {
-    resetForm();
-    formContainer.style.display = 'block';
-    formContainer.scrollIntoView({ behavior: 'smooth' });
-});
+if (toggleFormBtn) {
+    toggleFormBtn.addEventListener('click', () => {
+        resetForm();
+        formContainer.style.display = 'block';
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+    });
+}
 
 // --- EXPORT TO CSV (EXCEL) ---
-exportBtn.addEventListener('click', () => {
+if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
     if (inventory.length === 0) return showAlert('Inventory is empty!', 'error');
 
     const headers = ['id', 'brand', 'sku', 'title', 'description', 'category', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'stockQuantity', 'lowStockThreshold', 'images'];
@@ -312,12 +342,16 @@ exportBtn.addEventListener('click', () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-});
+    });
+}
 
 // --- IMPORT FROM CSV ---
-importBtn.addEventListener('click', () => importFile.click());
+if (importBtn) {
+    importBtn.addEventListener('click', () => importFile.click());
+}
 
-importFile.addEventListener('change', (e) => {
+if (importFile) {
+    importFile.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -366,7 +400,8 @@ importFile.addEventListener('change', (e) => {
         importFile.value = ''; // Reset input
     };
     reader.readAsText(file);
-});
+    });
+}
 
 // Initial render when the page loads
 document.addEventListener('DOMContentLoaded', async () => {
