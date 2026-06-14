@@ -1409,19 +1409,6 @@
     </section>
 
     <main class="section-wrapper">
-        <div class="category-chips">
-            <div class="chip active" data-category="">All</div>
-            <div class="chip" data-category="Electronics">Electronics</div>
-            <div class="chip" data-category="Fashion">Fashion</div>
-            <div class="chip" data-category="Home & Garden">Home &amp; Garden</div>
-            <div class="chip" data-category="Sports">Sports</div>
-            <div class="chip" data-category="Beauty">Beauty</div>
-            <div class="chip" data-category="Books">Books</div>
-            <div class="chip" data-category="Toys">Toys</div>
-            <div class="chip" data-category="Food & Beverage">Food &amp; Beverage</div>
-            <div class="chip" data-category="Other">Other</div>
-        </div>
-
         <div class="section-header">
             <h2 class="section-title">Trending Deals in Kuwait City</h2>
             <button class="view-all-btn">VIEW ALL</button>
@@ -1557,7 +1544,6 @@
         const cartBadge = document.querySelector('.cart-badge');
         const mobileCartBadge = document.querySelector('.mobile-cart-badge');
         const searchInput = document.querySelector('.search-container input');
-        const categoryChips = document.querySelectorAll('.chip');
 
         // Debounce timer for search scrolling
         let searchScrollTimeout;
@@ -1843,25 +1829,13 @@
         // Declare megaMenu early for use in event listeners below
         const megaMenu = document.getElementById('megaMenu');
 
-        categoryChips.forEach(chip => {
-            chip.addEventListener('click', () => {
-                categoryChips.forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                selectedCategory = chip.dataset.category || '';
-                renderProducts();
-            });
-        });
-
         // Wire up mega menu category links
         document.querySelectorAll('.mega-menu-item').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const category = link.dataset.category || '';
-                // Find and click the corresponding chip
-                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
-                if (correspondingChip) {
-                    correspondingChip.click();
-                }
+                selectedCategory = category;
+                renderProducts();
                 // Close mega menu
                 if (megaMenu) megaMenu.classList.remove('active');
             });
@@ -1881,11 +1855,8 @@
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const category = link.dataset.category || '';
-                // Find and click the corresponding chip
-                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
-                if (correspondingChip) {
-                    correspondingChip.click();
-                }
+                selectedCategory = category;
+                renderProducts();
             });
         });
 
@@ -1948,10 +1919,8 @@
             option.addEventListener('click', (e) => {
                 e.preventDefault();
                 const category = option.dataset.category || '';
-                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
-                if (correspondingChip) {
-                    correspondingChip.click();
-                }
+                selectedCategory = category;
+                renderProducts();
                 if (categoriesModal) categoriesModal.classList.remove('active');
             });
         });
