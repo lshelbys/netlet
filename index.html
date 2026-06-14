@@ -614,6 +614,8 @@
             border-radius: 4px;
             background: rgba(250, 250, 250, 0.5);
             border-radius: 12px;
+            position: relative;
+            overflow: hidden;
         }
 
         .image-placeholder {
@@ -627,6 +629,29 @@
             object-fit: contain;
             border-radius: 12px;
             mix-blend-mode: multiply;
+        }
+
+        /* Stacked images for the hover slideshow */
+        .image-stack {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .image-stack .product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.7s ease-in-out;
+        }
+        .image-stack .product-image.active {
+            opacity: 1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .image-stack .product-image {
+                transition: none;
+            }
         }
 
         .product-details {
@@ -1259,7 +1284,9 @@
                             </button>
                             <div class="image-container">
                                 ${product.images && product.images.length > 0
-                                    ? `<img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.title)}" class="product-image" loading="lazy" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)} image-placeholder\\'></i>';">`
+                                    ? (product.images.length > 1
+                                        ? `<div class="image-stack">${product.images.map((url, i) => `<img src="${escapeHtml(url)}" alt="${escapeHtml(product.title)}" class="product-image${i === 0 ? ' active' : ''}" loading="lazy" onerror="this.style.display='none';">`).join('')}</div>`
+                                        : `<img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.title)}" class="product-image" loading="lazy" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)} image-placeholder\\'></i>';">`)
                                     : `<i class="fas ${escapeHtml(product.icon)} image-placeholder"></i>`}
                             </div>
                             <div class="product-details">
@@ -1286,6 +1313,44 @@
                     </article>
                 `;
             }).join('');
+
+            setupHoverSlideshows();
+        }
+
+        // Cycle through a card's images while the mouse hovers over it.
+        function setupHoverSlideshows() {
+            document.querySelectorAll('.image-stack').forEach(stack => {
+                const card = stack.closest('.product-card');
+                if (!card) return;
+                const imgs = stack.querySelectorAll('.product-image');
+                if (imgs.length < 2) return;
+
+                let index = 0;
+                let timer = null;
+
+                const show = (i) => {
+                    imgs.forEach((img, n) => img.classList.toggle('active', n === i));
+                };
+
+                const start = () => {
+                    if (timer) return;
+                    // Advance roughly in step with the 0.7s fade so it changes "slowly and smoothly".
+                    timer = setInterval(() => {
+                        index = (index + 1) % imgs.length;
+                        show(index);
+                    }, 900);
+                };
+
+                const stop = () => {
+                    clearInterval(timer);
+                    timer = null;
+                    index = 0;
+                    show(0);
+                };
+
+                card.addEventListener('mouseenter', start);
+                card.addEventListener('mouseleave', stop);
+            });
         }
 
         // 2. CART & WISHLIST LOGIC
