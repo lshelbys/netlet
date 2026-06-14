@@ -275,6 +275,36 @@
             color: var(--text-dark);
         }
 
+        /* Mobile Wishlist Button */
+        .mobile-wishlist-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            width: 46px;
+            height: 46px;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 12px 0 0;
+            font-size: 18px;
+            color: var(--text-dark);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .mobile-wishlist-btn:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.95);
+        }
+
         /* HEADER ACTIONS */
         .header-actions {
             display: flex;
@@ -928,12 +958,14 @@
             .header-actions {
                 display: none; /* Hide desktop actions to declutter; use bottom tabs instead */
             }
+            .mobile-wishlist-btn {
+                display: flex;
+            }
             .delivery-location {
                 display: none;
             }
             .mega-menu-trigger {
-                border-right: none;
-                margin-right: 0;
+                display: none;
             }
             .nav-links {
                 display: none;
@@ -1505,6 +1537,10 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+
+            <a href="wishlist.html" class="mobile-wishlist-btn" title="Wishlist">
+                <i class="far fa-heart"></i>
+            </a>
 
             <div class="header-actions">
                 <div class="lang-toggle">العربية</div>
