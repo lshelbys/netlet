@@ -137,40 +137,62 @@ function injectToastStyles() {
     styles.id = 'toast-styles';
     styles.textContent = `
         .toast {
-            background: white;
-            color: #404553;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            color: #1F2229;
             padding: 14px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            font-weight: 500;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            font-weight: 600;
             font-size: 14px;
-            border-left: 4px solid #999;
             max-width: 100%;
             word-break: break-word;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast::before {
+            content: '';
+            min-width: 4px;
+            min-height: 20px;
+            border-radius: 2px;
         }
 
         .toast-success {
-            border-left-color: #28a745;
-            background: #d4edda;
-            color: #155724;
+            border-color: rgba(40, 167, 69, 0.3);
+        }
+
+        .toast-success::before {
+            background: #28a745;
         }
 
         .toast-error {
-            border-left-color: #E61C38;
-            background: #f8d7da;
-            color: #721c24;
+            border-color: rgba(230, 28, 56, 0.3);
+        }
+
+        .toast-error::before {
+            background: #E61C38;
         }
 
         .toast-info {
-            border-left-color: #1E3A8A;
-            background: #d1ecf1;
-            color: #0c5460;
+            border-color: rgba(30, 58, 138, 0.3);
+        }
+
+        .toast-info::before {
+            background: #1E3A8A;
         }
 
         .toast-warning {
-            border-left-color: #ffc107;
-            background: #fff3cd;
-            color: #856404;
+            border-color: rgba(255, 193, 7, 0.3);
+        }
+
+        .toast-warning::before {
+            background: #FFC107;
         }
 
         @keyframes slideIn {
