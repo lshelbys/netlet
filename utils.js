@@ -239,11 +239,107 @@ function injectToastStyles() {
     document.head.appendChild(styles);
 }
 
-// Initialize on DOM load
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectToastStyles);
-} else {
-    injectToastStyles();
+// Skeleton loader for product cards
+class SkeletonLoader {
+    static createProductCardSkeleton() {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'skeleton-card';
+        skeleton.innerHTML = `
+            <div class="skeleton-image"></div>
+            <div class="skeleton-brand"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-price"></div>
+            <div class="skeleton-button"></div>
+        `;
+        return skeleton;
+    }
+
+    static injectStyles() {
+        if (document.getElementById('skeleton-styles')) return;
+
+        const styles = document.createElement('style');
+        styles.id = 'skeleton-styles';
+        styles.textContent = `
+            .skeleton-card {
+                background: rgba(255, 255, 255, 0.4);
+                backdrop-filter: blur(20px) saturate(180%);
+                -webkit-backdrop-filter: blur(20px) saturate(180%);
+                border-radius: 16px;
+                padding: 12px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                animation: pulse 2s ease-in-out infinite;
+            }
+
+            .skeleton-image {
+                width: 100%;
+                height: 150px;
+                background: rgba(200, 200, 200, 0.3);
+                border-radius: 12px;
+            }
+
+            .skeleton-brand {
+                width: 60%;
+                height: 12px;
+                background: rgba(200, 200, 200, 0.3);
+                border-radius: 6px;
+            }
+
+            .skeleton-title {
+                width: 100%;
+                height: 16px;
+                background: rgba(200, 200, 200, 0.3);
+                border-radius: 6px;
+                margin-bottom: 4px;
+            }
+
+            .skeleton-title::after {
+                content: '';
+                display: block;
+                width: 80%;
+                height: 16px;
+                background: rgba(200, 200, 200, 0.3);
+                border-radius: 6px;
+                margin-top: 8px;
+            }
+
+            .skeleton-price {
+                width: 50%;
+                height: 18px;
+                background: rgba(200, 200, 200, 0.3);
+                border-radius: 6px;
+            }
+
+            .skeleton-button {
+                width: 100%;
+                height: 36px;
+                background: rgba(200, 200, 200, 0.3);
+                border-radius: 8px;
+            }
+
+            @keyframes pulse {
+                0%, 100% {
+                    opacity: 0.6;
+                }
+                50% {
+                    opacity: 0.9;
+                }
+            }
+        `;
+        document.head.appendChild(styles);
+    }
 }
 
-export { Toast, LoadingOverlay, RateLimiter, handleError, injectToastStyles };
+// Initialize skeleton styles on load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        injectToastStyles();
+        SkeletonLoader.injectStyles();
+    });
+} else {
+    injectToastStyles();
+    SkeletonLoader.injectStyles();
+}
+
+export { Toast, LoadingOverlay, RateLimiter, SkeletonLoader, handleError, injectToastStyles };
