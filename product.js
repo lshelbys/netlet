@@ -94,9 +94,11 @@ function renderProduct(product) {
                     ${savePct > 0 ? `<span class="price-save">Save ${savePct}%</span>` : ''}
                 </div>
                 <hr class="divider">
-                <p class="info-desc">${escapeHtml(product.title)} by ${escapeHtml(product.brand)}.
-                    ${product.isExpress ? 'Eligible for fast NetLet Express delivery.' : 'Standard delivery available.'}
-                    Backed by ${escapeHtml(product.reviews)} customer reviews with an average rating of ${escapeHtml(product.rating)} out of 5.</p>
+                ${product.description
+                    ? `<p class="info-desc" style="white-space: pre-wrap;">${escapeHtml(product.description)}</p>`
+                    : `<p class="info-desc">${escapeHtml(product.title)} by ${escapeHtml(product.brand)}.
+                        ${product.isExpress ? 'Eligible for fast NetLet Express delivery.' : 'Standard delivery available.'}
+                        Backed by ${escapeHtml(product.reviews)} customer reviews with an average rating of ${escapeHtml(product.rating)} out of 5.</p>`}
                 <div class="actions">
                     <button class="add-cart-btn" id="addCartBtn">
                         <i class="fas fa-shopping-cart"></i> ADD TO CART
