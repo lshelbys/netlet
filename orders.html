@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>My Orders | NetLet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --netlet-blue: #1E3A8A;
+            --netlet-red: #E61C38;
+            --bg-gray: #F7F9FA;
+            --text-dark: #1F2229;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'system-ui', -apple-system, sans-serif;
+            background-color: var(--bg-gray);
+            color: #404553;
+            -webkit-tap-highlight-color: transparent;
+            padding-top: 100px;
+        }
+
+        .orders-header {
+            background: rgba(247, 246, 242, 0.75);
+            backdrop-filter: blur(25px) saturate(210%);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .orders-header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .orders-header img {
+            height: 50px;
+            width: auto;
+        }
+
+        .orders-header h2 {
+            font-size: 18px;
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .orders-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7E859B;
+        }
+
+        .orders-empty i {
+            font-size: 48px;
+            opacity: 0.3;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .order-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .order-card:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-4px);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                inset 0 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+            gap: 16px;
+        }
+
+        .order-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .order-date {
+            font-size: 13px;
+            color: #7E859B;
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .status-processing {
+            background: rgba(30, 58, 138, 0.2);
+            color: var(--netlet-blue);
+            border: 1px solid rgba(30, 58, 138, 0.3);
+        }
+
+        .status-shipped {
+            background: rgba(100, 149, 237, 0.2);
+            color: #6495ED;
+            border: 1px solid rgba(100, 149, 237, 0.3);
+        }
+
+        .status-delivered {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .status-cancelled {
+            background: rgba(230, 28, 56, 0.2);
+            color: var(--netlet-red);
+            border: 1px solid rgba(230, 28, 56, 0.3);
+        }
+
+        .order-items {
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding-top: 16px;
+            margin-bottom: 16px;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .order-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: rgba(240, 240, 240, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .item-sku {
+            font-size: 12px;
+            color: #7E859B;
+        }
+
+        .item-qty {
+            font-size: 12px;
+            color: #404553;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .order-total {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .order-total-label {
+            font-size: 12px;
+            color: #7E859B;
+        }
+
+        .order-total-amount {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .order-action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(30, 58, 138, 0.3);
+            background: rgba(30, 58, 138, 0.1);
+            color: var(--netlet-blue);
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .order-action-btn:hover {
+            background: rgba(30, 58, 138, 0.2);
+            border-color: var(--netlet-blue);
+            transform: translateY(-2px);
+        }
+
+        .mobile-bottom-ui {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 130px;
+                padding-top: 80px;
+            }
+
+            .orders-header {
+                padding: 12px 0;
+            }
+
+            .orders-header-content {
+                padding: 0 16px;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .order-card {
+                padding: 16px;
+            }
+
+            .order-header {
+                flex-direction: column;
+            }
+
+            .order-footer {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .order-actions {
+                width: 100%;
+            }
+
+            .order-action-btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            /* Mobile Bottom Navigation */
+            .mobile-bottom-ui {
+                display: block;
+                position: fixed;
+                bottom: 30px;
+                left: 15px;
+                right: 15px;
+                width: calc(100% - 30px);
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(25px) saturate(210%);
+                -webkit-backdrop-filter: blur(25px) saturate(210%);
+                z-index: 2000;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 24px;
+                box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+
+            .mobile-tabs {
+                display: flex;
+                position: relative;
+                justify-content: space-around;
+                align-items: center;
+                padding: 6px 4px;
+            }
+
+            .tab-indicator {
+                position: absolute;
+                top: 6px;
+                left: 0;
+                width: 20%;
+                height: calc(100% - 12px);
+                z-index: 0;
+                pointer-events: none;
+                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            .tab-indicator::after {
+                content: '';
+                display: block;
+                margin: 0 4px;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                border-radius: 22px;
+                box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+            }
+
+            .mobile-tab-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                padding: 12px 0;
+                color: #7E859B;
+                font-size: 10px;
+                font-weight: 600;
+                text-decoration: none;
+                flex: 1;
+                position: relative;
+                z-index: 1;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+
+            .mobile-tab-item i {
+                font-size: 20px;
+            }
+
+            .mobile-tab-item.active {
+                color: var(--netlet-blue);
+                transform: translateY(-2px);
+            }
+
+            .mobile-cart-badge {
+                position: absolute;
+                top: -6px;
+                right: 20%;
+                background-color: var(--netlet-red);
+                color: white;
+                font-size: 9px;
+                font-weight: 700;
+                padding: 2px 5px;
+                border-radius: 10px;
+                min-width: 16px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            .order-card {
+                padding: 14px;
+                margin-bottom: 12px;
+            }
+
+            .order-number {
+                font-size: 14px;
+            }
+
+            .item-image {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .item-name {
+                font-size: 13px;
+            }
+
+            .order-total-amount {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="orders-header">
+        <div class="orders-header-content">
+            <a href="index.html"><img src="logo.png" alt="NetLet home" width="3130" height="1725" decoding="async" style="height: 50px; width: auto;"></a>
+            <h2>My Orders</h2>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="ordersContainer">
+            <!-- Orders injected here -->
+        </div>
+    </main>
+
+    <!-- Mobile Bottom UI -->
+    <div class="mobile-bottom-ui">
+        <nav class="mobile-tabs">
+            <div class="tab-indicator"></div>
+            <a href="index.html" class="mobile-tab-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="index.html" class="mobile-tab-item" id="mobileMegaTrigger">
+                <i class="fas fa-th-large"></i>
+                <span>Categories</span>
+            </a>
+            <a href="deals.html" class="mobile-tab-item">
+                <i class="fas fa-tags"></i>
+                <span>Deals</span>
+            </a>
+            <a href="account.html" class="mobile-tab-item">
+                <i class="fas fa-user"></i>
+                <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-tab-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Cart</span>
+                <span class="mobile-cart-badge">0</span>
+            </a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import { Toast } from './utils.js';
+
+        const ordersContainer = document.getElementById('ordersContainer');
+        const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+
+        function renderOrders() {
+            const orders = JSON.parse(localStorage.getItem('netletOrders')) || [];
+
+            // Update cart badge
+            const cart = JSON.parse(localStorage.getItem('netletCart')) || [];
+            const cartCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            if (mobileCartBadge) mobileCartBadge.textContent = cartCount;
+
+            if (orders.length === 0) {
+                ordersContainer.innerHTML = `
+                    <div class="orders-empty">
+                        <i class="fas fa-box"></i>
+                        <p>No orders yet</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Start shopping to place your first order!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            ordersContainer.innerHTML = orders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-number">Order #${order.id}</div>
+                            <div class="order-date">${new Date(order.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                        </div>
+                        <span class="order-status status-${order.status.toLowerCase()}">${order.status}</span>
+                    </div>
+
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item">
+                                <div class="item-image">
+                                    <i class="${item.icon}"></i>
+                                </div>
+                                <div class="item-details">
+                                    <div class="item-name">${item.title}</div>
+                                    <div class="item-sku">${item.brand}</div>
+                                    <div class="item-qty">Qty: ${item.quantity}</div>
+                                </div>
+                                <div class="item-price">KWD ${(item.price * item.quantity).toFixed(2)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="order-footer">
+                        <div class="order-total">
+                            <div class="order-total-label">Order Total</div>
+                            <div class="order-total-amount">KWD ${order.total.toFixed(2)}</div>
+                        </div>
+                        <div class="order-actions">
+                            <button class="order-action-btn" onclick="viewOrderDetails('${order.id}')">View Details</button>
+                            <button class="order-action-btn" onclick="trackOrder('${order.id}')">Track Order</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.viewOrderDetails = function(orderId) {
+            new Toast(`Order #${orderId} details loaded`, 'info', 3000);
+        };
+
+        window.trackOrder = function(orderId) {
+            const orders = JSON.parse(localStorage.getItem('netletOrders')) || [];
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                new Toast(`Order #${orderId} status: ${order.status}`, 'info', 4000);
+            }
+        };
+
+        // Tab switching for mobile
+        const mobileTabs = document.querySelectorAll('.mobile-tab-item');
+        const indicator = document.querySelector('.tab-indicator');
+
+        mobileTabs.forEach((tab, index) => {
+            tab.addEventListener('click', function() {
+                mobileTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                if (indicator) indicator.style.transform = `translateX(${index * 100}%)`;
+            });
+        });
+
+        renderOrders();
+    </script>
+</body>
+</html>

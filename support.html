@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Customer Support | NetLet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --netlet-blue: #1E3A8A;
+            --netlet-red: #E61C38;
+            --bg-gray: #F7F9FA;
+            --text-dark: #1F2229;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'system-ui', -apple-system, sans-serif;
+            background-color: var(--bg-gray);
+            color: #404553;
+            -webkit-tap-highlight-color: transparent;
+            padding-top: 100px;
+        }
+
+        .support-header {
+            background: rgba(247, 246, 242, 0.75);
+            backdrop-filter: blur(25px) saturate(210%);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .support-header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .support-header img {
+            height: 50px;
+            width: auto;
+        }
+
+        .support-header h2 {
+            font-size: 18px;
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+        }
+
+        .hero-section h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .hero-section p {
+            font-size: 16px;
+            color: #7E859B;
+            margin-bottom: 24px;
+        }
+
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(30, 58, 138, 0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--netlet-blue);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .support-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            flex-wrap: wrap;
+        }
+
+        .support-tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #7E859B;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            bottom: -1px;
+        }
+
+        .support-tab-btn.active {
+            color: var(--netlet-blue);
+            border-bottom-color: var(--netlet-blue);
+        }
+
+        .support-tab-btn:hover {
+            color: var(--netlet-blue);
+        }
+
+        .support-content {
+            display: none;
+        }
+
+        .support-content.active {
+            display: block;
+        }
+
+        /* FAQ Styles */
+        .faq-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .faq-question {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-dark);
+            user-select: none;
+        }
+
+        .faq-question i {
+            font-size: 12px;
+            color: var(--netlet-blue);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: rgba(30, 58, 138, 0.05);
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #404553;
+        }
+
+        /* Contact Form Styles */
+        .contact-form {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(30, 58, 138, 0.3);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--netlet-blue);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--netlet-blue) 0%, #0F2550 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
+        }
+
+        /* Quick Contact Cards */
+        .quick-contacts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .contact-card i {
+            font-size: 28px;
+            color: var(--netlet-blue);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .contact-card-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .contact-card-info {
+            font-size: 13px;
+            color: #7E859B;
+        }
+
+        .mobile-bottom-ui {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 130px;
+                padding-top: 80px;
+            }
+
+            .support-header {
+                padding: 12px 0;
+            }
+
+            .support-header-content {
+                padding: 0 16px;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .hero-section {
+                padding: 24px 16px;
+                margin-bottom: 24px;
+            }
+
+            .hero-section h1 {
+                font-size: 24px;
+            }
+
+            .hero-section p {
+                font-size: 14px;
+            }
+
+            .contact-form {
+                padding: 20px;
+            }
+
+            .support-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                gap: 8px;
+                padding-bottom: 12px;
+            }
+
+            .support-tab-btn {
+                padding: 10px 16px;
+                font-size: 13px;
+                white-space: nowrap;
+            }
+
+            /* Mobile Bottom Navigation */
+            .mobile-bottom-ui {
+                display: block;
+                position: fixed;
+                bottom: 30px;
+                left: 15px;
+                right: 15px;
+                width: calc(100% - 30px);
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(25px) saturate(210%);
+                -webkit-backdrop-filter: blur(25px) saturate(210%);
+                z-index: 2000;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 24px;
+                box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            }
+
+            .mobile-tabs {
+                display: flex;
+                position: relative;
+                justify-content: space-around;
+                align-items: center;
+                padding: 6px 4px;
+            }
+
+            .tab-indicator {
+                position: absolute;
+                top: 6px;
+                left: 0;
+                width: 20%;
+                height: calc(100% - 12px);
+                z-index: 0;
+                pointer-events: none;
+                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            .tab-indicator::after {
+                content: '';
+                display: block;
+                margin: 0 4px;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                border-radius: 22px;
+                box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+            }
+
+            .mobile-tab-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                padding: 12px 0;
+                color: #7E859B;
+                font-size: 10px;
+                font-weight: 600;
+                text-decoration: none;
+                flex: 1;
+                position: relative;
+                z-index: 1;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+
+            .mobile-tab-item i {
+                font-size: 20px;
+            }
+
+            .mobile-tab-item.active {
+                color: var(--netlet-blue);
+                transform: translateY(-2px);
+            }
+
+            .mobile-cart-badge {
+                position: absolute;
+                top: -6px;
+                right: 20%;
+                background-color: var(--netlet-red);
+                color: white;
+                font-size: 9px;
+                font-weight: 700;
+                padding: 2px 5px;
+                border-radius: 10px;
+                min-width: 16px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            .hero-section h1 {
+                font-size: 20px;
+            }
+
+            .quick-contacts {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .faq-question {
+                padding: 12px;
+            }
+
+            .contact-form {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="support-header">
+        <div class="support-header-content">
+            <a href="index.html"><img src="logo.png" alt="NetLet home" width="3130" height="1725" decoding="async" style="height: 50px; width: auto;"></a>
+            <h2>Help & Support</h2>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>How can we help?</h1>
+            <p>Find answers to your questions and get support from our team</p>
+            <div class="search-box">
+                <input type="text" id="searchFaq" placeholder="Search FAQ...">
+            </div>
+        </div>
+
+        <!-- Support Tabs -->
+        <div class="support-tabs">
+            <button class="support-tab-btn active" data-tab="faq">
+                <i class="fas fa-question-circle" style="margin-right: 6px;"></i>FAQ
+            </button>
+            <button class="support-tab-btn" data-tab="contact">
+                <i class="fas fa-envelope" style="margin-right: 6px;"></i>Contact Us
+            </button>
+            <button class="support-tab-btn" data-tab="help">
+                <i class="fas fa-life-ring" style="margin-right: 6px;"></i>Help Center
+            </button>
+        </div>
+
+        <!-- FAQ Tab -->
+        <div class="support-content active" id="faq-tab">
+            <div id="faqContainer">
+                <!-- FAQ items injected here -->
+            </div>
+        </div>
+
+        <!-- Contact Tab -->
+        <div class="support-content" id="contact-tab">
+            <div class="quick-contacts">
+                <div class="contact-card">
+                    <i class="fas fa-phone"></i>
+                    <div class="contact-card-title">Phone</div>
+                    <div class="contact-card-info">+965 1234 5678</div>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-envelope"></i>
+                    <div class="contact-card-title">Email</div>
+                    <div class="contact-card-info">support@netlet.com</div>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-clock"></i>
+                    <div class="contact-card-title">Hours</div>
+                    <div class="contact-card-info">24/7 Support</div>
+                </div>
+            </div>
+
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <label for="contactName">Full Name</label>
+                    <input type="text" id="contactName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactEmail">Email Address</label>
+                    <input type="email" id="contactEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactTopic">Topic</label>
+                    <select id="contactTopic" required>
+                        <option value="">Select a topic...</option>
+                        <option value="order">Order Issues</option>
+                        <option value="shipping">Shipping & Delivery</option>
+                        <option value="returns">Returns & Refunds</option>
+                        <option value="payment">Payment Issues</option>
+                        <option value="product">Product Question</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactMessage">Message</label>
+                    <textarea id="contactMessage" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+
+        <!-- Help Center Tab -->
+        <div class="support-content" id="help-tab">
+            <div id="helpContainer">
+                <!-- Help articles injected here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Bottom UI -->
+    <div class="mobile-bottom-ui">
+        <nav class="mobile-tabs">
+            <div class="tab-indicator"></div>
+            <a href="index.html" class="mobile-tab-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="index.html" class="mobile-tab-item" id="mobileMegaTrigger">
+                <i class="fas fa-th-large"></i>
+                <span>Categories</span>
+            </a>
+            <a href="deals.html" class="mobile-tab-item">
+                <i class="fas fa-tags"></i>
+                <span>Deals</span>
+            </a>
+            <a href="account.html" class="mobile-tab-item">
+                <i class="fas fa-user"></i>
+                <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-tab-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Cart</span>
+                <span class="mobile-cart-badge">0</span>
+            </a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import { Toast } from './utils.js';
+
+        const faqData = [
+            {
+                question: 'How do I track my order?',
+                answer: 'You can track your order by visiting the "My Orders" page in your account. Each order shows real-time status updates including confirmation, processing, shipping, and delivery.'
+            },
+            {
+                question: 'What is your return policy?',
+                answer: 'We offer a 30-day return policy on most items. Products must be unused and in original packaging. To initiate a return, visit your orders page and select the return option.'
+            },
+            {
+                question: 'How long does delivery take?',
+                answer: 'Standard delivery takes 3-5 business days. Express delivery (if available) takes 1-2 business days. Delivery times may vary based on location and stock availability.'
+            },
+            {
+                question: 'Do you offer free shipping?',
+                answer: 'Yes! We offer free shipping on all orders in Kuwait. No minimum purchase required.'
+            },
+            {
+                question: 'How do I apply a promo code?',
+                answer: 'You can apply promo codes at checkout in your shopping cart. Enter the code in the promo code field and click "Apply". The discount will be calculated automatically.'
+            },
+            {
+                question: 'What payment methods do you accept?',
+                answer: 'We accept credit cards (Visa, Mastercard), debit cards, and digital wallets. All payments are secure and encrypted.'
+            },
+            {
+                question: 'Can I cancel my order?',
+                answer: 'Orders can be cancelled within 1 hour of placement. Visit your orders page to cancel if the order status is still "Pending".'
+            },
+            {
+                question: 'How do I contact customer support?',
+                answer: 'You can reach us via phone at +965 1234 5678, email at support@netlet.com, or use the contact form on this page. We offer 24/7 support.'
+            }
+        ];
+
+        const helpData = [
+            {
+                title: 'Getting Started',
+                items: [
+                    'Creating your account',
+                    'Browsing products',
+                    'Adding items to cart'
+                ]
+            },
+            {
+                title: 'Checkout & Payment',
+                items: [
+                    'Checkout process',
+                    'Available payment methods',
+                    'Applying promo codes'
+                ]
+            },
+            {
+                title: 'Orders & Shipping',
+                items: [
+                    'Order confirmation',
+                    'Tracking your order',
+                    'Delivery information'
+                ]
+            },
+            {
+                title: 'Returns & Refunds',
+                items: [
+                    'How to return an item',
+                    'Refund status',
+                    'Damaged items'
+                ]
+            }
+        ];
+
+        const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+
+        // Update cart badge
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('netletCart')) || [];
+            const cartCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            if (mobileCartBadge) mobileCartBadge.textContent = cartCount;
+        }
+
+        function renderFAQ() {
+            const container = document.getElementById('faqContainer');
+            container.innerHTML = faqData.map((item, idx) => `
+                <div class="faq-item" data-idx="${idx}">
+                    <div class="faq-question">
+                        <span>${item.question}</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">${item.answer}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // FAQ toggle
+            document.querySelectorAll('.faq-question').forEach(el => {
+                el.addEventListener('click', () => {
+                    el.closest('.faq-item').classList.toggle('open');
+                });
+            });
+        }
+
+        function renderHelp() {
+            const container = document.getElementById('helpContainer');
+            container.innerHTML = helpData.map(section => `
+                <div style="margin-bottom: 32px;">
+                    <h3 style="font-size: 18px; font-weight: 700; color: #1F2229; margin-bottom: 16px;">${section.title}</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                        ${section.items.map(item => `
+                            <div style="padding: 16px; background: rgba(255, 255, 255, 0.15); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.3); cursor: pointer; transition: all 0.3s ease;">
+                                <i class="fas fa-file-alt" style="color: var(--netlet-blue); margin-right: 8px;"></i>
+                                <span style="font-weight: 600; color: #1F2229;">${item}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Tab switching
+        document.querySelectorAll('.support-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.support-tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.support-content').forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                const tabId = btn.dataset.tab + '-tab';
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const topic = document.getElementById('contactTopic').value;
+
+            const message = {
+                name,
+                email,
+                topic,
+                date: new Date().toISOString()
+            };
+
+            const messages = JSON.parse(localStorage.getItem('netletSupportMessages')) || [];
+            messages.push(message);
+            localStorage.setItem('netletSupportMessages', JSON.stringify(messages));
+
+            document.getElementById('contactForm').reset();
+            new Toast('Message sent successfully! We\'ll respond soon.', 'success', 4000);
+        });
+
+        // FAQ search
+        document.getElementById('searchFaq').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('.faq-item').forEach(item => {
+                const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer-content').textContent.toLowerCase();
+                if (question.includes(query) || answer.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Mobile tab switching
+        const mobileTabs = document.querySelectorAll('.mobile-tab-item');
+        const indicator = document.querySelector('.tab-indicator');
+
+        mobileTabs.forEach((tab, index) => {
+            tab.addEventListener('click', function() {
+                mobileTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                if (indicator) indicator.style.transform = `translateX(${index * 100}%)`;
+            });
+        });
+
+        // Initialize
+        renderFAQ();
+        renderHelp();
+        updateCartBadge();
+    </script>
+</body>
+</html>
