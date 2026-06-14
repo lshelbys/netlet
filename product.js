@@ -80,6 +80,7 @@ function renderProduct(product) {
             </div>
             <div class="info-box">
                 <div class="info-brand">${escapeHtml(product.brand)}</div>
+                ${product.sku ? `<div style="font-size: 12px; color: #7E859B; margin-bottom: 8px;"><strong>SKU:</strong> ${escapeHtml(product.sku)}</div>` : ''}
                 <h1 class="info-title">${escapeHtml(product.title)}</h1>
                 <div class="info-rating">
                     <i class="fas fa-star star-icon"></i>

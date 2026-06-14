@@ -129,8 +129,8 @@ function renderInventory(filterText = '') {
             : `<i class="fas ${escapeHtml(product.icon)}"></i>`;
         row.innerHTML = `
             <td>${product.id}</td>
-            <td>${thumb}${images.length > 1 ? ` <small>+${images.length - 1}</small>` : ''}</td>
             <td>${escapeHtml(product.brand)}</td>
+            <td>${product.sku ? escapeHtml(product.sku) : '-'}</td>
             <td>${escapeHtml(product.title)}</td>
             <td>KWD ${price.toFixed(2)}</td>
             <td>${oldPrice != null ? `KWD ${oldPrice.toFixed(2)}` : 'N/A'}</td>
@@ -155,6 +155,7 @@ productForm.addEventListener('submit', async (e) => {
     const productData = {
         id: editingProductId, // Supabase handles new ID generation
         brand: document.getElementById('brand').value,
+        sku: document.getElementById('sku').value || null,
         title: document.getElementById('title').value,
         price: parseFloat(document.getElementById('price').value),
         oldPrice: document.getElementById('oldPrice').value ? parseFloat(document.getElementById('oldPrice').value) : null,
@@ -207,6 +208,7 @@ function startEdit(id) {
     editingProductId = id;
     formContainer.style.display = 'block';
     document.getElementById('brand').value = product.brand;
+    document.getElementById('sku').value = product.sku || '';
     document.getElementById('title').value = product.title;
     document.getElementById('price').value = product.price;
     document.getElementById('oldPrice').value = product.oldPrice || '';
@@ -263,7 +265,7 @@ toggleFormBtn.addEventListener('click', () => {
 exportBtn.addEventListener('click', () => {
     if (inventory.length === 0) return showAlert('Inventory is empty!', 'error');
 
-    const headers = ['id', 'brand', 'title', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'images'];
+    const headers = ['id', 'brand', 'sku', 'title', 'price', 'oldPrice', 'isExpress', 'rating', 'reviews', 'icon', 'images'];
 
     const csvRows = [
         headers.join(','), // Header row

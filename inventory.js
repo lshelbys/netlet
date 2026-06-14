@@ -20,6 +20,7 @@ function normalizeProduct(row) {
     return {
         id: row.id,
         brand: row.brand,
+        sku: row.sku ?? null,
         title: row.title,
         price: row.price,
         oldPrice: row.old_price ?? null,
@@ -36,6 +37,7 @@ function toDbRow(product) {
     const images = Array.isArray(product.images) ? product.images : [];
     return {
         brand: product.brand,
+        sku: product.sku || null,
         title: product.title,
         price: product.price,
         old_price: product.oldPrice,
