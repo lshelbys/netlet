@@ -266,6 +266,59 @@ document.getElementById('promoCode')?.addEventListener('keypress', (e) => {
 // Remove promo code button
 document.getElementById('removePromoBtn')?.addEventListener('click', removePromoCode);
 
+// Create order from cart
+function createOrder() {
+    const cartItems = JSON.parse(localStorage.getItem('netletCart')) || [];
+    let totalCost = 0;
+    const orderItems = [];
+
+    cartItems.forEach(item => {
+        const product = inventory.find(p => Number(p.id) === Number(item.id));
+        if (product) {
+            const qty = typeof item === 'object' ? (item.quantity || 1) : 1;
+            totalCost += product.price * qty;
+            orderItems.push({
+                id: product.id,
+                title: product.title,
+                brand: product.brand,
+                icon: product.icon,
+                price: product.price,
+                quantity: qty
+            });
+        }
+    });
+
+    // Apply discount if promo is applied
+    if (appliedPromo) {
+        const promo = PROMO_CODES[appliedPromo];
+        let discount = 0;
+
+        if (promo.type === 'percentage') {
+            discount = (totalCost * promo.value) / 100;
+        } else if (promo.type === 'fixed') {
+            discount = Math.min(promo.value, totalCost);
+        }
+
+        totalCost -= discount;
+    }
+
+    const order = {
+        id: `ORD-${Date.now()}`,
+        date: new Date().toISOString(),
+        status: 'Pending',
+        items: orderItems,
+        total: totalCost,
+        promoCode: appliedPromo || null
+    };
+
+    // Save order to localStorage
+    const orders = JSON.parse(localStorage.getItem('netletOrders')) || [];
+    orders.push(order);
+    localStorage.setItem('netletOrders', JSON.stringify(orders));
+
+    return order;
+}
+
 // Checkout validation
 document.querySelector('.checkout-btn')?.addEventListener('click', () => {
     const cartItems = JSON.parse(localStorage.getItem('netletCart')) || [];
@@ -292,7 +345,19 @@ document.querySelector('.checkout-btn')?.addEventListener('click', () => {
         }
     }
 
-    new Toast('Proceeding to checkout...', 'success', 6000);
+    // Create order
+    const order = createOrder();
+
+    // Clear cart
+    localStorage.setItem('netletCart', JSON.stringify([]));
+
+    // Show success message and redirect
+    new Toast(`Order placed successfully! Order #${order.id}`, 'success', 4000);
+
+    // Redirect to orders page after a brief delay
+    setTimeout(() => {
+        window.location.href = 'orders.html';
+    }, 1500);
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
