@@ -77,6 +77,36 @@
             font-size: 13px;
             font-weight: 600;
             letter-spacing: 0.5px;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .promo-message {
+            animation: fadeInOut 5s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .promo-message.active {
+            animation: fadeInOut 5s ease-in-out;
+            opacity: 1;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
         }
 
         /* MAIN HEADER */
@@ -1633,8 +1663,12 @@
 </head>
 <body>
 
-    <div class="top-promo-bar">
-        Use code NETLET for extra savings! Free Delivery over KWD 10
+    <div class="top-promo-bar" id="promoBar">
+        <span class="promo-message active" data-message="0">🎉 Use code NETLET for extra savings! Free Delivery over KWD 10</span>
+        <span class="promo-message" data-message="1">⚡ NetLet Express - Same day delivery on selected items!</span>
+        <span class="promo-message" data-message="2">🛍️ Up to 70% off on electronics and fashion! Limited time offer.</span>
+        <span class="promo-message" data-message="3">💎 Join NetLet One for exclusive deals and priority support.</span>
+        <span class="promo-message" data-message="4">🚚 Free shipping on all orders! No minimum purchase required.</span>
     </div>
 
     <header class="main-header">
@@ -1873,6 +1907,24 @@
     <script type="module">
         import { inventory, fetchInventory, escapeHtml } from './inventory.js';
         import { Toast, LoadingOverlay, handleError } from './utils.js';
+
+        // Promo Bar Message Rotation
+        let currentMessageIndex = 0;
+        const messages = document.querySelectorAll('.promo-message');
+        const totalMessages = messages.length;
+
+        if (totalMessages > 1) {
+            setInterval(() => {
+                // Remove active class from current message
+                messages[currentMessageIndex].classList.remove('active');
+
+                // Move to next message
+                currentMessageIndex = (currentMessageIndex + 1) % totalMessages;
+
+                // Add active class to new message
+                messages[currentMessageIndex].classList.add('active');
+            }, 5000);
+        }
 
         // Disable pinch zoom on mobile
         document.addEventListener('touchmove', (e) => {
