@@ -121,6 +121,82 @@
             font-size: 20px; font-weight: 800;
         }
 
+        /* Promo Code Section */
+        .promo-section {
+            margin: 16px 0;
+            padding: 16px;
+            background: rgba(30, 58, 138, 0.08);
+            border: 1px solid rgba(30, 58, 138, 0.2);
+            border-radius: 12px;
+        }
+
+        .promo-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        #promoCode {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid rgba(30, 58, 138, 0.3);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        #promoCode:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--netlet-blue);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        #promoCode::placeholder {
+            color: #7E859B;
+        }
+
+        .apply-promo-btn {
+            padding: 10px 16px;
+            background: rgba(30, 58, 138, 0.15);
+            border: 1px solid rgba(30, 58, 138, 0.3);
+            border-radius: 8px;
+            color: var(--netlet-blue);
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+        }
+
+        .apply-promo-btn:hover {
+            background: rgba(30, 58, 138, 0.25);
+            border-color: var(--netlet-blue);
+            transform: translateY(-2px);
+        }
+
+        .promo-message {
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .promo-message.success {
+            color: #28a745;
+        }
+
+        .promo-message.error {
+            color: #E61C38;
+        }
+
+        .discount-row {
+            color: #28a745;
+            font-weight: 700;
+        }
+
         .checkout-btn {
             width: 100%;
             background: var(--netlet-blue);
@@ -513,6 +589,25 @@
                     <span>Total</span>
                     <span>KWD <span id="total">0.00</span></span>
                 </div>
+
+                <!-- Promo Code Section -->
+                <div class="promo-section">
+                    <div class="promo-input-group">
+                        <input type="text" id="promoCode" placeholder="Enter promo code" maxlength="20">
+                        <button class="apply-promo-btn" id="applyPromoBtn">Apply</button>
+                    </div>
+                    <div id="promoMessage" class="promo-message" style="display: none;"></div>
+                </div>
+
+                <!-- Discount Row (hidden by default) -->
+                <div class="summary-row discount-row" id="discountRow" style="display: none; position: relative;">
+                    <span id="discountLabel">Discount</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span>-KWD <span id="discountAmount">0.00</span></span>
+                        <button id="removePromoBtn" style="background: none; border: none; color: #7E859B; cursor: pointer; font-size: 12px; font-weight: 600; padding: 2px 6px; transition: all 0.2s; border-radius: 4px;" title="Remove promo code">✕</button>
+                    </div>
+                </div>
+
                 <button class="checkout-btn">CHECKOUT NOW</button>
             </div>
         </div>

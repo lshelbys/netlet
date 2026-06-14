@@ -12,6 +12,17 @@ const confirmBtn = document.getElementById('confirmBtn');
 const cancelBtn = document.getElementById('cancelBtn');
 let idToDelete = null;
 
+// Promo Codes Database
+const PROMO_CODES = {
+    'NETLET10': { type: 'percentage', value: 10 },
+    'NETLET20': { type: 'percentage', value: 20 },
+    'WELCOME15': { type: 'percentage', value: 15 },
+    'SUMMER25': { type: 'percentage', value: 25 },
+    'SAVE5': { type: 'fixed', value: 5 }
+};
+
+let appliedPromo = null;
+
 function renderCart() {
     const cartItems = JSON.parse(localStorage.getItem('netletCart')) || [];
 
@@ -71,8 +82,35 @@ function renderCart() {
 
 function updateTotals(total, count) {
     subtotalEl.textContent = total.toFixed(2);
-    totalEl.textContent = total.toFixed(2);
     itemCountEl.textContent = count;
+
+    let finalTotal = total;
+    const discountRow = document.getElementById('discountRow');
+    const discountAmount = document.getElementById('discountAmount');
+    const discountLabel = document.getElementById('discountLabel');
+
+    if (appliedPromo) {
+        const promo = PROMO_CODES[appliedPromo];
+        let discount = 0;
+
+        if (promo.type === 'percentage') {
+            discount = (total * promo.value) / 100;
+        } else if (promo.type === 'fixed') {
+            discount = Math.min(promo.value, total); // Don't discount more than total
+        }
+
+        finalTotal = total - discount;
+
+        discountAmount.textContent = discount.toFixed(2);
+        discountLabel.textContent = promo.type === 'percentage'
+            ? `Discount (${promo.value}%)`
+            : 'Discount (Fixed)';
+        discountRow.style.display = 'flex';
+    } else {
+        discountRow.style.display = 'none';
+    }
+
+    totalEl.textContent = finalTotal.toFixed(2);
     if (mobileCartBadge) mobileCartBadge.textContent = count;
 }
 
@@ -130,6 +168,103 @@ cancelBtn.addEventListener('click', () => {
     idToDelete = null;
     modal.classList.remove('active');
 });
+
+// Promo Code Handler
+function applyPromoCode() {
+    const promoInput = document.getElementById('promoCode');
+    const promoMessage = document.getElementById('promoMessage');
+    const code = promoInput.value.trim().toUpperCase();
+
+    // Clear previous message
+    promoMessage.style.display = 'none';
+    promoMessage.textContent = '';
+
+    if (!code) {
+        promoMessage.textContent = 'Please enter a promo code';
+        promoMessage.className = 'promo-message error';
+        promoMessage.style.display = 'block';
+        return;
+    }
+
+    if (!PROMO_CODES[code]) {
+        promoMessage.textContent = 'Invalid promo code';
+        promoMessage.className = 'promo-message error';
+        promoMessage.style.display = 'block';
+        return;
+    }
+
+    appliedPromo = code;
+    const promo = PROMO_CODES[code];
+    const message = promo.type === 'percentage'
+        ? `${promo.value}% discount applied!`
+        : `KWD ${promo.value.toFixed(2)} discount applied!`;
+
+    promoMessage.textContent = message;
+    promoMessage.className = 'promo-message success';
+    promoMessage.style.display = 'block';
+
+    promoInput.disabled = true;
+    document.getElementById('applyPromoBtn').disabled = true;
+
+    // Re-render cart to update totals with discount
+    const cartItems = JSON.parse(localStorage.getItem('netletCart')) || [];
+    let totalCost = 0;
+    let totalItems = 0;
+
+    cartItems.forEach(item => {
+        const product = inventory.find(p => Number(p.id) === Number(item.id));
+        if (product) {
+            const qty = typeof item === 'object' ? (item.quantity || 1) : 1;
+            totalCost += product.price * qty;
+            totalItems += qty;
+        }
+    });
+
+    updateTotals(totalCost, totalItems);
+
+    new Toast(`Promo code "${code}" applied successfully!`, 'success', 4000);
+}
+
+function removePromoCode() {
+    appliedPromo = null;
+    const promoInput = document.getElementById('promoCode');
+    const promoMessage = document.getElementById('promoMessage');
+    const discountRow = document.getElementById('discountRow');
+
+    promoInput.value = '';
+    promoInput.disabled = false;
+    document.getElementById('applyPromoBtn').disabled = false;
+    promoMessage.style.display = 'none';
+    discountRow.style.display = 'none';
+
+    // Re-render cart to update totals without discount
+    const cartItems = JSON.parse(localStorage.getItem('netletCart')) || [];
+    let totalCost = 0;
+    let totalItems = 0;
+
+    cartItems.forEach(item => {
+        const product = inventory.find(p => Number(p.id) === Number(item.id));
+        if (product) {
+            const qty = typeof item === 'object' ? (item.quantity || 1) : 1;
+            totalCost += product.price * qty;
+            totalItems += qty;
+        }
+    });
+
+    updateTotals(totalCost, totalItems);
+
+    new Toast('Promo code removed', 'info', 3000);
+}
+
+document.getElementById('applyPromoBtn')?.addEventListener('click', applyPromoCode);
+
+// Allow Enter key to apply promo code
+document.getElementById('promoCode')?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') applyPromoCode();
+});
+
+// Remove promo code button
+document.getElementById('removePromoBtn')?.addEventListener('click', removePromoCode);
 
 // Checkout validation
 document.querySelector('.checkout-btn')?.addEventListener('click', () => {
