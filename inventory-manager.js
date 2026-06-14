@@ -107,7 +107,7 @@ if (document.readyState === 'loading') {
 // Use toast notifications instead of inline alerts
 function showAlert(message, type = 'success') {
     const toastType = type === 'error' ? 'error' : 'success';
-    new Toast(message, toastType, 3000);
+    new Toast(message, toastType, 4000);
 }
 
 // Function to render the inventory table

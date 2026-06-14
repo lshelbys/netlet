@@ -238,7 +238,7 @@ function renderProduct(product) {
     // Add to cart
     document.getElementById('addCartBtn').addEventListener('click', () => {
         if (product.stockStatus === 'Out of Stock') {
-            new Toast('This product is out of stock', 'error', 2000);
+            new Toast('This product is out of stock', 'error', 4000);
             return;
         }
         const cart = getCart();
@@ -250,7 +250,7 @@ function renderProduct(product) {
         }
         localStorage.setItem('netletCart', JSON.stringify(cart));
         updateCartBadge();
-        new Toast(`Added ${product.brand} to cart`, 'success', 2000);
+        new Toast(`Added ${product.brand} to cart`, 'success', 4000);
     });
 
     // Wishlist toggle
@@ -261,11 +261,11 @@ function renderProduct(product) {
         if (idx > -1) {
             wishlist.splice(idx, 1);
             icon.className = 'far fa-heart';
-            new Toast('Removed from wishlist', 'info', 1500);
+            new Toast('Removed from wishlist', 'info', 4000);
         } else {
             wishlist.push(product.id);
             icon.className = 'fas fa-heart';
-            new Toast('Added to wishlist', 'success', 1500);
+            new Toast('Added to wishlist', 'success', 4000);
         }
         localStorage.setItem('netletWishlist', JSON.stringify(wishlist));
     });

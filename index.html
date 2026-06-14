@@ -1954,7 +1954,7 @@
             const product = inventory.find(p => p.id === productId);
             if (!product) return;
             if (product.stockStatus === 'Out of Stock') {
-                new Toast('This product is out of stock', 'error', 2000);
+                new Toast('This product is out of stock', 'error', 4000);
                 return;
             }
             const existingItem = cart.find(item => item.id === productId);
@@ -1965,17 +1965,17 @@
             }
             localStorage.setItem('netletCart', JSON.stringify(cart));
             updateCartUI();
-            new Toast(`Added ${product.brand} to cart`, 'success', 2000);
+            new Toast(`Added ${product.brand} to cart`, 'success', 4000);
         }
 
         function toggleWishlist(productId) {
             const index = wishlist.indexOf(productId);
             if (index > -1) {
                 wishlist.splice(index, 1);
-                new Toast('Removed from wishlist', 'info', 1500);
+                new Toast('Removed from wishlist', 'info', 4000);
             } else {
                 wishlist.push(productId);
-                new Toast('Added to wishlist', 'success', 1500);
+                new Toast('Added to wishlist', 'success', 4000);
             }
             localStorage.setItem('netletWishlist', JSON.stringify(wishlist));
             renderProducts();
@@ -2257,7 +2257,7 @@
                 const selected = locationSelect.value;
                 locationName.innerHTML = `${selected} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>`;
                 locationModal.style.display = 'none';
-                new Toast(`Delivery location set to ${selected}`, 'success', 2000);
+                new Toast(`Delivery location set to ${selected}`, 'success', 4000);
             });
         }
 
