@@ -701,6 +701,196 @@
             color: #ffffff;
         }
 
+        /* FILTERS SECTION */
+        .products-container {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .filters-sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .filters-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2229;
+        }
+
+        .clear-filters-btn {
+            background: none;
+            border: none;
+            color: #1E3A8A;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1F2229;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            color: #404553;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:hover {
+            border-color: rgba(30, 58, 138, 0.3);
+        }
+
+        .price-filter {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .price-input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .price-slider {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .rating-filter {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .rating-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #404553;
+        }
+
+        .rating-checkbox {
+            cursor: pointer;
+        }
+
+        .stars {
+            color: #FFA500;
+            font-size: 12px;
+        }
+
+        .stock-filter {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stock-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #404553;
+        }
+
+        .stock-checkbox {
+            cursor: pointer;
+        }
+
+        .brand-filter {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .brand-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #404553;
+        }
+
+        .brand-checkbox {
+            cursor: pointer;
+        }
+
+        .products-main {
+            flex: 1;
+        }
+
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            min-height: 20px;
+        }
+
+        .filter-tag {
+            background: rgba(30, 58, 138, 0.1);
+            border: 1px solid rgba(30, 58, 138, 0.2);
+            color: #1E3A8A;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-tag-close {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -1133,6 +1323,24 @@
 
             body {
                 padding-bottom: 130px; /* Increased space for the floating bar */
+            }
+
+            /* Filters on Mobile */
+            .products-container {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .filters-sidebar {
+                width: 100%;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                border-radius: 12px;
+            }
+
+            .products-main {
+                width: 100%;
             }
 
             /* Tighter spacing and a 2-column product grid on phones */
@@ -1986,8 +2194,91 @@
             <button class="view-all-btn">VIEW ALL</button>
         </div>
 
-        <div class="product-grid" id="productGrid">
-            <!-- Products injected from inventory.js -->
+        <div class="products-container">
+            <!-- Filters Sidebar -->
+            <aside class="filters-sidebar">
+                <div class="filters-header">
+                    <h3>Filters</h3>
+                    <button class="clear-filters-btn" id="clearFiltersBtn">Clear All</button>
+                </div>
+
+                <!-- Sort -->
+                <div class="filter-group">
+                    <label class="filter-label">Sort By</label>
+                    <select id="sortSelect" class="filter-select">
+                        <option value="relevance">Relevance</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="newest">Newest</option>
+                    </select>
+                </div>
+
+                <!-- Price Range -->
+                <div class="filter-group">
+                    <label class="filter-label">Price Range</label>
+                    <div class="price-filter">
+                        <input type="number" id="minPrice" placeholder="Min" class="price-input" value="0">
+                        <span>-</span>
+                        <input type="number" id="maxPrice" placeholder="Max" class="price-input" value="1000">
+                    </div>
+                    <input type="range" id="priceSlider" class="price-slider" min="0" max="1000" value="1000">
+                </div>
+
+                <!-- Rating Filter -->
+                <div class="filter-group">
+                    <label class="filter-label">Rating</label>
+                    <div class="rating-filter">
+                        <label class="rating-option">
+                            <input type="checkbox" class="rating-checkbox" value="5" data-min-rating="5">
+                            <span class="stars">★★★★★</span> 5 Stars
+                        </label>
+                        <label class="rating-option">
+                            <input type="checkbox" class="rating-checkbox" value="4" data-min-rating="4">
+                            <span class="stars">★★★★☆</span> 4+ Stars
+                        </label>
+                        <label class="rating-option">
+                            <input type="checkbox" class="rating-checkbox" value="3" data-min-rating="3">
+                            <span class="stars">★★★☆☆</span> 3+ Stars
+                        </label>
+                        <label class="rating-option">
+                            <input type="checkbox" class="rating-checkbox" value="2" data-min-rating="2">
+                            <span class="stars">★★☆☆☆</span> 2+ Stars
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Stock Status -->
+                <div class="filter-group">
+                    <label class="filter-label">Availability</label>
+                    <div class="stock-filter">
+                        <label class="stock-option">
+                            <input type="checkbox" class="stock-checkbox" value="In Stock">
+                            <span class="stock-label">In Stock</span>
+                        </label>
+                        <label class="stock-option">
+                            <input type="checkbox" class="stock-checkbox" value="Low Stock">
+                            <span class="stock-label">Low Stock</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Brand Filter -->
+                <div class="filter-group">
+                    <label class="filter-label">Brand</label>
+                    <div class="brand-filter" id="brandFilter">
+                        <!-- Brands populated dynamically -->
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Products Grid -->
+            <div class="products-main">
+                <div class="active-filters" id="activeFilters"></div>
+                <div class="product-grid" id="productGrid">
+                    <!-- Products injected from inventory.js -->
+                </div>
+            </div>
         </div>
     </main>
 
@@ -2180,9 +2471,14 @@
         // State management
         let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
         let wishlist = JSON.parse(localStorage.getItem('netletWishlist')) || [];
-        let sortBy = 'name'; // 'name', 'price-asc', 'price-desc', 'rating'
+        let sortBy = 'relevance';
         let searchQuery = '';
         let selectedCategory = '';
+        let minPrice = 0;
+        let maxPrice = 1000;
+        let selectedRating = null;
+        let selectedStockStatus = [];
+        let selectedBrands = [];
 
         // DOM elements
         const cartBadge = document.querySelector('.cart-badge');
@@ -2211,17 +2507,31 @@
                     p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     p.brand.toLowerCase().includes(searchQuery.toLowerCase());
                 const matchesCategory = !selectedCategory || p.category === selectedCategory;
-                return matchesSearch && matchesCategory;
+
+                // Price filter
+                const matchesPrice = p.price >= minPrice && p.price <= maxPrice;
+
+                // Rating filter
+                const matchesRating = !selectedRating || p.rating >= selectedRating;
+
+                // Stock status filter
+                const matchesStock = selectedStockStatus.length === 0 || selectedStockStatus.includes(p.stockStatus);
+
+                // Brand filter
+                const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(p.brand);
+
+                return matchesSearch && matchesCategory && matchesPrice && matchesRating && matchesStock && matchesBrand;
             });
 
             // Sort products
             return filtered.sort((a, b) => {
                 switch(sortBy) {
-                    case 'price-asc': return a.price - b.price;
-                    case 'price-desc': return b.price - a.price;
+                    case 'price-low': return a.price - b.price;
+                    case 'price-high': return b.price - a.price;
                     case 'rating': return b.rating - a.rating;
-                    case 'name':
-                    default: return a.title.localeCompare(b.title);
+                    case 'newest': return b.id - a.id;
+                    case 'relevance':
+                    default: return 0;
                 }
             });
         }
@@ -2716,6 +3026,190 @@
             });
         }
 
+        // 4. ADVANCED FILTERS
+        function initializeFilters() {
+            // Populate brands
+            const brands = [...new Set(inventory.map(p => p.brand))].sort();
+            const brandFilter = document.getElementById('brandFilter');
+            if (brandFilter) {
+                brandFilter.innerHTML = brands.map(brand => `
+                    <label class="brand-option">
+                        <input type="checkbox" class="brand-checkbox" value="${escapeHtml(brand)}">
+                        <span>${escapeHtml(brand)}</span>
+                    </label>
+                `).join('');
+
+                // Brand filter listeners
+                brandFilter.querySelectorAll('.brand-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', (e) => {
+                        const brand = e.target.value;
+                        if (e.target.checked) {
+                            selectedBrands.push(brand);
+                        } else {
+                            selectedBrands = selectedBrands.filter(b => b !== brand);
+                        }
+                        renderProducts();
+                        updateActiveFilters();
+                    });
+                });
+            }
+
+            // Sort dropdown
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', (e) => {
+                    sortBy = e.target.value;
+                    renderProducts();
+                });
+            }
+
+            // Price range
+            const minPriceInput = document.getElementById('minPrice');
+            const maxPriceInput = document.getElementById('maxPrice');
+            const priceSlider = document.getElementById('priceSlider');
+
+            if (priceSlider) {
+                priceSlider.addEventListener('input', (e) => {
+                    maxPrice = parseInt(e.target.value);
+                    if (maxPriceInput) maxPriceInput.value = maxPrice;
+                    renderProducts();
+                    updateActiveFilters();
+                });
+            }
+
+            if (minPriceInput) {
+                minPriceInput.addEventListener('change', (e) => {
+                    minPrice = parseInt(e.target.value) || 0;
+                    renderProducts();
+                    updateActiveFilters();
+                });
+            }
+
+            if (maxPriceInput) {
+                maxPriceInput.addEventListener('change', (e) => {
+                    maxPrice = parseInt(e.target.value) || 1000;
+                    if (priceSlider) priceSlider.value = maxPrice;
+                    renderProducts();
+                    updateActiveFilters();
+                });
+            }
+
+            // Rating filter
+            document.querySelectorAll('.rating-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    selectedRating = e.target.checked ? parseInt(e.target.value) : null;
+                    // Uncheck other ratings
+                    document.querySelectorAll('.rating-checkbox').forEach(cb => {
+                        if (cb !== e.target) cb.checked = false;
+                    });
+                    renderProducts();
+                    updateActiveFilters();
+                });
+            });
+
+            // Stock status filter
+            document.querySelectorAll('.stock-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const status = e.target.value;
+                    if (e.target.checked) {
+                        selectedStockStatus.push(status);
+                    } else {
+                        selectedStockStatus = selectedStockStatus.filter(s => s !== status);
+                    }
+                    renderProducts();
+                    updateActiveFilters();
+                });
+            });
+
+            // Clear filters button
+            const clearBtn = document.getElementById('clearFiltersBtn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    minPrice = 0;
+                    maxPrice = 1000;
+                    selectedRating = null;
+                    selectedStockStatus = [];
+                    selectedBrands = [];
+                    sortBy = 'relevance';
+
+                    // Reset all inputs
+                    if (minPriceInput) minPriceInput.value = 0;
+                    if (maxPriceInput) maxPriceInput.value = 1000;
+                    if (priceSlider) priceSlider.value = 1000;
+                    if (sortSelect) sortSelect.value = 'relevance';
+
+                    document.querySelectorAll('.rating-checkbox, .stock-checkbox, .brand-checkbox').forEach(cb => {
+                        cb.checked = false;
+                    });
+
+                    renderProducts();
+                    updateActiveFilters();
+                });
+            }
+        }
+
+        function updateActiveFilters() {
+            const activeFiltersContainer = document.getElementById('activeFilters');
+            if (!activeFiltersContainer) return;
+
+            const filters = [];
+
+            if (minPrice > 0 || maxPrice < 1000) {
+                filters.push({ label: `Price: KWD ${minPrice} - ${maxPrice}`, id: 'price' });
+            }
+            if (selectedRating) {
+                filters.push({ label: `${selectedRating}+ Stars`, id: 'rating' });
+            }
+            selectedStockStatus.forEach(status => {
+                filters.push({ label: status, id: `stock-${status}` });
+            });
+            selectedBrands.forEach(brand => {
+                filters.push({ label: brand, id: `brand-${brand}` });
+            });
+
+            if (filters.length === 0) {
+                activeFiltersContainer.innerHTML = '';
+                return;
+            }
+
+            activeFiltersContainer.innerHTML = filters.map(f => `
+                <div class="filter-tag">
+                    ${f.label}
+                    <span class="filter-tag-close">×</span>
+                </div>
+            `).join('');
+
+            activeFiltersContainer.querySelectorAll('.filter-tag-close').forEach((closeBtn, index) => {
+                closeBtn.addEventListener('click', () => {
+                    const filter = filters[index];
+                    if (filter.id === 'price') {
+                        minPrice = 0;
+                        maxPrice = 1000;
+                        if (document.getElementById('minPrice')) document.getElementById('minPrice').value = 0;
+                        if (document.getElementById('maxPrice')) document.getElementById('maxPrice').value = 1000;
+                        if (document.getElementById('priceSlider')) document.getElementById('priceSlider').value = 1000;
+                    } else if (filter.id === 'rating') {
+                        selectedRating = null;
+                        document.querySelectorAll('.rating-checkbox').forEach(cb => cb.checked = false);
+                    } else if (filter.id.startsWith('stock-')) {
+                        const status = filter.label;
+                        selectedStockStatus = selectedStockStatus.filter(s => s !== status);
+                        document.querySelectorAll('.stock-checkbox').forEach(cb => {
+                            if (cb.value === status) cb.checked = false;
+                        });
+                    } else if (filter.id.startsWith('brand-')) {
+                        const brand = filter.label;
+                        selectedBrands = selectedBrands.filter(b => b !== brand);
+                        document.querySelectorAll('.brand-checkbox').forEach(cb => {
+                            if (cb.value === brand) cb.checked = false;
+                        });
+                    }
+                    renderProducts();
+                    updateActiveFilters();
+                });
+            });
+        }
+
         // 5. INITIALIZATION
         document.addEventListener('DOMContentLoaded', async () => {
             try {
@@ -2730,6 +3224,7 @@
                 }
 
                 renderProducts();
+                initializeFilters();
                 updateCartUI();
 
                 const elapsed = Math.max(300 - (performance.now() - start), 0);
