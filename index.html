@@ -631,25 +631,28 @@
             mix-blend-mode: multiply;
         }
 
-        /* Stacked images for the hover slideshow */
-        .image-stack {
+        /* Carousel for hovering image slideshow */
+        .carousel-wrap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             position: relative;
-            width: 100%;
-            height: 100%;
         }
-        .image-stack .product-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+        .carousel {
+            display: flex;
             height: 100%;
-            transform: translateX(100%);
-            transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-        }
-        .image-stack .product-image.active {
             transform: translateX(0);
-            z-index: 1;
+        }
+        .carousel.scrolling {
+            animation: none;
+        }
+        .carousel-img {
+            width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            object-fit: contain;
+            border-radius: 12px;
+            mix-blend-mode: multiply;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1289,7 +1292,7 @@
                             <div class="image-container">
                                 ${product.images && product.images.length > 0
                                     ? (product.images.length > 1
-                                        ? `<div class="image-stack">${product.images.map((url, i) => `<img src="${escapeHtml(url)}" alt="${escapeHtml(product.title)}" class="product-image${i === 0 ? ' active' : ''}" loading="lazy" onerror="this.style.display='none';">`).join('')}</div>`
+                                        ? `<div class="carousel-wrap"><div class="carousel" data-count="${product.images.length}">${product.images.map((url, i) => `<img src="${escapeHtml(url)}" alt="${escapeHtml(product.title)}" class="carousel-img" loading="lazy" onerror="this.style.display='none';">`).join('')}</div></div>`
                                         : `<img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.title)}" class="product-image" loading="lazy" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)} image-placeholder\\'></i>';">`)
                                     : `<i class="fas ${escapeHtml(product.icon)} image-placeholder"></i>`}
                             </div>
@@ -1321,49 +1324,38 @@
             setupHoverSlideshows();
         }
 
-        // Cycle through a card's images with swipe animation while the mouse hovers over it.
+        // Carousel slideshow: continuously scroll through images on hover
         function setupHoverSlideshows() {
-            document.querySelectorAll('.image-stack').forEach(stack => {
-                const card = stack.closest('.product-card');
+            document.querySelectorAll('.carousel').forEach(carousel => {
+                const card = carousel.closest('.product-card');
                 if (!card) return;
-                const imgs = stack.querySelectorAll('.product-image');
-                if (imgs.length < 2) return;
+                const count = parseInt(carousel.dataset.count) || 0;
+                if (count < 2) return;
 
-                // Initialize: first image is active, rest are off-screen to the right
-                imgs.forEach((img, i) => {
-                    if (i === 0) img.classList.add('active');
-                    else img.style.transform = 'translateX(100%)';
-                });
-
-                let index = 0;
                 let timer = null;
+                let currentPos = 0;
 
-                const show = (i) => {
-                    imgs.forEach((img, n) => {
-                        if (n === i) {
-                            img.classList.add('active');
-                            img.style.transform = 'translateX(0)';
-                        } else {
-                            img.classList.remove('active');
-                            img.style.transform = 'translateX(100%)';
-                        }
-                    });
+                const scroll = () => {
+                    currentPos = (currentPos + 1) % count;
+                    const offset = -(currentPos * 100);
+                    carousel.style.transform = `translateX(${offset}%)`;
                 };
 
                 const start = () => {
                     if (timer) return;
-                    // Advance every 2.5s to match the swipe transition time
-                    timer = setInterval(() => {
-                        index = (index + 1) % imgs.length;
-                        show(index);
-                    }, 2500);
+                    carousel.classList.add('scrolling');
+                    // Scroll every 2.5s (matches animation duration)
+                    timer = setInterval(scroll, 2500);
                 };
 
                 const stop = () => {
-                    clearInterval(timer);
-                    timer = null;
-                    index = 0;
-                    show(0);
+                    if (timer) {
+                        clearInterval(timer);
+                        timer = null;
+                    }
+                    carousel.classList.remove('scrolling');
+                    currentPos = 0;
+                    carousel.style.transform = 'translateX(0)';
                 };
 
                 card.addEventListener('mouseenter', start);
