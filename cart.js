@@ -53,9 +53,9 @@ function renderCart() {
                         <h3 class="item-title"><a href="product.html?id=${product.id}" style="color:inherit;">${escapeHtml(product.title)}</a></h3>
                         <div class="item-qty" style="display: flex; align-items: center; gap: 12px; margin: 12px 0;">
                             <span>Qty:</span>
-                            <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty} - 1)" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">−</button>
+                            <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty - 1})" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">−</button>
                             <span style="min-width: 30px; text-align: center;">${qty}</span>
-                            <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty} + 1)" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">+</button>
+                            <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty + 1})" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">+</button>
                         </div>
                         <button class="remove-btn" onclick="removeFromCart(${product.id})">Remove</button>
                     </div>
@@ -83,13 +83,28 @@ window.removeFromCart = function(id) {
 
 window.changeQuantity = function(index, newQty) {
     let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
+    const cartItem = cart[index];
+    const product = inventory.find(p => Number(p.id) === Number(cartItem.id));
+
     if (newQty < 1) {
-        removeFromCart(cart[index].id);
-    } else {
-        cart[index].quantity = newQty;
-        localStorage.setItem('netletCart', JSON.stringify(cart));
-        renderCart();
+        removeFromCart(cartItem.id);
+        return;
     }
+
+    if (!product || !product.inStock) {
+        new Toast('This product is out of stock and cannot be purchased', 'error', 2000);
+        removeFromCart(cartItem.id);
+        return;
+    }
+
+    if (product.quantity > 0 && newQty > product.quantity) {
+        new Toast(`Only ${product.quantity} item(s) available in stock`, 'error', 2000);
+        return;
+    }
+
+    cart[index].quantity = newQty;
+    localStorage.setItem('netletCart', JSON.stringify(cart));
+    renderCart();
 };
 
 confirmBtn.addEventListener('click', () => {
@@ -114,6 +129,35 @@ confirmBtn.addEventListener('click', () => {
 cancelBtn.addEventListener('click', () => {
     idToDelete = null;
     modal.classList.remove('active');
+});
+
+// Checkout validation
+document.querySelector('.checkout-btn')?.addEventListener('click', () => {
+    const cartItems = JSON.parse(localStorage.getItem('netletCart')) || [];
+
+    if (cartItems.length === 0) {
+        new Toast('Your cart is empty', 'error', 2000);
+        return;
+    }
+
+    // Validate all items are in stock
+    for (const item of cartItems) {
+        const product = inventory.find(p => Number(p.id) === Number(item.id));
+        if (!product) {
+            new Toast('One or more items in your cart no longer exist', 'error', 2000);
+            return;
+        }
+        if (!product.inStock) {
+            new Toast(`${product.brand} is out of stock. Please remove it before checkout.`, 'error', 2000);
+            return;
+        }
+        if (product.quantity > 0 && item.quantity > product.quantity) {
+            new Toast(`Only ${product.quantity} of ${product.brand} available. Please adjust quantity.`, 'error', 2000);
+            return;
+        }
+    }
+
+    new Toast('Proceeding to checkout...', 'success', 2000);
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
