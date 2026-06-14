@@ -261,20 +261,34 @@
         .social-btn {
             flex: 1;
             padding: 12px;
-            border: 1px solid rgba(126, 133, 155, 0.3);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             cursor: pointer;
             transition: all 0.3s;
             font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--netlet-blue);
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
         }
 
         .social-btn:hover {
-            background: rgba(255, 255, 255, 0.8);
-            border-color: var(--netlet-blue);
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.6);
+        }
+
+        .social-btn:active {
+            transform: translateY(0);
         }
 
         /* Default mobile nav hidden on desktop */
