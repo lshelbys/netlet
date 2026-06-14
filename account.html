@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Account - NetLet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --netlet-blue: #1E3A8A;
+            --netlet-red: #E61C38;
+            --text-dark: #1F2229;
+            --bg-light: #F7F6F2;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #F7F6F2 0%, #F0EFE8 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .account-header {
+            background: rgba(247, 246, 242, 0.75);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .account-header-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--netlet-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-link i {
+            color: var(--netlet-red);
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--netlet-blue);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s;
+        }
+
+        .back-link:hover {
+            gap: 10px;
+        }
+
+        /* Main Container */
+        .account-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 48px 32px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                inset 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            font-size: 14px;
+            color: #7E859B;
+            font-weight: 500;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 1px solid rgba(126, 133, 155, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--netlet-blue);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #C2C6D1;
+        }
+
+        /* Form Sections */
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--netlet-blue) 0%, #0F2550 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 12px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Toggle Section */
+        .toggle-section {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .toggle-section p {
+            font-size: 14px;
+            color: #7E859B;
+            margin-bottom: 12px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--netlet-blue);
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .toggle-btn:hover {
+            color: var(--netlet-red);
+        }
+
+        /* Remember Me / Forgot Password */
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        .remember-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .remember-checkbox input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: var(--netlet-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: var(--netlet-red);
+        }
+
+        /* Social Login */
+        .social-login {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid rgba(126, 133, 155, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: var(--netlet-blue);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .account-container {
+                padding: 24px 16px;
+            }
+
+            .auth-card {
+                padding: 32px 24px;
+            }
+
+            .auth-header h1 {
+                font-size: 28px;
+            }
+
+            .logo-link {
+                font-size: 20px;
+            }
+        }
+
+        /* Additional Styles */
+        .password-toggle {
+            position: relative;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #7E859B;
+            font-size: 16px;
+            padding: 8px;
+            transition: color 0.2s;
+        }
+
+        .password-toggle-btn:hover {
+            color: var(--netlet-blue);
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+            gap: 12px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .divider-text {
+            font-size: 13px;
+            color: #7E859B;
+            font-weight: 500;
+        }
+
+        /* Success Message */
+        .success-message {
+            padding: 12px 16px;
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            border-left: 4px solid #28a745;
+            border-radius: 8px;
+            color: #1F2229;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="account-header">
+        <div class="account-header-content">
+            <a href="index.html" class="logo-link">
+                <i class="fas fa-home-lg-alt"></i>
+                <span>NetLet</span>
+            </a>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="account-container">
+        <div class="auth-wrapper">
+            <!-- Login Form -->
+            <div class="form-section active" id="loginForm">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h1>Welcome Back</h1>
+                        <p>Sign in to your NetLet account</p>
+                    </div>
+
+                    <form id="loginFormElement">
+                        <div class="success-message" id="loginSuccess">
+                            <i class="fas fa-check-circle"></i> Successfully logged in!
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loginEmail">Email Address</label>
+                            <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="loginPassword" placeholder="••••••••" required>
+                                <button type="button" class="password-toggle-btn" onclick="togglePassword('loginPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-footer">
+                            <label class="remember-checkbox">
+                                <input type="checkbox" id="rememberMe">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-link">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Sign In</button>
+                    </form>
+
+                    <div class="divider">
+                        <span class="divider-text">OR</span>
+                    </div>
+
+                    <div class="social-login">
+                        <button class="social-btn" title="Sign in with Google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button class="social-btn" title="Sign in with Apple">
+                            <i class="fab fa-apple"></i>
+                        </button>
+                        <button class="social-btn" title="Sign in with Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </button>
+                    </div>
+
+                    <div class="toggle-section">
+                        <p>Don't have an account?</p>
+                        <button type="button" class="toggle-btn" onclick="toggleForms()">Create one now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="form-section" id="signupForm">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h1>Join NetLet</h1>
+                        <p>Create your account to start shopping</p>
+                    </div>
+
+                    <form id="signupFormElement">
+                        <div class="success-message" id="signupSuccess">
+                            <i class="fas fa-check-circle"></i> Account created successfully! Please sign in.
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupName">Full Name</label>
+                            <input type="text" id="signupName" placeholder="John Doe" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupEmail">Email Address</label>
+                            <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="signupPassword" placeholder="••••••••" required>
+                                <button type="button" class="password-toggle-btn" onclick="togglePassword('signupPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupConfirmPassword">Confirm Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="signupConfirmPassword" placeholder="••••••••" required>
+                                <button type="button" class="password-toggle-btn" onclick="togglePassword('signupConfirmPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: flex; gap: 8px; margin-top: 16px;">
+                            <input type="checkbox" id="agreeTerms" required style="width: auto;">
+                            <label for="agreeTerms" style="margin: 0; font-size: 13px;">
+                                I agree to the <a href="#" style="color: var(--netlet-blue); text-decoration: none;">Terms of Service</a> and <a href="#" style="color: var(--netlet-blue); text-decoration: none;">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Create Account</button>
+                    </form>
+
+                    <div class="divider">
+                        <span class="divider-text">OR</span>
+                    </div>
+
+                    <div class="social-login">
+                        <button class="social-btn" title="Sign up with Google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button class="social-btn" title="Sign up with Apple">
+                            <i class="fab fa-apple"></i>
+                        </button>
+                        <button class="social-btn" title="Sign up with Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </button>
+                    </div>
+
+                    <div class="toggle-section">
+                        <p>Already have an account?</p>
+                        <button type="button" class="toggle-btn" onclick="toggleForms()">Sign in here</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between login and signup forms
+        function toggleForms() {
+            document.getElementById('loginForm').classList.toggle('active');
+            document.getElementById('signupForm').classList.toggle('active');
+
+            // Clear forms and messages
+            document.getElementById('loginFormElement').reset();
+            document.getElementById('signupFormElement').reset();
+            document.getElementById('loginSuccess').classList.remove('show');
+            document.getElementById('signupSuccess').classList.remove('show');
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const btn = event.currentTarget;
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            } else {
+                input.type = 'password';
+                btn.innerHTML = '<i class="fas fa-eye"></i>';
+            }
+        }
+
+        // Form submission handlers (placeholder functionality)
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('loginSuccess').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('loginSuccess').classList.remove('show');
+            }, 3000);
+        });
+
+        document.getElementById('signupFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('signupSuccess').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('signupSuccess').classList.remove('show');
+                toggleForms();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
