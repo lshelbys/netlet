@@ -1262,6 +1262,10 @@
                     p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     p.title.toLowerCase().includes(searchQuery.toLowerCase());
                 const matchesCategory = !selectedCategory || p.category === selectedCategory;
+                // Debug logging
+                if (selectedCategory && p.brand === 'TestBrand') {
+                    console.log(`Filter check: selectedCategory="${selectedCategory}", p.category="${p.category}", match=${matchesCategory}`);
+                }
                 return matchesSearch && matchesCategory;
             });
 
@@ -1282,6 +1286,7 @@
             if (!grid) return;
 
             const products = getFilteredAndSortedProducts();
+            console.log('renderProducts called - selectedCategory:', selectedCategory, 'products to render:', products.length);
 
             if (products.length === 0) {
                 grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #7E859B;">
@@ -1437,6 +1442,16 @@
                 categoryChips.forEach(c => c.classList.remove('active'));
                 chip.classList.add('active');
                 selectedCategory = chip.dataset.category || '';
+                console.log('Category chip clicked:', chip.textContent, 'data-category:', chip.dataset.category, 'selectedCategory set to:', selectedCategory);
+                console.log('Inventory items:', inventory.length);
+                const filtered = inventory.filter(p => {
+                    const matchesCategory = !selectedCategory || p.category === selectedCategory;
+                    return matchesCategory;
+                });
+                console.log('Products after category filter:', filtered.length);
+                if (selectedCategory) {
+                    console.log('First few products:', inventory.slice(0, 3).map(p => ({ id: p.id, brand: p.brand, category: p.category })));
+                }
                 renderProducts();
             });
         });
