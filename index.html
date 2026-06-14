@@ -549,6 +549,16 @@
             color: var(--netlet-blue);
         }
 
+        .chip.active {
+            background: var(--netlet-blue);
+            border-color: var(--netlet-blue);
+            color: #ffffff;
+        }
+
+        .chip.active:hover {
+            color: #ffffff;
+        }
+
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -1112,23 +1122,25 @@
             <div class="mega-menu-trigger" id="megaMenuTrigger">
                 <i class="fas fa-bars"></i> ALL CATEGORIES
                 <div class="mega-menu" id="megaMenu">
-                    <a href="#" class="mega-menu-item">Electronics <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Fashion <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Home & Kitchen <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Beauty & Fragrance <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Baby Products <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Toys <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-                    <a href="#" class="mega-menu-item">Sports & Outdoors <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Electronics">Electronics <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Fashion">Fashion <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Home & Garden">Home & Garden <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Beauty">Beauty <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Books">Books <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Toys">Toys <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Sports">Sports <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Food & Beverage">Food & Beverage <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
+                    <a href="#" class="mega-menu-item" data-category="Other">Other <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
                 </div>
             </div>
             <ul class="nav-links">
-                <li><a href="#">ELECTRONICS</a></li>
-                <li><a href="#">FASHION</a></li>
-                <li><a href="#">HOME & KITCHEN</a></li>
-                <li><a href="#">BEAUTY & FRAGRANCE</a></li>
-                <li><a href="#">BABY PRODUCTS</a></li>
-                <li><a href="#">TOYS</a></li>
-                <li><a href="#">SPORTS & OUTDOORS</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Electronics">ELECTRONICS</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Fashion">FASHION</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Home & Garden">HOME & GARDEN</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Beauty">BEAUTY</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Books">BOOKS</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Toys">TOYS</a></li>
+                <li><a href="#" class="nav-category-link" data-category="Sports">SPORTS</a></li>
                 <li><a href="#" class="highlight-netletone"><i class="fas fa-bolt"></i> NetLet One</a></li>
             </ul>
         </div>
@@ -1149,16 +1161,16 @@
 
     <main class="section-wrapper">
         <div class="category-chips">
-            <div class="chip">Mobile Phones</div>
-            <div class="chip">Laptops</div>
-            <div class="chip">Fragrances</div>
-            <div class="chip">Watches</div>
-            <div class="chip">Kitchen</div>
-            <div class="chip">Home Decor</div>
-            <div class="chip">Video Games</div>
-            <div class="chip">Toys</div>
-            <div class="chip">Eyewear</div>
-            <div class="chip">Personal Care</div>
+            <div class="chip active" data-category="">All</div>
+            <div class="chip" data-category="Electronics">Electronics</div>
+            <div class="chip" data-category="Fashion">Fashion</div>
+            <div class="chip" data-category="Home & Garden">Home &amp; Garden</div>
+            <div class="chip" data-category="Sports">Sports</div>
+            <div class="chip" data-category="Beauty">Beauty</div>
+            <div class="chip" data-category="Books">Books</div>
+            <div class="chip" data-category="Toys">Toys</div>
+            <div class="chip" data-category="Food & Beverage">Food &amp; Beverage</div>
+            <div class="chip" data-category="Other">Other</div>
         </div>
 
         <div class="section-header">
@@ -1251,7 +1263,8 @@
                 const matchesSearch = !searchQuery ||
                     p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     p.title.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesSearch;
+                const matchesCategory = !selectedCategory || p.category === selectedCategory;
+                return matchesSearch && matchesCategory;
             });
 
             // Sort products
@@ -1423,10 +1436,38 @@
 
         categoryChips.forEach(chip => {
             chip.addEventListener('click', () => {
-                categoryChips.forEach(c => c.style.opacity = '0.6');
-                chip.style.opacity = '1';
-                selectedCategory = chip.textContent;
+                categoryChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                selectedCategory = chip.dataset.category || '';
                 renderProducts();
+            });
+        });
+
+        // Wire up mega menu category links
+        document.querySelectorAll('.mega-menu-item').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = link.dataset.category || '';
+                // Find and click the corresponding chip
+                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
+                if (correspondingChip) {
+                    correspondingChip.click();
+                }
+                // Close mega menu
+                megaMenu.classList.remove('active');
+            });
+        });
+
+        // Wire up top nav category links
+        document.querySelectorAll('.nav-category-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = link.dataset.category || '';
+                // Find and click the corresponding chip
+                const correspondingChip = Array.from(categoryChips).find(chip => chip.dataset.category === category);
+                if (correspondingChip) {
+                    correspondingChip.click();
+                }
             });
         });
 

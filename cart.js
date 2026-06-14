@@ -14,12 +14,14 @@ let idToDelete = null;
 
 function renderCart() {
     const cartIds = JSON.parse(localStorage.getItem('netletCart')) || [];
-    
+
+    console.log('renderCart called. Inventory products:', inventory.length, 'Cart IDs:', cartIds);
+
     if (inventory.length === 0) {
         console.warn('NetLet: Inventory is currently empty or still loading.');
         // If inventory is empty, we wait a moment or try to reload
     }
-    
+
     if (cartIds.length === 0) {
         cartItemsContainer.innerHTML = `<div class="empty-cart">Your cart is empty. <br><br> <i class="fas fa-shopping-basket" style="font-size: 50px; opacity: 0.2;"></i></div>`;
         updateTotals(0, 0);
@@ -35,6 +37,7 @@ function renderCart() {
 
     Object.keys(counts).forEach(id => {
         const product = inventory.find(p => Number(p.id) === Number(id));
+        console.log(`Looking for product ID ${id}: found=${!!product}`, product ? { id: product.id, brand: product.brand } : 'NOT FOUND');
         if (product) {
             const qty = counts[id];
             totalCost += product.price * qty;

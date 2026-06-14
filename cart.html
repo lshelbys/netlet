@@ -327,6 +327,17 @@
 
     <script type="module" src="cart.js"></script>
     <script>
+        // Debug logging to see cart state
+        window.addEventListener('load', () => {
+            const cartIds = JSON.parse(localStorage.getItem('netletCart')) || [];
+            console.log('Cart page loaded. Cart IDs in storage:', cartIds);
+            console.log('Cart length:', cartIds.length);
+        });
+
+        window.addEventListener('error', (e) => {
+            console.error('JavaScript Error:', e.message, e.filename);
+        });
+
         // Tab Switching Feedback
         const mobileTabs = document.querySelectorAll('.mobile-tab-item');
         const indicator = document.querySelector('.tab-indicator');
