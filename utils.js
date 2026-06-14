@@ -126,7 +126,7 @@ class RateLimiter {
 function handleError(error, context = '') {
     console.error(`[${context}]`, error);
     const message = error.message || 'An unexpected error occurred.';
-    new Toast(`Error${context ? ` (${context})` : ''}: ${message}`, 'error', 5000);
+    new Toast(`Error${context ? ` (${context})` : ''}: ${message}`, 'error', 6000);
 }
 
 // Global toast styles (inject once)

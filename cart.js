@@ -92,13 +92,13 @@ window.changeQuantity = function(index, newQty) {
     }
 
     if (!product || product.stockStatus === 'Out of Stock') {
-        new Toast('This product is out of stock and cannot be purchased', 'error', 4000);
+        new Toast('This product is out of stock and cannot be purchased', 'error', 6000);
         removeFromCart(cartItem.id);
         return;
     }
 
     if (newQty > product.stockQuantity) {
-        new Toast(`Only ${product.stockQuantity} item(s) available in stock`, 'error', 4000);
+        new Toast(`Only ${product.stockQuantity} item(s) available in stock`, 'error', 6000);
         return;
     }
 
@@ -119,7 +119,7 @@ confirmBtn.addEventListener('click', () => {
     localStorage.setItem('netletCart', JSON.stringify(cart));
 
     const removed = prevLength - cart.length;
-    new Toast(`Removed ${removed} item${removed > 1 ? 's' : ''} from cart`, 'success', 4000);
+    new Toast(`Removed ${removed} item${removed > 1 ? 's' : ''} from cart`, 'success', 6000);
 
     idToDelete = null;
     modal.classList.remove('active');
@@ -136,7 +136,7 @@ document.querySelector('.checkout-btn')?.addEventListener('click', () => {
     const cartItems = JSON.parse(localStorage.getItem('netletCart')) || [];
 
     if (cartItems.length === 0) {
-        new Toast('Your cart is empty', 'error', 4000);
+        new Toast('Your cart is empty', 'error', 6000);
         return;
     }
 
@@ -144,20 +144,20 @@ document.querySelector('.checkout-btn')?.addEventListener('click', () => {
     for (const item of cartItems) {
         const product = inventory.find(p => Number(p.id) === Number(item.id));
         if (!product) {
-            new Toast('One or more items in your cart no longer exist', 'error', 4000);
+            new Toast('One or more items in your cart no longer exist', 'error', 6000);
             return;
         }
         if (product.stockStatus === 'Out of Stock') {
-            new Toast(`${product.brand} is out of stock. Please remove it before checkout.`, 'error', 4000);
+            new Toast(`${product.brand} is out of stock. Please remove it before checkout.`, 'error', 6000);
             return;
         }
         if (item.quantity > product.stockQuantity) {
-            new Toast(`Only ${product.stockQuantity} of ${product.brand} available. Please adjust quantity.`, 'error', 4000);
+            new Toast(`Only ${product.stockQuantity} of ${product.brand} available. Please adjust quantity.`, 'error', 6000);
             return;
         }
     }
 
-    new Toast('Proceeding to checkout...', 'success', 4000);
+    new Toast('Proceeding to checkout...', 'success', 6000);
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => LoadingOverlay.hide(), elapsed);
     } catch (err) {
         LoadingOverlay.hide();
-        new Toast('Error loading cart. Please refresh the page.', 'error', 4000);
+        new Toast('Error loading cart. Please refresh the page.', 'error', 6000);
         console.error('Cart loading error:', err);
     }
 });

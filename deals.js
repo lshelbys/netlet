@@ -84,7 +84,7 @@ function renderDeals() {
             const product = inventory.find(p => p.id === productId);
             if (product) {
                 if (product.stockStatus === 'Out of Stock') {
-                    new Toast('This product is out of stock', 'error', 4000);
+                    new Toast('This product is out of stock', 'error', 6000);
                     return;
                 }
                 const cart = getCart();
@@ -95,7 +95,7 @@ function renderDeals() {
                     cart.push({ id: productId, quantity: 1 });
                 }
                 saveCart(cart);
-                new Toast(`Added ${product.brand} to cart`, 'success', 4000);
+                new Toast(`Added ${product.brand} to cart`, 'success', 6000);
             }
         });
     });
@@ -111,11 +111,11 @@ function renderDeals() {
             if (idx > -1) {
                 wishlist.splice(idx, 1);
                 icon.className = 'far fa-heart';
-                new Toast('Removed from wishlist', 'info', 4000);
+                new Toast('Removed from wishlist', 'info', 6000);
             } else {
                 wishlist.push(productId);
                 icon.className = 'fas fa-heart';
-                new Toast('Added to wishlist', 'success', 4000);
+                new Toast('Added to wishlist', 'success', 6000);
             }
             saveWishlist(wishlist);
         });
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => LoadingOverlay.hide(), elapsed);
     } catch (err) {
         LoadingOverlay.hide();
-        new Toast('Error loading deals. Please refresh the page.', 'error', 4000);
+        new Toast('Error loading deals. Please refresh the page.', 'error', 6000);
         console.error('Deals loading error:', err);
     }
 });
