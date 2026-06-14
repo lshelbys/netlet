@@ -1337,11 +1337,10 @@
         // 1. RENDER LOGIC
         function getFilteredAndSortedProducts() {
             let filtered = inventory.filter(p => {
+                // Search only in title and brand for precise results
                 const matchesSearch = !searchQuery ||
-                    p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                    (p.category && p.category.toLowerCase().includes(searchQuery.toLowerCase()));
+                    p.brand.toLowerCase().includes(searchQuery.toLowerCase());
                 const matchesCategory = !selectedCategory || p.category === selectedCategory;
                 return matchesSearch && matchesCategory;
             });
