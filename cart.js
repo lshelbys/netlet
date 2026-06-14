@@ -13,34 +13,34 @@ const cancelBtn = document.getElementById('cancelBtn');
 let idToDelete = null;
 
 function renderCart() {
-    const cartIds = JSON.parse(localStorage.getItem('netletCart')) || [];
+    const cartItems = JSON.parse(localStorage.getItem('netletCart')) || [];
 
-    console.log('renderCart called. Inventory products:', inventory.length, 'Cart IDs:', cartIds);
+    console.log('renderCart called. Inventory products:', inventory.length, 'Cart items:', cartItems);
 
     if (inventory.length === 0) {
         console.warn('NetLet: Inventory is currently empty or still loading.');
-        // If inventory is empty, we wait a moment or try to reload
     }
 
-    if (cartIds.length === 0) {
+    if (cartItems.length === 0) {
         cartItemsContainer.innerHTML = `<div class="empty-cart">Your cart is empty. <br><br> <i class="fas fa-shopping-basket" style="font-size: 50px; opacity: 0.2;"></i></div>`;
         updateTotals(0, 0);
         return;
     }
 
-    // Count occurrences of each ID
-    const counts = {};
-    cartIds.forEach(id => counts[id] = (counts[id] || 0) + 1);
-
     let html = '';
     let totalCost = 0;
+    let totalItems = 0;
 
-    Object.keys(counts).forEach(id => {
-        const product = inventory.find(p => Number(p.id) === Number(id));
-        console.log(`Looking for product ID ${id}: found=${!!product}`, product ? { id: product.id, brand: product.brand } : 'NOT FOUND');
+    cartItems.forEach((cartItem, idx) => {
+        const productId = typeof cartItem === 'object' ? cartItem.id : cartItem;
+        const qty = typeof cartItem === 'object' ? (cartItem.quantity || 1) : 1;
+        const product = inventory.find(p => Number(p.id) === Number(productId));
+
+        console.log(`Looking for product ID ${productId}: found=${!!product}`, product ? { id: product.id, brand: product.brand } : 'NOT FOUND');
+
         if (product) {
-            const qty = counts[id];
             totalCost += product.price * qty;
+            totalItems += qty;
             const images = Array.isArray(product.images) ? product.images : [];
             const imageMarkup = images.length > 0
                 ? `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply;" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)}\\'></i>';">`
@@ -51,7 +51,12 @@ function renderCart() {
                     <div class="item-details">
                         <div class="item-brand">${escapeHtml(product.brand)}</div>
                         <h3 class="item-title"><a href="product.html?id=${product.id}" style="color:inherit;">${escapeHtml(product.title)}</a></h3>
-                        <div class="item-qty">Quantity: ${qty}</div>
+                        <div class="item-qty" style="display: flex; align-items: center; gap: 12px; margin: 12px 0;">
+                            <span>Qty:</span>
+                            <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty} - 1)" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">−</button>
+                            <span style="min-width: 30px; text-align: center;">${qty}</span>
+                            <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty} + 1)" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">+</button>
+                        </div>
                         <button class="remove-btn" onclick="removeFromCart(${product.id})">Remove</button>
                     </div>
                     <div class="item-price">KWD ${(product.price * qty).toFixed(2)}</div>
@@ -61,7 +66,7 @@ function renderCart() {
     });
 
     cartItemsContainer.innerHTML = html;
-    updateTotals(totalCost, cartIds.length);
+    updateTotals(totalCost, totalItems);
 }
 
 function updateTotals(total, count) {
@@ -76,12 +81,26 @@ window.removeFromCart = function(id) {
     modal.classList.add('active');
 };
 
+window.changeQuantity = function(index, newQty) {
+    let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
+    if (newQty < 1) {
+        removeFromCart(cart[index].id);
+    } else {
+        cart[index].quantity = newQty;
+        localStorage.setItem('netletCart', JSON.stringify(cart));
+        renderCart();
+    }
+};
+
 confirmBtn.addEventListener('click', () => {
     if (idToDelete === null) return;
 
     let cart = JSON.parse(localStorage.getItem('netletCart')) || [];
     const prevLength = cart.length;
-    cart = cart.filter(itemId => Number(itemId) !== Number(idToDelete));
+    cart = cart.filter(item => {
+        const itemId = typeof item === 'object' ? item.id : item;
+        return Number(itemId) !== Number(idToDelete);
+    });
     localStorage.setItem('netletCart', JSON.stringify(cart));
 
     const removed = prevLength - cart.length;

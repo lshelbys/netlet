@@ -30,7 +30,9 @@ function normalizeProduct(row) {
         rating: row.rating,
         reviews: row.reviews,
         icon: row.icon,
-        images
+        images,
+        inStock: row.in_stock ?? true,
+        quantity: row.quantity ?? 0
     };
 }
 
@@ -49,7 +51,9 @@ function toDbRow(product) {
         rating: product.rating,
         reviews: product.reviews,
         icon: product.icon,
-        images: JSON.stringify(images)
+        images: JSON.stringify(images),
+        in_stock: product.inStock ?? true,
+        quantity: product.quantity ?? 0
     };
 }
 

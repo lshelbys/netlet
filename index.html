@@ -1328,7 +1328,12 @@
                                 <span>${product.rating}</span>
                                 <span class="rating-count">(${product.reviews})</span>
                             </div>
-                            <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart">ADD TO CART</button>
+                            <div style="margin: 8px 0; font-size: 12px; font-weight: 600;">
+                                ${product.inStock
+                                    ? '<span style="color: #28a745;"><i class="fas fa-check-circle"></i> In Stock</span>'
+                                    : '<span style="color: #E61C38;"><i class="fas fa-times-circle"></i> Out of Stock</span>'}
+                            </div>
+                            <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart" ${!product.inStock ? 'disabled' : ''} style="${!product.inStock ? 'opacity: 0.5; cursor: not-allowed;' : ''}">ADD TO CART</button>
                         </div>
                     </article>
                 `;
@@ -1393,10 +1398,20 @@
         });
 
         function addToCart(productId) {
-            cart.push(productId);
+            const product = inventory.find(p => p.id === productId);
+            if (!product) return;
+            if (!product.inStock) {
+                new Toast('This product is out of stock', 'error', 2000);
+                return;
+            }
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+            } else {
+                cart.push({ id: productId, quantity: 1 });
+            }
             localStorage.setItem('netletCart', JSON.stringify(cart));
             updateCartUI();
-            const product = inventory.find(p => p.id === productId);
             new Toast(`Added ${product.brand} to cart`, 'success', 2000);
         }
 
@@ -1414,13 +1429,16 @@
         }
 
         function updateCartUI() {
+            const totalItems = cart.reduce((sum, item) => {
+                return sum + (typeof item === 'object' ? (item.quantity || 1) : 1);
+            }, 0);
             if (cartBadge) {
-                cartBadge.textContent = cart.length;
+                cartBadge.textContent = totalItems;
                 cartBadge.style.transform = 'scale(1.3)';
                 setTimeout(() => cartBadge.style.transform = 'scale(1)', 200);
             }
             if (mobileCartBadge) {
-                mobileCartBadge.textContent = cart.length;
+                mobileCartBadge.textContent = totalItems;
                 mobileCartBadge.style.transform = 'scale(1.3)';
                 setTimeout(() => mobileCartBadge.style.transform = 'scale(1)', 200);
             }

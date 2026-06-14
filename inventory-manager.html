@@ -218,6 +218,8 @@
                     <th>Express</th>
                     <th>Rating</th>
                     <th>Reviews</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
                     <th>Icon</th>
                     <th>Actions</th>
                 </tr>
@@ -289,6 +291,14 @@
                     <label for="icon">Font Awesome Icon Class (e.g., fa-mobile-alt):</label>
                     <input type="text" id="icon" value="fa-box">
                     <small style="color:#7E859B; display:block; margin-top:4px;">Used as a fallback when no images are provided.</small>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity in Stock:</label>
+                    <input type="number" id="quantity" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="inStock" checked>
+                    <label for="inStock">In Stock</label>
                 </div>
                 <div class="form-group">
                     <label>Product Images:</label>
