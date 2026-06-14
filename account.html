@@ -725,10 +725,17 @@
                 cartBadge.textContent = totalItems;
             }
 
-            // Mobile Tab Switching
             const mobileTabs = document.querySelectorAll('.mobile-tab-item');
             const indicator = document.querySelector('.tab-indicator');
 
+            // Set initial indicator position based on active tab
+            const activeTab = document.querySelector('.mobile-tab-item.active');
+            if (activeTab && indicator) {
+                const activeIndex = Array.from(mobileTabs).indexOf(activeTab);
+                indicator.style.transform = `translateX(${activeIndex * 100}%)`;
+            }
+
+            // Add click listeners to update indicator and active state
             mobileTabs.forEach((tab, index) => {
                 tab.addEventListener('click', function() {
                     mobileTabs.forEach(t => t.classList.remove('active'));
