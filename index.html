@@ -1641,6 +1641,9 @@
             }
         }
 
+        // Declare megaMenu early for use in event listeners below
+        const megaMenu = document.getElementById('megaMenu');
+
         categoryChips.forEach(chip => {
             chip.addEventListener('click', () => {
                 categoryChips.forEach(c => c.classList.remove('active'));
@@ -1702,7 +1705,6 @@
 
         // Mega Menu Toggle Logic
         const megaMenuTrigger = document.getElementById('megaMenuTrigger');
-        const megaMenu = document.getElementById('megaMenu');
 
         if (megaMenuTrigger && megaMenu) {
             megaMenuTrigger.addEventListener('click', (e) => {
