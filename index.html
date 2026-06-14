@@ -2031,15 +2031,35 @@
                 <h3 style="margin: 0; color: var(--text-dark);">Select Delivery Location</h3>
                 <span class="close-modal">&times;</span>
             </div>
-            <p style="font-size: 14px; margin-bottom: 20px; color: var(--text-main);">Choose your city for accurate delivery times and costs.</p>
-            <select id="locationSelect" style="width: 100%; padding: 12px; border: 1px solid #E2E5F1; border-radius: 12px; font-size: 14px; outline: none; margin-bottom: 20px;">
-                <option value="Kuwait City">Kuwait City</option>
-                <option value="Jahra">Jahra</option>
-                <option value="Ahmadi">Ahmadi</option>
-                <option value="Farwaniya">Farwaniya</option>
-                <option value="Hawally">Hawally</option>
-                <option value="Mubarak Al-Kabeer">Mubarak Al-Kabeer</option>
-            </select>
+            <p style="font-size: 14px; margin-bottom: 20px; color: var(--text-main);">Choose your governorate and city for accurate delivery times and costs.</p>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 8px;">Country</label>
+                <select id="countrySelect" disabled style="width: 100%; padding: 12px; border: 1px solid #E2E5F1; border-radius: 12px; font-size: 14px; outline: none; background-color: #f5f5f5; color: #7E859B;">
+                    <option value="Kuwait">Kuwait</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 8px;">Governorate</label>
+                <select id="governorateSelect" style="width: 100%; padding: 12px; border: 1px solid #E2E5F1; border-radius: 12px; font-size: 14px; outline: none;">
+                    <option value="">Select Governorate</option>
+                    <option value="Kuwait City">Kuwait City</option>
+                    <option value="Hawalli">Hawalli</option>
+                    <option value="Farwaniya">Farwaniya</option>
+                    <option value="Jahra">Jahra</option>
+                    <option value="Ahmadi">Ahmadi</option>
+                    <option value="Mubarak Al-Kabeer">Mubarak Al-Kabeer</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 8px;">City</label>
+                <select id="citySelect" style="width: 100%; padding: 12px; border: 1px solid #E2E5F1; border-radius: 12px; font-size: 14px; outline: none;">
+                    <option value="">Select City</option>
+                </select>
+            </div>
+
             <button id="saveLocation" class="add-to-cart-btn" style="margin-top: 0;">SAVE LOCATION</button>
         </div>
     </div>
@@ -2630,9 +2650,35 @@
         const closeModal = document.querySelector('.close-modal');
         const saveLocationBtn = document.getElementById('saveLocation');
         const locationName = document.querySelector('.location-name');
-        const locationSelect = document.getElementById('locationSelect');
+        const governorateSelect = document.getElementById('governorateSelect');
+        const citySelect = document.getElementById('citySelect');
+
+        // Kuwait cities by governorate
+        const kuwaitCities = {
+            'Kuwait City': ['Kuwait City', 'Adailiya', 'Nuzha', 'Shamiya', 'Surra', 'Mansouriya'],
+            'Hawalli': ['Hawalli', 'Salwa', 'Salmiya', 'Rumaithiya', 'Mahboula', 'Messila'],
+            'Farwaniya': ['Farwaniya', 'Khaitan', 'Omariya', 'Sabah Al-Nakheel', 'Ardiya', 'Jaber Al-Ahmed'],
+            'Jahra': ['Jahra', 'Kabd', 'Subiya', 'Tashkeel', 'South Wafra', 'Sabriyah'],
+            'Ahmadi': ['Ahmadi', 'Mina Ahmadi', 'Shuwaikh', 'Fahaheel', 'Waha', 'Fintas'],
+            'Mubarak Al-Kabeer': ['Mubarak Al-Kabeer', 'Sabah Al-Ahmad', 'Qurain', 'Waha']
+        };
 
         if (deliveryLocation && locationModal) {
+            // Handle governorate change
+            governorateSelect.addEventListener('change', (e) => {
+                const selectedGovernorate = e.target.value;
+                citySelect.innerHTML = '<option value="">Select City</option>';
+
+                if (selectedGovernorate && kuwaitCities[selectedGovernorate]) {
+                    kuwaitCities[selectedGovernorate].forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                }
+            });
+
             deliveryLocation.addEventListener('click', () => {
                 locationModal.style.display = 'block';
             });
@@ -2648,10 +2694,17 @@
             });
 
             saveLocationBtn.addEventListener('click', () => {
-                const selected = locationSelect.value;
-                locationName.innerHTML = `${selected} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>`;
+                const selectedGovernorate = governorateSelect.value;
+                const selectedCity = citySelect.value;
+
+                if (!selectedGovernorate || !selectedCity) {
+                    new Toast('Please select both governorate and city', 'error', 4000);
+                    return;
+                }
+
+                locationName.innerHTML = `${selectedCity}, ${selectedGovernorate} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>`;
                 locationModal.style.display = 'none';
-                new Toast(`Delivery location set to ${selected}`, 'success', 6000);
+                new Toast(`Delivery location set to ${selectedCity}, ${selectedGovernorate}`, 'success', 6000);
             });
         }
 
