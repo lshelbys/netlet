@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>NetLet Kuwait Marketplace</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -29,6 +31,32 @@
             background-color: var(--bg-gray);
             color: var(--text-main);
             -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Prevent iOS zoom on input focus - ensure 16px minimum */
+        input,
+        textarea,
+        select,
+        button {
+            font-size: 16px;
+        }
+
+        /* Touch-friendly interactive elements */
+        button,
+        a,
+        input[type="button"],
+        input[type="submit"],
+        input[type="checkbox"],
+        input[type="radio"] {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Ensure buttons are touch-friendly (44x44 minimum recommended) */
+        button {
+            min-height: 44px;
+            padding: 10px 16px;
         }
 
         a {
@@ -170,18 +198,21 @@
             padding: 0 45px 0 24px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 16px;
-            font-size: 14px;
+            font-size: 16px;
             color: var(--text-dark);
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(25px) saturate(210%);
             -webkit-backdrop-filter: blur(25px) saturate(210%);
             outline: none;
+            -webkit-appearance: none;
+            appearance: none;
             /* Multi-layered shadows for the Liquid Glass depth effect */
-            box-shadow: 
+            box-shadow:
                 0 4px 30px rgba(0, 0, 0, 0.05),
                 inset 0 1px 1px rgba(255, 255, 255, 0.4),
                 inset 0 -1px 1px rgba(0, 0, 0, 0.05);
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            touch-action: manipulation;
         }
 
         .search-container input:focus {

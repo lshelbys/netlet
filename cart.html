@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Your Cart | NetLet</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -19,6 +21,19 @@
             color: #404553;
             margin: 0;
             padding-top: 100px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Prevent iOS zoom on input focus */
+        input, textarea, select, button {
+            font-size: 16px;
+        }
+
+        /* Touch-friendly interactions */
+        button, a, input[type="button"], input[type="submit"] {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 44px;
         }
 
         /* Reuse Header Styles */
