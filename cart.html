@@ -454,13 +454,33 @@
         #confirmModal {
             display: none;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 3000; align-items: center; justify-content: center;
         }
         #confirmModal.active { display: flex; }
         .modal-content {
-            background: white; padding: 30px; border-radius: 16px;
-            max-width: 300px; text-align: center;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 40px 36px;
+            border-radius: 20px;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        .modal-content h3 {
+            margin: 0 0 12px 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1F2229;
+        }
+        .modal-content p {
+            margin: 0 0 24px 0;
+            font-size: 14px;
+            color: #404553;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -531,9 +551,9 @@
         <div class="modal-content">
             <h3>Remove Item?</h3>
             <p>Are you sure you want to remove this from your cart?</p>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button id="cancelBtn" style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd; cursor:pointer;">Cancel</button>
-                <button id="confirmBtn" style="flex:1; padding:10px; border-radius:8px; background:#E61C38; color:white; border:none; cursor:pointer;">Remove</button>
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button id="cancelBtn" style="flex:1; padding:12px; border-radius:12px; border:1px solid rgba(255, 255, 255, 0.6); background:rgba(255, 255, 255, 0.4); backdrop-filter: blur(20px) saturate(180%); color:#1E3A8A; font-weight: 600; font-size: 14px; cursor:pointer; transition: all 0.3s ease;">Cancel</button>
+                <button id="confirmBtn" style="flex:1; padding:12px; border-radius:12px; background:linear-gradient(135deg, #E61C38 0%, #B81530 100%); color:white; border:none; font-weight: 600; font-size: 14px; cursor:pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(230, 28, 56, 0.2);">Remove</button>
             </div>
         </div>
     </div>
