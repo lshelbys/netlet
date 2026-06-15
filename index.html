@@ -3465,7 +3465,7 @@
             if (locationTrapCleanup) { locationTrapCleanup(); locationTrapCleanup = null; }
         }
 
-        if (deliveryLocation && locationModal) {
+        if (deliveryLocation && locationModal && closeModal) {
             // Handle governorate change
             governorateSelect.addEventListener('change', (e) => {
                 const selectedGovernorate = e.target.value;

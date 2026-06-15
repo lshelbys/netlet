@@ -1,4 +1,4 @@
-const CACHE = 'netlet-v1';
+const CACHE = 'netlet-v2';
 const PRECACHE = [
     './index.html', './cart.html', './account.html', './product.html',
     './deals.html', './wishlist.html', './orders.html', './about.html',
@@ -22,12 +22,28 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;
-    // Network-first for Supabase API calls
-    if (e.request.url.includes('supabase')) {
-        e.respondWith(fetch(e.request).catch(() => new Response('[]', { headers: { 'Content-Type': 'application/json' } })));
+
+    const url = e.request.url;
+    const dest = e.request.destination;
+
+    // Network-first for Supabase DATA API calls only (not CDN scripts)
+    // Supabase API calls have destination 'empty' (fetch()) not 'script'/'worker'
+    if (url.includes('.supabase.co') && dest !== 'script') {
+        e.respondWith(
+            fetch(e.request).catch(() =>
+                new Response('[]', { headers: { 'Content-Type': 'application/json' } })
+            )
+        );
         return;
     }
-    // Cache-first for everything else
+
+    // For external CDN resources (scripts/styles): network-first, no cache storage
+    if (!url.startsWith(self.location.origin)) {
+        e.respondWith(fetch(e.request).catch(() => Response.error()));
+        return;
+    }
+
+    // Cache-first for same-origin assets
     e.respondWith(
         caches.match(e.request).then(cached =>
             cached || fetch(e.request).then(res => {
