@@ -565,14 +565,21 @@
         }
 
         .hero-tag {
-            background-color: var(--netlet-red);
-            color: white;
-            padding: 4px 10px;
+            background: rgba(254, 238, 0, 0.65);
+            backdrop-filter: blur(14px) saturate(200%);
+            -webkit-backdrop-filter: blur(14px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: var(--text-dark);
+            padding: 5px 12px;
             font-size: 12px;
-            font-weight: 700;
-            border-radius: 4px;
+            font-weight: 800;
+            border-radius: 8px;
             display: inline-block;
             margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            box-shadow:
+                0 4px 16px rgba(254, 238, 0, 0.35),
+                inset 0 1px 1px rgba(255, 255, 255, 0.6);
         }
 
         .hero-title {
