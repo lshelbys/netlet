@@ -2208,11 +2208,19 @@
         @media (max-width: 768px) {
             .cookie-banner {
                 padding: 16px;
-                bottom: 140px;
+                top: 50%;
+                bottom: auto;
                 left: 12px;
                 right: 12px;
+                transform: translateY(-50%);
                 border-radius: 16px;
                 width: calc(100% - 24px);
+            }
+
+            .cookie-banner.show {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
             }
 
             .cookie-content {
