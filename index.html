@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>NetLet Kuwait Marketplace</title>
@@ -434,7 +434,7 @@
             display: flex;
             flex-direction: column;
             padding: 16px 0;
-            z-index: 2000;
+            z-index: 1100;
             transform-origin: top;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             opacity: 0;
@@ -961,6 +961,25 @@
             outline: none !important;
         }
 
+        .discount-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--netlet-red);
+            color: white;
+            padding: 3px 7px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            z-index: 5;
+        }
+
+        .stock-status { margin: 8px 0; font-size: 12px; font-weight: 600; }
+        .stock-in  { color: #28a745; }
+        .stock-low { color: #FFC107; }
+        .stock-out { color: var(--netlet-red); }
+
         .image-container {
             width: 100%;
             height: 180px;
@@ -1070,6 +1089,11 @@
             background-color: var(--netlet-blue);
             transform: scale(1.05);
             box-shadow: 0 8px 20px rgba(30, 58, 138, 0.4);
+        }
+
+        .add-to-cart-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .price-container {
@@ -1226,7 +1250,7 @@
                 background: rgba(255, 255, 255, 0.15);
                 backdrop-filter: blur(25px) saturate(210%);
                 -webkit-backdrop-filter: blur(25px) saturate(210%);
-                z-index: 2000;
+                z-index: 1050;
                 border: 1px solid rgba(255, 255, 255, 0.3);
                 border-radius: 24px;
                 box-shadow: 
@@ -1277,7 +1301,7 @@
                 gap: 4px;
                 padding: 12px 0;
                 color: #7E859B;
-                font-size: 10px;
+                font-size: 12px;
                 font-weight: 600;
                 text-decoration: none;
                 flex: 1;
@@ -1323,6 +1347,17 @@
 
             body {
                 padding-bottom: 130px; /* Increased space for the floating bar */
+            }
+
+            /* Reduce GPU-heavy blur on mobile */
+            .top-promo-bar,
+            .main-header,
+            .nav-bar,
+            .mega-menu,
+            .mobile-bottom-ui,
+            .filters-sidebar {
+                backdrop-filter: blur(10px) saturate(150%);
+                -webkit-backdrop-filter: blur(10px) saturate(150%);
             }
 
             /* Filters on Mobile */
@@ -1905,7 +1940,7 @@
                 0 -8px 32px rgba(0, 0, 0, 0.1),
                 inset 0 1px 1px rgba(255, 255, 255, 0.8);
             padding: 20px 24px;
-            z-index: 999;
+            z-index: 1010;
             display: none;
             animation: slideUp 0.4s ease-out;
         }
@@ -2580,7 +2615,7 @@
                     <article class="product-card" data-id="${product.id}">
                         <div>
                             <div class="discount-badge" style="display: ${product.oldPrice ? 'block' : 'none'}">${discountPercent}% OFF</div>
-                            <button class="wishlist-btn" type="button" data-id="${product.id}" aria-label="Add ${escapeHtml(product.title)} to wishlist" style="background:none; border:none; padding:0;">
+                            <button class="wishlist-btn" type="button" data-id="${product.id}" aria-label="Add ${escapeHtml(product.title)} to wishlist">
                                 <i class="fa${isWishlisted ? 's' : 'r'} fa-heart wishlist-icon" aria-hidden="true" style="color: ${isWishlisted ? '#E61C38' : '#C2C6D1'};"></i>
                             </button>
                             <div class="image-container">
@@ -2609,14 +2644,14 @@
                                 <span>${product.rating}</span>
                                 <span class="rating-count">(${product.reviews})</span>
                             </div>
-                            <div style="margin: 8px 0; font-size: 12px; font-weight: 600;">
+                            <div class="stock-status">
                                 ${product.stockStatus === 'In Stock'
-                                    ? '<span style="color: #28a745;"><i class="fas fa-check-circle"></i> In Stock</span>'
+                                    ? '<span class="stock-in"><i class="fas fa-check-circle"></i> In Stock</span>'
                                     : product.stockStatus === 'Low Stock'
-                                    ? '<span style="color: #FFC107;"><i class="fas fa-exclamation-triangle"></i> Low Stock</span>'
-                                    : '<span style="color: #E61C38;"><i class="fas fa-times-circle"></i> Out of Stock</span>'}
+                                    ? '<span class="stock-low"><i class="fas fa-exclamation-triangle"></i> Low Stock</span>'
+                                    : '<span class="stock-out"><i class="fas fa-times-circle"></i> Out of Stock</span>'}
                             </div>
-                            <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart" ${product.stockStatus === 'Out of Stock' ? 'disabled' : ''} style="${product.stockStatus === 'Out of Stock' ? 'opacity: 0.5; cursor: not-allowed;' : ''}">ADD TO CART</button>
+                            <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart" ${product.stockStatus === 'Out of Stock' ? 'disabled' : ''}>ADD TO CART</button>
                         </div>
                     </article>
                 `;
