@@ -1531,6 +1531,8 @@
             background-color: rgba(0,0,0,0.5);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
@@ -1538,12 +1540,11 @@
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            margin: 15% auto;
             padding: 30px;
             width: 90%;
             max-width: 400px;
             border-radius: 20px;
-            box-shadow: 
+            box-shadow:
                 0 20px 40px rgba(0,0,0,0.1),
                 inset 0 1px 1px rgba(255, 255, 255, 0.5);
             animation: modalFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -3170,7 +3171,7 @@
             });
 
             deliveryLocation.addEventListener('click', () => {
-                locationModal.style.display = 'block';
+                locationModal.style.display = 'flex';
                 document.body.classList.add('no-scroll');
             });
 
