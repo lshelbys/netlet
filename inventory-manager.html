@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="theme-color" content="#1E3A8A">
+    <link rel="manifest" href="manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -441,23 +443,23 @@
     <div class="mobile-bottom-ui">
         <nav class="mobile-tabs">
             <div class="tab-indicator"></div>
-            <a href="index.html" class="mobile-tab-item">
+            <a href="index.html" class="mobile-tab-item" aria-label="Home">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="index.html#categories" class="mobile-tab-item">
+            <a href="index.html#categories" class="mobile-tab-item" aria-label="Categories">
                 <i class="fas fa-th-large"></i>
                 <span>Categories</span>
             </a>
-            <a href="index.html#deals" class="mobile-tab-item">
+            <a href="index.html#deals" class="mobile-tab-item" aria-label="Deals">
                 <i class="fas fa-tags"></i>
                 <span>Deals</span>
             </a>
-            <a href="account.html" class="mobile-tab-item">
+            <a href="account.html" class="mobile-tab-item" aria-label="Account">
                 <i class="fas fa-user"></i>
                 <span>Account</span>
             </a>
-            <a href="cart.html" class="mobile-tab-item">
+            <a href="cart.html" class="mobile-tab-item" aria-label="Cart">
                 <i class="fas fa-shopping-cart"></i>
                 <span>Cart</span>
                 <span class="mobile-cart-badge">0</span>
@@ -487,6 +489,11 @@
                 });
             });
         });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+        }
     </script>
 </body>
 </html>

@@ -13,7 +13,8 @@ class Toast {
         // Remove any existing toast with the same message
         const existingToasts = container.querySelectorAll('.toast');
         for (const existingToast of existingToasts) {
-            if (existingToast.textContent === this.message) {
+            const existingSpan = existingToast.querySelector('span');
+            if ((existingSpan ? existingSpan.textContent : existingToast.textContent) === this.message) {
                 existingToast.style.animation = 'slideOut 0.3s ease-out forwards';
                 setTimeout(() => existingToast.remove(), 300);
             }
@@ -21,10 +22,28 @@ class Toast {
 
         const toast = document.createElement('div');
         toast.className = `toast toast-${this.type}`;
-        toast.textContent = this.message;
         toast.style.cssText = `
             animation: slideIn 0.3s ease-out;
         `;
+
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = this.message;
+        toast.appendChild(messageSpan);
+
+        if (this.duration > 0) {
+            const colorMap = {
+                success: '#28a745',
+                error: '#E61C38',
+                info: '#1E3A8A',
+                warning: '#FFC107',
+            };
+            const progressBar = document.createElement('div');
+            progressBar.className = 'toast-progress';
+            progressBar.style.background = colorMap[this.type] || colorMap.info;
+            progressBar.style.animationDuration = this.duration + 'ms';
+            toast.appendChild(progressBar);
+        }
+
         container.appendChild(toast);
 
         if (this.duration > 0) {
@@ -154,6 +173,7 @@ function injectToastStyles() {
             backdrop-filter: blur(25px) saturate(210%);
             -webkit-backdrop-filter: blur(25px) saturate(210%);
             padding: 14px 20px;
+            padding-bottom: 6px;
             border-radius: 12px;
             box-shadow:
                 0 4px 30px rgba(0, 0, 0, 0.05),
@@ -163,6 +183,19 @@ function injectToastStyles() {
             max-width: 100%;
             word-break: break-word;
             border-left: 4px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            border-radius: 0 0 12px 12px;
+            width: 100%;
+            transform-origin: left;
+            animation: toastProgress linear forwards;
         }
 
         .toast-success {
@@ -199,6 +232,11 @@ function injectToastStyles() {
             border-color: rgba(255, 193, 7, 0.3);
             border: 1px solid rgba(255, 193, 7, 0.3);
             border-left: 4px solid #FFC107;
+        }
+
+        @keyframes toastProgress {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0); }
         }
 
         @keyframes slideIn {
@@ -346,4 +384,62 @@ if (document.readyState === 'loading') {
     SkeletonLoader.injectStyles();
 }
 
-export { Toast, LoadingOverlay, RateLimiter, SkeletonLoader, handleError, injectToastStyles };
+// Focus trap utility
+function trapFocus(element) {
+    const focusableSelectors = [
+        'a[href]',
+        'button',
+        'input',
+        'select',
+        'textarea',
+        '[tabindex]:not([tabindex="-1"])',
+    ].join(', ');
+
+    function getFocusable() {
+        return Array.from(element.querySelectorAll(focusableSelectors)).filter(
+            el => !el.disabled && !el.hasAttribute('disabled')
+        );
+    }
+
+    function handleKeydown(event) {
+        if (event.key === 'Escape') {
+            cleanup();
+            element.dispatchEvent(new CustomEvent('focustrap:escape', { bubbles: true }));
+            return;
+        }
+
+        if (event.key !== 'Tab') return;
+
+        const focusable = getFocusable();
+        if (focusable.length === 0) {
+            event.preventDefault();
+            return;
+        }
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+
+        if (event.shiftKey) {
+            if (active === first || !element.contains(active)) {
+                event.preventDefault();
+                last.focus();
+            }
+        } else {
+            if (active === last || !element.contains(active)) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+    }
+
+    document.addEventListener('keydown', handleKeydown);
+
+    function cleanup() {
+        document.removeEventListener('keydown', handleKeydown);
+    }
+
+    return cleanup;
+}
+
+export { Toast, LoadingOverlay, RateLimiter, SkeletonLoader, handleError, injectToastStyles, trapFocus };

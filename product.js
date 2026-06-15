@@ -2,6 +2,14 @@ import { inventory, fetchInventory, escapeHtml } from './inventory.js';
 import { Toast } from './utils.js';
 import { ReviewsSystem } from './reviews.js';
 
+function trackRecentlyViewed(productId) {
+    const MAX = 8;
+    let recent = JSON.parse(localStorage.getItem('netletRecentlyViewed')) || [];
+    recent = recent.filter(id => id !== productId);
+    recent.unshift(productId);
+    localStorage.setItem('netletRecentlyViewed', JSON.stringify(recent.slice(0, MAX)));
+}
+
 const root = document.getElementById('productRoot');
 const crumbTitle = document.getElementById('crumbTitle');
 const cartBadge = document.querySelector('.cart-badge');
@@ -40,6 +48,7 @@ function renderError(message) {
 }
 
 function renderProduct(product) {
+    trackRecentlyViewed(product.id);
     crumbTitle.textContent = product.title;
     document.title = `${product.title} | NetLet`;
 
@@ -116,6 +125,14 @@ function renderProduct(product) {
                     : `<p class="info-desc">${escapeHtml(product.title)} by ${escapeHtml(product.brand)}.
                         ${product.isExpress ? 'Eligible for fast NetLet Express delivery.' : 'Standard delivery available.'}
                         Backed by ${escapeHtml(product.reviews)} customer reviews with an average rating of ${escapeHtml(product.rating)} out of 5.</p>`}
+                <div class="qty-selector" style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <span style="font-size: 14px; font-weight: 600; color: #7E859B;">Quantity:</span>
+                    <div style="display: flex; align-items: center; gap: 0; background: rgba(255,255,255,0.45); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.55); border-radius: 10px; overflow: hidden; box-shadow: inset 0 1px 1px rgba(255,255,255,0.7);">
+                        <button id="qtyDecrease" style="width:36px; height:36px; border:none; background:none; font-size:18px; font-weight:700; cursor:pointer; color:#1E3A8A; transition: background 0.2s;" aria-label="Decrease quantity">−</button>
+                        <span id="qtyValue" style="min-width:36px; text-align:center; font-size:15px; font-weight:700; color:#1F2229;">1</span>
+                        <button id="qtyIncrease" style="width:36px; height:36px; border:none; background:none; font-size:18px; font-weight:700; cursor:pointer; color:#1E3A8A; transition: background 0.2s;" aria-label="Increase quantity">+</button>
+                    </div>
+                </div>
                 <div class="actions">
                     <button class="add-cart-btn" id="addCartBtn" ${product.stockStatus === 'Out of Stock' ? 'disabled' : ''} style="${product.stockStatus === 'Out of Stock' ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
                         <i class="fas fa-shopping-cart"></i> ADD TO CART
@@ -241,7 +258,37 @@ function renderProduct(product) {
 
     document.addEventListener('keydown', handleKeyDown);
 
+    // Touch swipe for gallery
+    let touchStartX = 0;
+    const mainWrap = document.getElementById('mainImageWrap');
+    if (mainWrap && images.length > 1) {
+        mainWrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        mainWrap.addEventListener('touchend', e => {
+            const delta = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(delta) > 50) {
+                if (delta < 0) switchImage(currentIndex + 1);
+                else switchImage(currentIndex - 1);
+            }
+        }, { passive: true });
+    }
+
     updateNavButtons();
+
+    // Quantity selector
+    let quantity = 1;
+    const qtyDecrease = document.getElementById('qtyDecrease');
+    const qtyIncrease = document.getElementById('qtyIncrease');
+    const qtyValueEl = document.getElementById('qtyValue');
+
+    if (qtyDecrease && qtyIncrease && qtyValueEl) {
+        qtyDecrease.addEventListener('click', () => {
+            if (quantity > 1) { quantity--; qtyValueEl.textContent = quantity; }
+        });
+        qtyIncrease.addEventListener('click', () => {
+            const max = product.stockQuantity || 99;
+            if (quantity < max) { quantity++; qtyValueEl.textContent = quantity; }
+        });
+    }
 
     // Add to cart
     document.getElementById('addCartBtn').addEventListener('click', () => {
@@ -252,9 +299,9 @@ function renderProduct(product) {
         const cart = getCart();
         const existingItem = cart.find(item => item.id === product.id);
         if (existingItem) {
-            existingItem.quantity = (existingItem.quantity || 1) + 1;
+            existingItem.quantity = (existingItem.quantity || 1) + quantity;
         } else {
-            cart.push({ id: product.id, quantity: 1 });
+            cart.push({ id: product.id, quantity });
         }
         localStorage.setItem('netletCart', JSON.stringify(cart));
         updateCartBadge();

@@ -1,5 +1,5 @@
 import { inventory, fetchInventory, escapeHtml } from './inventory.js';
-import { Toast, LoadingOverlay } from './utils.js';
+import { Toast, SkeletonLoader } from './utils.js';
 
 const root = document.getElementById('dealsRoot');
 
@@ -134,16 +134,16 @@ function renderDeals() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        LoadingOverlay.show('Loading deals...');
-        const start = performance.now();
+        SkeletonLoader.injectStyles();
+        const skelGrid = document.createElement('div');
+        skelGrid.className = 'deals-grid';
+        for (let i = 0; i < 8; i++) skelGrid.appendChild(SkeletonLoader.createProductCardSkeleton());
+        root.innerHTML = '';
+        root.appendChild(skelGrid);
 
         await fetchInventory();
         renderDeals();
-
-        const elapsed = Math.max(200 - (performance.now() - start), 0);
-        setTimeout(() => LoadingOverlay.hide(), elapsed);
     } catch (err) {
-        LoadingOverlay.hide();
         new Toast('Error loading deals. Please refresh the page.', 'error', 6000);
         console.error('Deals loading error:', err);
     }

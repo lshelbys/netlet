@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="theme-color" content="#1E3A8A">
+    <link rel="manifest" href="manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1323,7 +1325,7 @@
             }
 
             .search-icon, .search-clear-btn {
-                right: 12px;
+                right: 20px;
             }
             .header-actions {
                 display: none; /* Hide desktop actions to declutter; use bottom tabs instead */
@@ -1432,12 +1434,25 @@
 
             .mobile-tab-item i {
                 font-size: 20px;
-                transition: transform 0.3s ease;
+                transition: all 0.3s ease;
+                color: rgba(126, 133, 155, 0.9);
+                filter:
+                    drop-shadow(0 -1px 1px rgba(255, 255, 255, 0.95))
+                    drop-shadow(0 2px 4px rgba(30, 58, 138, 0.18))
+                    drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
             }
 
             .mobile-tab-item.active {
                 color: var(--netlet-blue);
                 transform: translateY(-2px);
+            }
+
+            .mobile-tab-item.active i {
+                color: rgba(30, 58, 138, 0.95);
+                filter:
+                    drop-shadow(0 -1px 1px rgba(255, 255, 255, 1))
+                    drop-shadow(0 3px 8px rgba(30, 58, 138, 0.45))
+                    drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
             }
 
             .mobile-tab-item:active {
@@ -1897,13 +1912,19 @@
         }
 
         .deal-item-badge {
-            background: var(--netlet-red);
+            background: rgba(230, 28, 56, 0.72);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.35);
             color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 3px 7px;
+            border-radius: 6px;
             font-size: 10px;
             font-weight: 700;
             margin-top: auto;
+            box-shadow:
+                0 3px 10px rgba(230, 28, 56, 0.25),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3);
         }
 
         .loading-state {
@@ -2085,7 +2106,7 @@
                 0 -8px 32px rgba(0, 0, 0, 0.1),
                 inset 0 1px 1px rgba(255, 255, 255, 0.8);
             padding: 20px 24px;
-            z-index: 1010;
+            z-index: 1060;
             display: none;
             animation: slideUp 0.4s ease-out;
         }
@@ -2208,11 +2229,19 @@
         @media (max-width: 768px) {
             .cookie-banner {
                 padding: 16px;
-                bottom: 120px;
+                top: 50%;
+                bottom: auto;
                 left: 12px;
                 right: 12px;
+                transform: translateY(-50%);
                 border-radius: 16px;
                 width: calc(100% - 24px);
+            }
+
+            .cookie-banner.show {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
             }
 
             .cookie-content {
@@ -2275,9 +2304,203 @@
                 font-size: 12px;
             }
         }
+
+        /* ===== SKIP NAV ===== */
+        .skip-nav {
+            position: absolute;
+            top: -100%;
+            left: 0;
+            background: var(--netlet-blue);
+            color: white;
+            padding: 10px 20px;
+            z-index: 10000;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 0 0 8px 0;
+            transition: top 0.2s ease;
+            text-decoration: none;
+        }
+        .skip-nav:focus { top: 0; }
+
+        /* ===== OFFLINE BANNER ===== */
+        #offline-banner {
+            display: none;
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(230, 28, 56, 0.88);
+            backdrop-filter: blur(14px) saturate(180%);
+            -webkit-backdrop-filter: blur(14px) saturate(180%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 9000;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(230,28,56,0.35), inset 0 1px 1px rgba(255,255,255,0.2);
+            white-space: nowrap;
+        }
+
+        /* ===== RECENTLY VIEWED ===== */
+        .recently-viewed-section {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255,255,255,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding: 24px 0;
+        }
+        .rv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+        .rv-card {
+            display: block;
+            text-decoration: none;
+            background: rgba(255,255,255,0.45);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 12px;
+            padding: 10px;
+            transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+            color: inherit;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,0.7);
+        }
+        .rv-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: rgba(255,255,255,0.65);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.09), inset 0 1px 1px rgba(255,255,255,0.8);
+        }
+        .rv-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 8px;
+            font-size: 36px;
+            color: #E2E5F1;
+        }
+        .rv-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+        .rv-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #1F2229;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .rv-price {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--netlet-blue);
+            margin-top: 3px;
+        }
+        @media (max-width: 768px) {
+            .rv-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+        }
+
+        /* ===== ADD-TO-CART PULSE ANIMATION ===== */
+        @keyframes cartPulse {
+            0%   { transform: scale(1); }
+            25%  { transform: scale(0.93); }
+            60%  { transform: scale(1.07); }
+            85%  { transform: scale(0.97); }
+            100% { transform: scale(1); }
+        }
+        .add-to-cart-btn.cart-adding {
+            animation: cartPulse 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            pointer-events: none;
+        }
+
+        /* ===== MOBILE FILTER BOTTOM SHEET ===== */
+        .filter-sheet-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.38);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1800;
+        }
+        .filter-sheet-overlay.open { display: block; }
+        .mobile-filter-toggle { display: none; }
+        .filter-sheet-handle { display: none; }
+        @media (max-width: 768px) {
+            .mobile-filter-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                width: 100%;
+                padding: 12px 20px;
+                margin-bottom: 14px;
+                background: rgba(30, 58, 138, 0.72);
+                backdrop-filter: blur(12px) saturate(180%);
+                -webkit-backdrop-filter: blur(12px) saturate(180%);
+                border: 1px solid rgba(255,255,255,0.3);
+                border-radius: 12px;
+                color: white;
+                font-size: 14px;
+                font-weight: 700;
+                cursor: pointer;
+                box-shadow: 0 4px 16px rgba(30,58,138,0.22), inset 0 1px 1px rgba(255,255,255,0.15);
+                transition: all 0.3s ease;
+            }
+            .mobile-filter-toggle:active { transform: scale(0.97); }
+            .filters-sidebar {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                max-height: 82vh !important;
+                overflow-y: auto !important;
+                border-radius: 24px 24px 0 0 !important;
+                z-index: 1900 !important;
+                transform: translateY(110%) !important;
+                transition: transform 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+                top: auto !important;
+                padding-bottom: calc(env(safe-area-inset-bottom) + 20px) !important;
+            }
+            .filters-sidebar.sheet-open {
+                transform: translateY(0) !important;
+            }
+            .filter-sheet-handle {
+                display: block;
+                width: 40px;
+                height: 4px;
+                background: rgba(0,0,0,0.15);
+                border-radius: 2px;
+                margin: 0 auto 16px;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+    <div id="offline-banner">
+        <i class="fas fa-wifi"></i>
+        <span>No internet connection — some features may be unavailable</span>
+    </div>
+
+    <div class="filter-sheet-overlay" id="filterSheetOverlay"></div>
 
     <div class="top-promo-bar" id="promoBar">
         <span class="promo-message active" data-message="0">🎉 Use code NETLET for extra savings! Free Delivery over KWD 10</span>
@@ -2382,7 +2605,17 @@
         </div>
     </section>
 
-    <main class="section-wrapper">
+    <!-- Recently Viewed -->
+    <section class="recently-viewed-section" id="recentlyViewedSection" style="display:none;" aria-label="Recently Viewed">
+        <div class="section-wrapper" style="padding-top: 20px; padding-bottom: 8px;">
+            <div class="section-header" style="margin-bottom: 16px;">
+                <h2 class="section-title" style="font-size: 20px;">Recently Viewed</h2>
+            </div>
+            <div class="rv-grid" id="recentlyViewedGrid"></div>
+        </div>
+    </section>
+
+    <main class="section-wrapper" id="main-content">
         <div class="section-header">
             <h2 class="section-title">Trending Deals in Kuwait City</h2>
             <button class="view-all-btn">VIEW ALL</button>
@@ -2390,7 +2623,8 @@
 
         <div class="products-container">
             <!-- Filters Sidebar -->
-            <aside class="filters-sidebar">
+            <aside class="filters-sidebar" id="filtersSidebar">
+                <div class="filter-sheet-handle"></div>
                 <div class="filters-header">
                     <h3>Filters</h3>
                     <button class="clear-filters-btn" id="clearFiltersBtn">Clear All</button>
@@ -2468,6 +2702,9 @@
 
             <!-- Products Grid -->
             <div class="products-main">
+                <button class="mobile-filter-toggle" id="mobileFilterToggle" aria-label="Open filters">
+                    <i class="fas fa-sliders-h"></i> Filters &amp; Sort
+                </button>
                 <div class="active-filters" id="activeFilters"></div>
                 <div class="product-grid" id="productGrid">
                     <!-- Products injected from inventory.js -->
@@ -2489,23 +2726,23 @@
         </div>
         <nav class="mobile-tabs">
             <div class="tab-indicator"></div>
-            <a href="index.html" class="mobile-tab-item active">
+            <a href="index.html" class="mobile-tab-item active" aria-label="Home">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="#" class="mobile-tab-item" id="mobileMegaTrigger">
+            <a href="#" class="mobile-tab-item" id="mobileMegaTrigger" aria-label="Categories">
                 <i class="fas fa-th-large"></i>
                 <span>Categories</span>
             </a>
-            <button class="mobile-tab-item" id="dealsTrigger">
+            <button class="mobile-tab-item" id="dealsTrigger" aria-label="Deals">
                 <i class="fas fa-tags"></i>
                 <span>Deals</span>
             </button>
-            <a href="account.html" class="mobile-tab-item">
+            <a href="account.html" class="mobile-tab-item" aria-label="Account">
                 <i class="fas fa-user"></i>
                 <span>Account</span>
             </a>
-            <a href="cart.html" class="mobile-tab-item">
+            <a href="cart.html" class="mobile-tab-item" aria-label="Cart">
                 <i class="fas fa-shopping-cart"></i>
                 <span>Cart</span>
                 <span class="mobile-cart-badge">0</span>
@@ -2625,7 +2862,7 @@
 
     <script type="module">
         import { inventory, fetchInventory, escapeHtml } from './inventory.js';
-        import { Toast, LoadingOverlay, handleError } from './utils.js';
+        import { Toast, LoadingOverlay, SkeletonLoader, handleError, trapFocus } from './utils.js';
 
         // Promo Bar Message Rotation
         let currentMessageIndex = 0;
@@ -2892,6 +3129,12 @@
             localStorage.setItem('netletCart', JSON.stringify(cart));
             updateCartUI();
             new Toast(`Added ${product.title} to cart`, 'success', 6000);
+            // Micro-animation on button
+            const btn = document.querySelector(`.product-card[data-id="${productId}"] .add-to-cart-btn`);
+            if (btn) {
+                btn.classList.add('cart-adding');
+                btn.addEventListener('animationend', () => btn.classList.remove('cart-adding'), { once: true });
+            }
         }
 
         function toggleWishlist(productId) {
@@ -3048,24 +3291,36 @@
         const categoryOptions = document.querySelectorAll('.category-option');
         const categoriesOverlay = document.querySelector('.categories-modal-overlay');
 
+        let categoriesTrapCleanup = null;
+        function openCategoriesModal() {
+            if (categoriesModal) {
+                categoriesModal.classList.add('active');
+                categoriesTrapCleanup = trapFocus(categoriesModal);
+            }
+        }
+        function closeCategoriesModal() {
+            if (categoriesModal) {
+                categoriesModal.classList.remove('active');
+                if (categoriesTrapCleanup) { categoriesTrapCleanup(); categoriesTrapCleanup = null; }
+            }
+        }
+
         if (mobileMegaTrigger) {
             mobileMegaTrigger.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (categoriesModal) categoriesModal.classList.add('active');
+                openCategoriesModal();
             });
         }
 
         if (categoriesCloseBtn) {
-            categoriesCloseBtn.addEventListener('click', () => {
-                if (categoriesModal) categoriesModal.classList.remove('active');
-            });
+            categoriesCloseBtn.addEventListener('click', closeCategoriesModal);
         }
 
         if (categoriesOverlay) {
-            categoriesOverlay.addEventListener('click', () => {
-                if (categoriesModal) categoriesModal.classList.remove('active');
-            });
+            categoriesOverlay.addEventListener('click', closeCategoriesModal);
         }
+
+        categoriesModal?.addEventListener('focustrap:escape', closeCategoriesModal);
 
         categoryOptions.forEach(option => {
             option.addEventListener('click', (e) => {
@@ -3073,7 +3328,7 @@
                 const category = option.dataset.category || '';
                 selectedCategory = category;
                 renderProducts();
-                if (categoriesModal) categoriesModal.classList.remove('active');
+                closeCategoriesModal();
             });
         });
 
@@ -3124,25 +3379,37 @@
             }).join('');
         }
 
+        let dealsTrapCleanup = null;
+        function openDealsModal() {
+            renderDealsModal();
+            if (dealsModal) {
+                dealsModal.classList.add('active');
+                dealsTrapCleanup = trapFocus(dealsModal);
+            }
+        }
+        function closeDealsModal() {
+            if (dealsModal) {
+                dealsModal.classList.remove('active');
+                if (dealsTrapCleanup) { dealsTrapCleanup(); dealsTrapCleanup = null; }
+            }
+        }
+
         if (dealsTrigger) {
             dealsTrigger.addEventListener('click', (e) => {
                 e.preventDefault();
-                renderDealsModal();
-                if (dealsModal) dealsModal.classList.add('active');
+                openDealsModal();
             });
         }
 
         if (dealsCloseBtn) {
-            dealsCloseBtn.addEventListener('click', () => {
-                if (dealsModal) dealsModal.classList.remove('active');
-            });
+            dealsCloseBtn.addEventListener('click', closeDealsModal);
         }
 
         if (dealsOverlay) {
-            dealsOverlay.addEventListener('click', () => {
-                if (dealsModal) dealsModal.classList.remove('active');
-            });
+            dealsOverlay.addEventListener('click', closeDealsModal);
         }
+
+        dealsModal?.addEventListener('focustrap:escape', closeDealsModal);
 
         // Hero graphic bounce on click
         const heroGraphic = document.querySelector('.hero-graphic');
@@ -3186,6 +3453,18 @@
             'Mubarak Al-Kabeer': ['Mubarak Al-Kabeer', 'Sabah Al-Salem', 'Qurain', 'Adan', 'Qusour', 'Funaitees', 'Masayel', 'Abu Fatera', 'Abu Hasaniya']
         };
 
+        let locationTrapCleanup = null;
+        function openLocationModal() {
+            locationModal.style.display = 'flex';
+            document.body.classList.add('no-scroll');
+            locationTrapCleanup = trapFocus(locationModal);
+        }
+        function closeLocationModal() {
+            locationModal.style.display = 'none';
+            document.body.classList.remove('no-scroll');
+            if (locationTrapCleanup) { locationTrapCleanup(); locationTrapCleanup = null; }
+        }
+
         if (deliveryLocation && locationModal) {
             // Handle governorate change
             governorateSelect.addEventListener('change', (e) => {
@@ -3202,21 +3481,12 @@
                 }
             });
 
-            deliveryLocation.addEventListener('click', () => {
-                locationModal.style.display = 'flex';
-                document.body.classList.add('no-scroll');
-            });
-
-            closeModal.addEventListener('click', () => {
-                locationModal.style.display = 'none';
-                document.body.classList.remove('no-scroll');
-            });
+            deliveryLocation.addEventListener('click', openLocationModal);
+            closeModal.addEventListener('click', closeLocationModal);
+            locationModal.addEventListener('focustrap:escape', closeLocationModal);
 
             window.addEventListener('click', (event) => {
-                if (event.target === locationModal) {
-                    locationModal.style.display = 'none';
-                    document.body.classList.remove('no-scroll');
-                }
+                if (event.target === locationModal) closeLocationModal();
             });
 
             saveLocationBtn.addEventListener('click', () => {
@@ -3229,11 +3499,64 @@
                 }
 
                 locationName.innerHTML = `${selectedCity}, ${selectedGovernorate} <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>`;
-                locationModal.style.display = 'none';
-                document.body.classList.remove('no-scroll');
+                closeLocationModal();
                 new Toast(`Delivery location set to ${selectedCity}, ${selectedGovernorate}`, 'success', 6000);
             });
         }
+
+        // Recently Viewed
+        function renderRecentlyViewed() {
+            const recentIds = JSON.parse(localStorage.getItem('netletRecentlyViewed')) || [];
+            const section = document.getElementById('recentlyViewedSection');
+            const grid = document.getElementById('recentlyViewedGrid');
+            if (!section || !grid) return;
+            const recentProducts = recentIds.map(id => inventory.find(p => p.id === id)).filter(Boolean);
+            if (recentProducts.length === 0) { section.style.display = 'none'; return; }
+            section.style.display = 'block';
+            grid.innerHTML = recentProducts.map(product => `
+                <a href="product.html?id=${product.id}" class="rv-card">
+                    <div class="rv-image">
+                        ${product.images?.length > 0
+                            ? `<img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.title)}" loading="lazy">`
+                            : `<i class="fas ${escapeHtml(product.icon)}"></i>`}
+                    </div>
+                    <div class="rv-title">${escapeHtml(product.title)}</div>
+                    <div class="rv-price">KWD ${product.price.toFixed(2)}</div>
+                </a>
+            `).join('');
+        }
+
+        // Offline detection
+        window.addEventListener('offline', () => {
+            const b = document.getElementById('offline-banner');
+            if (b) b.style.display = 'flex';
+        });
+        window.addEventListener('online', () => {
+            const b = document.getElementById('offline-banner');
+            if (b) b.style.display = 'none';
+        });
+
+        // Mobile filter bottom sheet
+        const mobileFilterToggle = document.getElementById('mobileFilterToggle');
+        const filterSheetOverlay = document.getElementById('filterSheetOverlay');
+        const filtersSidebar = document.getElementById('filtersSidebar');
+        let filterTrapCleanup = null;
+
+        function openFilterSheet() {
+            filtersSidebar?.classList.add('sheet-open');
+            filterSheetOverlay?.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            if (filtersSidebar) filterTrapCleanup = trapFocus(filtersSidebar);
+        }
+        function closeFilterSheet() {
+            filtersSidebar?.classList.remove('sheet-open');
+            filterSheetOverlay?.classList.remove('open');
+            document.body.style.overflow = '';
+            if (filterTrapCleanup) { filterTrapCleanup(); filterTrapCleanup = null; }
+        }
+        mobileFilterToggle?.addEventListener('click', openFilterSheet);
+        filterSheetOverlay?.addEventListener('click', closeFilterSheet);
+        filtersSidebar?.addEventListener('focustrap:escape', closeFilterSheet);
 
         // 4. ADVANCED FILTERS
         function initializeFilters() {
@@ -3433,17 +3756,17 @@
                 }
 
                 renderProducts();
+                renderRecentlyViewed();
                 initializeFilters();
                 updateCartUI();
 
                 // Auto-open modals when arriving from another page via hash
                 const hash = location.hash;
                 if (hash === '#categories' && categoriesModal) {
-                    categoriesModal.classList.add('active');
+                    openCategoriesModal();
                     history.replaceState(null, '', location.pathname + location.search);
                 } else if (hash === '#deals' && dealsModal) {
-                    renderDealsModal();
-                    dealsModal.classList.add('active');
+                    openDealsModal();
                     history.replaceState(null, '', location.pathname + location.search);
                 }
 
@@ -3577,5 +3900,10 @@
         document.addEventListener('DOMContentLoaded', initCookieBanner);
     </script>
 
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+        }
+    </script>
 </body>
 </html>

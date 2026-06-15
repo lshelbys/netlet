@@ -57,20 +57,23 @@ function renderCart() {
                 ? `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(product.title)}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply;" onerror="this.outerHTML='<i class=\\'fas ${escapeHtml(product.icon)}\\'></i>';">`
                 : `<i class="fas ${escapeHtml(product.icon)}"></i>`;
             html += `
-                <div class="cart-item">
-                    <a href="product.html?id=${product.id}" class="item-image" style="overflow:hidden;">${imageMarkup}</a>
-                    <div class="item-details">
-                        <div class="item-brand">${escapeHtml(product.brand)}</div>
-                        <h3 class="item-title"><a href="product.html?id=${product.id}" style="color:inherit;">${escapeHtml(product.title)}</a></h3>
-                        <div class="item-qty" style="display: flex; align-items: center; gap: 12px; margin: 12px 0;">
-                            <span>Qty:</span>
-                            <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty - 1})" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">−</button>
-                            <span style="min-width: 30px; text-align: center;">${qty}</span>
-                            <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty + 1})" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">+</button>
+                <div class="cart-item-wrap" data-product-id="${product.id}">
+                    <div class="swipe-delete-bg"><i class="fas fa-trash"></i></div>
+                    <div class="cart-item">
+                        <a href="product.html?id=${product.id}" class="item-image" style="overflow:hidden;">${imageMarkup}</a>
+                        <div class="item-details">
+                            <div class="item-brand">${escapeHtml(product.brand)}</div>
+                            <h3 class="item-title"><a href="product.html?id=${product.id}" style="color:inherit;">${escapeHtml(product.title)}</a></h3>
+                            <div class="item-qty" style="display: flex; align-items: center; gap: 12px; margin: 12px 0;">
+                                <span>Qty:</span>
+                                <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty - 1})" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">−</button>
+                                <span style="min-width: 30px; text-align: center;">${qty}</span>
+                                <button class="qty-btn" onclick="changeQuantity(${idx}, ${qty + 1})" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #e2e5f1; background: #f9f9f9; cursor: pointer; font-weight: 600;">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${product.id})">Remove</button>
                         </div>
-                        <button class="remove-btn" onclick="removeFromCart(${product.id})">Remove</button>
+                        <div class="item-price">KWD ${(product.price * qty).toFixed(2)}</div>
                     </div>
-                    <div class="item-price">KWD ${(product.price * qty).toFixed(2)}</div>
                 </div>
             `;
         }
@@ -78,6 +81,45 @@ function renderCart() {
 
     cartItemsContainer.innerHTML = html;
     updateTotals(totalCost, totalItems);
+    initSwipeToDelete();
+}
+
+function initSwipeToDelete() {
+    const THRESHOLD = 80;
+    document.querySelectorAll('.cart-item-wrap').forEach(wrap => {
+        const inner = wrap.querySelector('.cart-item');
+        if (!inner) return;
+        let startX = 0, currentX = 0, dragging = false;
+
+        wrap.addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+            dragging = true;
+            inner.style.transition = 'none';
+        }, { passive: true });
+
+        wrap.addEventListener('touchmove', e => {
+            if (!dragging) return;
+            const dx = e.touches[0].clientX - startX;
+            currentX = Math.min(0, dx);
+            inner.style.transform = `translateX(${currentX}px)`;
+            if (currentX < -20) wrap.classList.add('swiping');
+            else wrap.classList.remove('swiping');
+        }, { passive: true });
+
+        wrap.addEventListener('touchend', () => {
+            dragging = false;
+            inner.style.transition = 'transform 0.3s ease';
+            if (currentX < -THRESHOLD) {
+                inner.style.transform = `translateX(-100%)`;
+                const productId = Number(wrap.dataset.productId);
+                setTimeout(() => window.removeFromCart(productId), 250);
+            } else {
+                inner.style.transform = 'translateX(0)';
+                wrap.classList.remove('swiping');
+            }
+            currentX = 0;
+        });
+    });
 }
 
 function updateTotals(total, count) {
