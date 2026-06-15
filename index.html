@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>NetLet Kuwait Marketplace</title>
@@ -434,7 +434,7 @@
             display: flex;
             flex-direction: column;
             padding: 16px 0;
-            z-index: 2000;
+            z-index: 1100;
             transform-origin: top;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             opacity: 0;
@@ -565,14 +565,21 @@
         }
 
         .hero-tag {
-            background-color: var(--netlet-red);
-            color: white;
-            padding: 4px 10px;
+            background: rgba(254, 238, 0, 0.65);
+            backdrop-filter: blur(14px) saturate(200%);
+            -webkit-backdrop-filter: blur(14px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: var(--text-dark);
+            padding: 5px 12px;
             font-size: 12px;
-            font-weight: 700;
-            border-radius: 4px;
+            font-weight: 800;
+            border-radius: 8px;
             display: inline-block;
             margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            box-shadow:
+                0 4px 16px rgba(254, 238, 0, 0.35),
+                inset 0 1px 1px rgba(255, 255, 255, 0.6);
         }
 
         .hero-title {
@@ -727,7 +734,7 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .filters-header h3 {
@@ -738,19 +745,42 @@
         }
 
         .clear-filters-btn {
-            background: none;
-            border: none;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(14px) saturate(180%);
+            -webkit-backdrop-filter: blur(14px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             color: #1E3A8A;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            text-decoration: underline;
+            padding: 5px 12px;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.06),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+        }
+
+        .clear-filters-btn:hover {
+            background: rgba(255, 255, 255, 0.65);
+            border-color: rgba(30, 58, 138, 0.25);
+            box-shadow:
+                0 4px 14px rgba(0, 0, 0, 0.09),
+                inset 0 1px 1px rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+        }
+
+        .clear-filters-btn:active {
+            transform: translateY(0);
+            box-shadow:
+                0 1px 4px rgba(0, 0, 0, 0.06),
+                inset 0 1px 1px rgba(255, 255, 255, 0.7);
         }
 
         .filter-group {
             margin-bottom: 20px;
             padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
         }
 
         .filter-label {
@@ -766,17 +796,29 @@
         .filter-select {
             width: 100%;
             padding: 10px 12px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px) saturate(160%);
+            -webkit-backdrop-filter: blur(12px) saturate(160%);
             font-size: 13px;
             color: #404553;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,0.7);
+            outline: none;
         }
 
         .filter-select:hover {
-            border-color: rgba(30, 58, 138, 0.3);
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(30, 58, 138, 0.25);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07), inset 0 1px 1px rgba(255,255,255,0.8);
+        }
+
+        .filter-select:focus {
+            background: rgba(255, 255, 255, 0.65);
+            border-color: rgba(30, 58, 138, 0.4);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.08), inset 0 1px 1px rgba(255,255,255,0.8);
         }
 
         .price-filter {
@@ -788,10 +830,23 @@
 
         .price-input {
             width: 80px;
-            padding: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 6px;
+            padding: 8px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px) saturate(160%);
+            -webkit-backdrop-filter: blur(12px) saturate(160%);
             font-size: 12px;
+            color: #404553;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,0.7);
+            outline: none;
+        }
+
+        .price-input:focus {
+            background: rgba(255, 255, 255, 0.65);
+            border-color: rgba(30, 58, 138, 0.4);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.08), inset 0 1px 1px rgba(255,255,255,0.8);
         }
 
         .price-slider {
@@ -802,7 +857,7 @@
         .rating-filter {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .rating-option {
@@ -812,6 +867,18 @@
             cursor: pointer;
             font-size: 13px;
             color: #404553;
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .rating-option:hover {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.8);
         }
 
         .rating-checkbox {
@@ -826,7 +893,7 @@
         .stock-filter {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .stock-option {
@@ -836,6 +903,18 @@
             cursor: pointer;
             font-size: 13px;
             color: #404553;
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .stock-option:hover {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.8);
         }
 
         .stock-checkbox {
@@ -845,7 +924,7 @@
         .brand-filter {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .brand-option {
@@ -855,6 +934,18 @@
             cursor: pointer;
             font-size: 13px;
             color: #404553;
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .brand-option:hover {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.8);
         }
 
         .brand-checkbox {
@@ -960,6 +1051,31 @@
         .wishlist-btn:active {
             outline: none !important;
         }
+
+        .discount-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(230, 28, 56, 0.72);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            z-index: 5;
+            box-shadow:
+                0 4px 12px rgba(230, 28, 56, 0.25),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .stock-status { margin: 8px 0; font-size: 12px; font-weight: 600; }
+        .stock-in  { color: #28a745; }
+        .stock-low { color: #FFC107; }
+        .stock-out { color: var(--netlet-red); }
 
         .image-container {
             width: 100%;
@@ -1070,6 +1186,11 @@
             background-color: var(--netlet-blue);
             transform: scale(1.05);
             box-shadow: 0 8px 20px rgba(30, 58, 138, 0.4);
+        }
+
+        .add-to-cart-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .price-container {
@@ -1226,7 +1347,7 @@
                 background: rgba(255, 255, 255, 0.15);
                 backdrop-filter: blur(25px) saturate(210%);
                 -webkit-backdrop-filter: blur(25px) saturate(210%);
-                z-index: 2000;
+                z-index: 1050;
                 border: 1px solid rgba(255, 255, 255, 0.3);
                 border-radius: 24px;
                 box-shadow: 
@@ -1277,7 +1398,7 @@
                 gap: 4px;
                 padding: 12px 0;
                 color: #7E859B;
-                font-size: 10px;
+                font-size: 12px;
                 font-weight: 600;
                 text-decoration: none;
                 flex: 1;
@@ -1325,6 +1446,17 @@
                 padding-bottom: 130px; /* Increased space for the floating bar */
             }
 
+            /* Reduce GPU-heavy blur on mobile */
+            .top-promo-bar,
+            .main-header,
+            .nav-bar,
+            .mega-menu,
+            .mobile-bottom-ui,
+            .filters-sidebar {
+                backdrop-filter: blur(10px) saturate(150%);
+                -webkit-backdrop-filter: blur(10px) saturate(150%);
+            }
+
             /* Filters on Mobile */
             .products-container {
                 flex-direction: column;
@@ -1333,9 +1465,7 @@
 
             .filters-sidebar {
                 width: 100%;
-                position: sticky;
-                top: 0;
-                z-index: 100;
+                position: static;
                 border-radius: 12px;
             }
 
@@ -1510,8 +1640,10 @@
         }
 
         .categories-close-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(14px) saturate(180%);
+            -webkit-backdrop-filter: blur(14px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             border-radius: 12px;
             width: 40px;
             height: 40px;
@@ -1521,14 +1653,25 @@
             color: var(--text-dark);
             font-size: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             min-height: 44px;
             min-width: 44px;
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.06),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+        }
+
+        .categories-close-btn:hover {
+            background: rgba(255, 255, 255, 0.65);
+            box-shadow:
+                0 4px 14px rgba(0, 0, 0, 0.09),
+                inset 0 1px 1px rgba(255, 255, 255, 0.9);
         }
 
         .categories-close-btn:active {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.35);
             transform: scale(0.95);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7);
         }
 
         .categories-grid {
@@ -1642,8 +1785,10 @@
         }
 
         .deals-close-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(14px) saturate(180%);
+            -webkit-backdrop-filter: blur(14px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             border-radius: 12px;
             width: 40px;
             height: 40px;
@@ -1653,14 +1798,25 @@
             color: var(--text-dark);
             font-size: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             min-height: 44px;
             min-width: 44px;
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.06),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
+        }
+
+        .deals-close-btn:hover {
+            background: rgba(255, 255, 255, 0.65);
+            box-shadow:
+                0 4px 14px rgba(0, 0, 0, 0.09),
+                inset 0 1px 1px rgba(255, 255, 255, 0.9);
         }
 
         .deals-close-btn:active {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.35);
             transform: scale(0.95);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7);
         }
 
         .deals-modal-grid {
@@ -1907,7 +2063,7 @@
                 0 -8px 32px rgba(0, 0, 0, 0.1),
                 inset 0 1px 1px rgba(255, 255, 255, 0.8);
             padding: 20px 24px;
-            z-index: 999;
+            z-index: 1010;
             display: none;
             animation: slideUp 0.4s ease-out;
         }
@@ -1980,34 +2136,50 @@
         .cookie-deny-btn,
         .cookie-accept-btn {
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
-            border: none;
+            transition: all 0.25s ease;
             white-space: nowrap;
+            backdrop-filter: blur(14px) saturate(180%);
+            -webkit-backdrop-filter: blur(14px) saturate(180%);
         }
 
         .cookie-deny-btn {
-            background: rgba(255, 255, 255, 0.3);
-            color: #7E859B;
-            border: 1px solid rgba(126, 133, 155, 0.3);
+            background: rgba(255, 255, 255, 0.45);
+            color: #404553;
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.06),
+                inset 0 1px 1px rgba(255, 255, 255, 0.8);
         }
 
         .cookie-deny-btn:hover {
-            background: rgba(255, 255, 255, 0.5);
-            border-color: rgba(126, 133, 155, 0.5);
+            background: rgba(255, 255, 255, 0.65);
+            border-color: rgba(255, 255, 255, 0.85);
+            box-shadow:
+                0 4px 14px rgba(0, 0, 0, 0.09),
+                inset 0 1px 1px rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
         }
 
         .cookie-accept-btn {
-            background: linear-gradient(135deg, var(--netlet-blue) 0%, #0F2550 100%);
+            background: rgba(30, 58, 138, 0.75);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow:
+                0 4px 16px rgba(30, 58, 138, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.2);
         }
 
         .cookie-accept-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+            background: rgba(30, 58, 138, 0.9);
+            border-color: rgba(255, 255, 255, 0.45);
+            box-shadow:
+                0 8px 24px rgba(30, 58, 138, 0.4),
+                inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
         }
 
         /* Mobile Cookie Banner */
@@ -2582,7 +2754,7 @@
                     <article class="product-card" data-id="${product.id}">
                         <div>
                             <div class="discount-badge" style="display: ${product.oldPrice ? 'block' : 'none'}">${discountPercent}% OFF</div>
-                            <button class="wishlist-btn" type="button" data-id="${product.id}" aria-label="Add ${escapeHtml(product.title)} to wishlist" style="background:none; border:none; padding:0;">
+                            <button class="wishlist-btn" type="button" data-id="${product.id}" aria-label="Add ${escapeHtml(product.title)} to wishlist">
                                 <i class="fa${isWishlisted ? 's' : 'r'} fa-heart wishlist-icon" aria-hidden="true" style="color: ${isWishlisted ? '#E61C38' : '#C2C6D1'};"></i>
                             </button>
                             <div class="image-container">
@@ -2611,14 +2783,14 @@
                                 <span>${product.rating}</span>
                                 <span class="rating-count">(${product.reviews})</span>
                             </div>
-                            <div style="margin: 8px 0; font-size: 12px; font-weight: 600;">
+                            <div class="stock-status">
                                 ${product.stockStatus === 'In Stock'
-                                    ? '<span style="color: #28a745;"><i class="fas fa-check-circle"></i> In Stock</span>'
+                                    ? '<span class="stock-in"><i class="fas fa-check-circle"></i> In Stock</span>'
                                     : product.stockStatus === 'Low Stock'
-                                    ? '<span style="color: #FFC107;"><i class="fas fa-exclamation-triangle"></i> Low Stock</span>'
-                                    : '<span style="color: #E61C38;"><i class="fas fa-times-circle"></i> Out of Stock</span>'}
+                                    ? '<span class="stock-low"><i class="fas fa-exclamation-triangle"></i> Low Stock</span>'
+                                    : '<span class="stock-out"><i class="fas fa-times-circle"></i> Out of Stock</span>'}
                             </div>
-                            <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart" ${product.stockStatus === 'Out of Stock' ? 'disabled' : ''} style="${product.stockStatus === 'Out of Stock' ? 'opacity: 0.5; cursor: not-allowed;' : ''}">ADD TO CART</button>
+                            <button class="add-to-cart-btn" type="button" aria-label="Add ${escapeHtml(product.title)} to cart" ${product.stockStatus === 'Out of Stock' ? 'disabled' : ''}>ADD TO CART</button>
                         </div>
                     </article>
                 `;
@@ -3230,6 +3402,17 @@
                 renderProducts();
                 initializeFilters();
                 updateCartUI();
+
+                // Auto-open modals when arriving from another page via hash
+                const hash = location.hash;
+                if (hash === '#categories' && categoriesModal) {
+                    categoriesModal.classList.add('active');
+                    history.replaceState(null, '', location.pathname + location.search);
+                } else if (hash === '#deals' && dealsModal) {
+                    renderDealsModal();
+                    dealsModal.classList.add('active');
+                    history.replaceState(null, '', location.pathname + location.search);
+                }
 
                 const elapsed = Math.max(300 - (performance.now() - start), 0);
                 setTimeout(() => LoadingOverlay.hide(), elapsed);
