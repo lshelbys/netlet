@@ -2983,6 +2983,17 @@
             });
         }
 
+        // Auto-open modals when navigating here from another page via hash
+        const hash = location.hash;
+        if (hash === '#categories' && categoriesModal) {
+            categoriesModal.classList.add('active');
+            history.replaceState(null, '', location.pathname + location.search);
+        } else if (hash === '#deals' && dealsModal) {
+            renderDealsModal();
+            dealsModal.classList.add('active');
+            history.replaceState(null, '', location.pathname + location.search);
+        }
+
         // Logo Bounce Effect
         const mainLogo = document.getElementById('mainLogo');
         if (mainLogo) {
