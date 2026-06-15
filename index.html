@@ -596,6 +596,12 @@
             font-weight: 500;
         }
 
+        @keyframes heroFloat {
+            0%   { transform: translateY(0px);    box-shadow: 0 12px 40px rgba(0,0,0,0.12), inset 0 1px 2px rgba(255,255,255,0.8), inset 0 -4px 8px rgba(0,0,0,0.05); }
+            50%  { transform: translateY(-12px);  box-shadow: 0 24px 50px rgba(0,0,0,0.09), inset 0 1px 2px rgba(255,255,255,0.8), inset 0 -4px 8px rgba(0,0,0,0.05); }
+            100% { transform: translateY(0px);    box-shadow: 0 12px 40px rgba(0,0,0,0.12), inset 0 1px 2px rgba(255,255,255,0.8), inset 0 -4px 8px rgba(0,0,0,0.05); }
+        }
+
         .hero-graphic {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px) saturate(180%);
@@ -613,6 +619,7 @@
                 0 12px 40px rgba(0, 0, 0, 0.12),
                 inset 0 1px 2px rgba(255, 255, 255, 0.8),
                 inset 0 -4px 8px rgba(0, 0, 0, 0.05);
+            animation: heroFloat 3.5s ease-in-out infinite;
         }
 
         /* PRODUCT ROW SECTION */
