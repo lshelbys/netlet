@@ -2930,13 +2930,12 @@
         const isMobile = () => window.innerWidth <= 768;
 
         function scrollToProducts() {
-            if (isMobile()) return; // Don't auto-scroll on mobile
             const grid = document.getElementById('productGrid');
-            if (grid) {
-                setTimeout(() => {
-                    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-            }
+            if (!grid) return;
+            const delay = isMobile() ? 350 : 100;
+            setTimeout(() => {
+                grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, delay);
         }
 
         // 1. RENDER LOGIC
@@ -2982,8 +2981,8 @@
 
             const products = getFilteredAndSortedProducts();
 
-            // Auto-scroll to products when searching or filtering (desktop only)
-            if ((searchQuery || selectedCategory) && !isMobile()) {
+            // Auto-scroll to products when searching or filtering
+            if (searchQuery || selectedCategory) {
                 scrollToProducts();
             }
 
