@@ -1,9 +1,10 @@
-const CACHE = 'netlet-v2';
+const CACHE = 'netlet-v3';
 const PRECACHE = [
     './index.html', './cart.html', './account.html', './product.html',
     './deals.html', './wishlist.html', './orders.html', './about.html',
     './logo.png', './inventory.js', './utils.js', './cart.js',
-    './product.js', './deals.js', './wishlist.js'
+    './product.js', './deals.js', './wishlist.js',
+    './shiplee.html', './shiplee-track.html', './IMG_1342.jpeg'
 ];
 
 self.addEventListener('install', e => {
