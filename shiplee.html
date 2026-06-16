@@ -17,9 +17,9 @@
             --shiplee-green-dark:  #16A34A;
             --shiplee-green-deep:  #15803D;
             --shiplee-green-light: #DCFCE7;
-            --shiplee-bg:          #F0FDF4;
+            --shiplee-bg:          #F5F7FA;
             --shiplee-white:       #FFFFFF;
-            --text-dark:           #1A2E1A;
+            --text-dark:           #111827;
             --text-mid:            #374151;
             --text-light:          #6B7280;
         }
@@ -37,11 +37,16 @@
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--shiplee-bg);
+            background-color: #F5F7FA;
+            background-image:
+                radial-gradient(ellipse 70% 55% at 8% 0%, rgba(219,234,254,0.55) 0%, transparent 65%),
+                radial-gradient(ellipse 55% 70% at 92% 95%, rgba(233,213,255,0.28) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 45% at 55% 18%, rgba(255,255,255,0.75) 0%, transparent 58%);
+            background-attachment: fixed;
             color: var(--text-mid);
             -webkit-font-smoothing: antialiased;
             -webkit-tap-highlight-color: transparent;
-            padding-top: 72px; /* header height */
+            padding-top: 72px;
         }
 
         /* Prevent iOS zoom on inputs */
@@ -87,13 +92,13 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(240, 253, 244, 0.82);
-            backdrop-filter: blur(24px) saturate(200%);
-            -webkit-backdrop-filter: blur(24px) saturate(200%);
-            border-bottom: 1px solid rgba(34, 197, 94, 0.18);
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(28px) saturate(200%);
+            -webkit-backdrop-filter: blur(28px) saturate(200%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow:
-                0 4px 24px rgba(22, 163, 74, 0.07),
-                inset 0 1px 1px rgba(255, 255, 255, 0.7);
+                0 4px 24px rgba(0, 0, 0, 0.06),
+                inset 0 1px 1px rgba(255, 255, 255, 0.9);
             height: 72px;
             display: flex;
             align-items: center;
@@ -244,17 +249,17 @@
         }
         .deco-1 {
             width: 420px; height: 420px;
-            background: radial-gradient(circle, rgba(34, 197, 94, 0.18) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(219,234,254,0.45) 0%, transparent 70%);
             top: -120px; left: -100px;
         }
         .deco-2 {
             width: 340px; height: 340px;
-            background: radial-gradient(circle, rgba(22, 163, 74, 0.13) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(233,213,255,0.3) 0%, transparent 70%);
             top: 40px; right: -80px;
         }
         .deco-3 {
             width: 200px; height: 200px;
-            background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.65) 0%, transparent 70%);
             bottom: -40px; left: 50%;
             transform: translateX(-50%);
         }
@@ -278,18 +283,20 @@
 
         .float-shape-1 {
             width: 52px; height: 52px;
-            background: rgba(34, 197, 94, 0.15);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(34, 197, 94, 0.25);
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255,255,255,0.9);
             top: 20%; left: 8%;
             animation-delay: 0s;
             font-size: 22px;
         }
         .float-shape-2 {
             width: 44px; height: 44px;
-            background: rgba(22, 163, 74, 0.12);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(22, 163, 74, 0.2);
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.85);
             top: 50%; left: 4%;
             animation-delay: -2s;
             font-size: 18px;
@@ -297,9 +304,10 @@
         }
         .float-shape-3 {
             width: 60px; height: 60px;
-            background: rgba(34, 197, 94, 0.12);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(34, 197, 94, 0.2);
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255,255,255,0.9);
             top: 15%; right: 8%;
             animation-delay: -1s;
             font-size: 26px;
@@ -307,9 +315,10 @@
         }
         .float-shape-4 {
             width: 42px; height: 42px;
-            background: rgba(220, 252, 231, 0.6);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(34, 197, 94, 0.2);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.9);
             top: 60%; right: 6%;
             animation-delay: -3s;
             font-size: 18px;

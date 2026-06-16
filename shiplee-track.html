@@ -14,8 +14,8 @@
             --shiplee-green-dark:  #16A34A;
             --shiplee-green-deep:  #15803D;
             --shiplee-green-light: #DCFCE7;
-            --shiplee-bg:          #F0FDF4;
-            --text-dark:           #1A2E1A;
+            --shiplee-bg:          #F5F7FA;
+            --text-dark:           #111827;
             --text-mid:            #374151;
             --text-light:          #6B7280;
         }
@@ -32,7 +32,12 @@
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--shiplee-bg);
+            background-color: #F5F7FA;
+            background-image:
+                radial-gradient(ellipse 70% 55% at 8% 0%, rgba(219,234,254,0.55) 0%, transparent 65%),
+                radial-gradient(ellipse 55% 70% at 92% 95%, rgba(233,213,255,0.28) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 45% at 55% 18%, rgba(255,255,255,0.75) 0%, transparent 58%);
+            background-attachment: fixed;
             color: var(--text-mid);
             -webkit-font-smoothing: antialiased;
             -webkit-tap-highlight-color: transparent;
@@ -56,11 +61,11 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(240, 253, 244, 0.75);
-            backdrop-filter: blur(25px) saturate(210%);
-            -webkit-backdrop-filter: blur(25px) saturate(210%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.45);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(28px) saturate(200%);
+            -webkit-backdrop-filter: blur(28px) saturate(200%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.9);
             padding: 0 20px;
             height: 72px;
             display: flex;
