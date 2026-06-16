@@ -86,13 +86,8 @@
             justify-content: space-between;
             padding: 0 24px;
         }
-        .logo-section { display: flex; align-items: center; gap: 16px; }
-
-        /* Text-based grocery logo */
-        .logo-link { display: flex; flex-direction: column; line-height: 1.1; text-decoration: none; }
-        .logo-top { font-size: 20px; font-weight: 900; color: var(--text-dark); letter-spacing: -0.5px; }
-        .logo-sub { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1px; }
-        .logo-leaf { font-size: 20px; }
+        .logo-section { display: flex; align-items: center; gap: 20px; }
+        .logo img { height: 120px; width: auto; display: block; object-fit: contain; }
 
         .delivery-location {
             display: flex;
@@ -495,6 +490,7 @@
         @media (max-width: 768px) {
             .top-promo-bar { display: none; }
             .main-header { padding: 10px 0; }
+            .logo img { height: 80px; }
             .header-container { flex-wrap: wrap; gap: 8px; justify-content: center; }
             .search-container { order: 3; max-width: 100%; width: 100%; margin: 0; padding: 0 12px; }
             .search-container input { padding: 0 45px 0 16px !important; }
@@ -593,9 +589,11 @@
 <header class="main-header">
     <div class="header-container">
         <div class="logo-section">
-            <a href="groceries.html" class="logo-link" aria-label="NetLet Groceries home">
-                <img src="NetLetGroc.png" alt="NetLet Groceries" style="height:120px;width:auto;display:block;object-fit:contain;">
-            </a>
+            <div class="logo">
+                <a href="groceries.html" aria-label="NetLet Groceries home">
+                    <img src="NetLetGroc.png" alt="NetLet Groceries">
+                </a>
+            </div>
 
             <div class="delivery-location" aria-label="Delivery location">
                 <i class="fas fa-map-marker-alt" style="color:var(--green)"></i>
