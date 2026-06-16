@@ -166,8 +166,11 @@
         }
 
         .apply-promo-btn {
+            -webkit-appearance: none;
+            appearance: none;
             height: 48px;
-            min-height: unset;
+            min-height: 0;
+            max-height: 48px;
             padding: 0 16px;
             background: rgba(30, 58, 138, 0.72);
             backdrop-filter: blur(12px) saturate(180%);
@@ -185,6 +188,8 @@
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
+            line-height: 1;
+            flex-shrink: 0;
         }
 
         .apply-promo-btn:hover {
