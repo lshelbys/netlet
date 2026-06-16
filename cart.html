@@ -136,12 +136,12 @@
             display: flex;
             gap: 8px;
             margin-bottom: 12px;
-            align-items: stretch;
         }
 
         #promoCode {
             flex: 1;
-            padding: 10px 12px;
+            height: 48px;
+            padding: 0 12px;
             border: 1px solid rgba(255, 255, 255, 0.55);
             border-radius: 10px;
             font-size: 16px;
@@ -152,6 +152,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,0.7);
             transition: all 0.3s ease;
             outline: none;
+            box-sizing: border-box;
         }
 
         #promoCode:focus {
@@ -165,6 +166,8 @@
         }
 
         .apply-promo-btn {
+            height: 48px;
+            min-height: unset;
             padding: 0 16px;
             background: rgba(30, 58, 138, 0.72);
             backdrop-filter: blur(12px) saturate(180%);
@@ -181,6 +184,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-sizing: border-box;
         }
 
         .apply-promo-btn:hover {
