@@ -374,26 +374,26 @@
         /* Track card */
         .track-card {
             width: 100%;
-            max-width: 780px;
+            max-width: 820px;
             margin: 0 auto;
-            padding: 36px 36px 30px;
-            border-radius: 28px;
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(28px) saturate(210%);
-            -webkit-backdrop-filter: blur(28px) saturate(210%);
-            border: 1.5px solid rgba(255, 255, 255, 0.88);
+            padding: 40px 40px 32px;
+            border-radius: 32px;
+            background: rgba(255, 255, 255, 0.48);
+            backdrop-filter: blur(32px) saturate(220%);
+            -webkit-backdrop-filter: blur(32px) saturate(220%);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
             box-shadow:
-                0 12px 48px rgba(22, 163, 74, 0.13),
+                0 16px 56px rgba(22, 163, 74, 0.14),
                 0 2px 8px rgba(0, 0, 0, 0.04),
-                inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+                inset 0 2px 3px rgba(255, 255, 255, 0.95);
             transition: box-shadow 0.3s ease;
         }
 
         .track-card:focus-within {
             box-shadow:
-                0 16px 60px rgba(22, 163, 74, 0.22),
+                0 20px 70px rgba(22, 163, 74, 0.24),
                 0 2px 8px rgba(0, 0, 0, 0.05),
-                inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+                inset 0 2px 3px rgba(255, 255, 255, 0.95);
         }
 
         .track-card-label {
@@ -406,31 +406,34 @@
             text-align: left;
         }
 
+        /* Always stacked so input gets the full card width */
         .track-input-row {
             display: flex;
+            flex-direction: column;
             gap: 12px;
         }
 
         .track-input {
-            flex: 1;
-            height: 62px;
-            padding: 0 22px;
-            border-radius: 16px;
-            border: 1.5px solid rgba(34, 197, 94, 0.35);
-            background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            width: 100%;
+            height: 68px;
+            padding: 0 26px;
+            border-radius: 18px;
+            border: 1.5px solid rgba(34, 197, 94, 0.4);
+            background: rgba(255, 255, 255, 0.68);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
             color: var(--text-dark);
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 500;
             outline: none;
             transition: all 0.25s ease;
             -webkit-appearance: none;
             appearance: none;
             box-shadow:
-                inset 0 1px 3px rgba(0,0,0,0.04),
-                inset 0 1px 1px rgba(255,255,255,0.9);
-            min-width: 0;
+                0 2px 8px rgba(0,0,0,0.04),
+                inset 0 1px 3px rgba(0,0,0,0.03),
+                inset 0 1.5px 2px rgba(255,255,255,0.95);
+            box-sizing: border-box;
         }
 
         .track-input::placeholder {
@@ -440,11 +443,12 @@
 
         .track-input:focus {
             border-color: var(--shiplee-green);
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.90);
             box-shadow:
-                0 0 0 4px rgba(34, 197, 94, 0.18),
-                inset 0 1px 3px rgba(0,0,0,0.04),
-                inset 0 1px 1px rgba(255,255,255,0.9);
+                0 0 0 4px rgba(34, 197, 94, 0.16),
+                0 2px 8px rgba(0,0,0,0.04),
+                inset 0 1px 3px rgba(0,0,0,0.03),
+                inset 0 1.5px 2px rgba(255,255,255,0.95);
         }
 
         .track-input.input-error {
@@ -453,28 +457,31 @@
         }
 
         .track-btn {
-            height: 62px;
+            width: 100%;
+            height: 64px;
             padding: 0 32px;
-            border-radius: 16px;
+            border-radius: 18px;
             border: none;
             background: linear-gradient(135deg, var(--shiplee-green) 0%, var(--shiplee-green-dark) 100%);
             color: #fff;
-            font-size: 15px;
+            font-size: 17px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 10px;
             transition: all 0.25s ease;
-            white-space: nowrap;
-            box-shadow: 0 4px 16px rgba(22, 163, 74, 0.35);
-            flex-shrink: 0;
+            box-shadow:
+                0 6px 20px rgba(22, 163, 74, 0.38),
+                inset 0 1px 1px rgba(255,255,255,0.2);
+            letter-spacing: 0.3px;
         }
 
         .track-btn:hover {
             background: linear-gradient(135deg, var(--shiplee-green-dark) 0%, var(--shiplee-green-deep) 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 22px rgba(22, 163, 74, 0.45);
+            box-shadow: 0 8px 28px rgba(22, 163, 74, 0.48);
         }
 
         .track-btn:active {
@@ -497,15 +504,14 @@
         .track-hint {
             font-size: 12px;
             color: var(--text-light);
-            margin-top: 10px;
-            text-align: left;
+            margin-top: 12px;
+            text-align: center;
         }
 
         @media (max-width: 600px) {
-            .track-card { padding: 22px 18px 20px; border-radius: 20px; }
-            .track-input-row { flex-direction: column; }
-            .track-btn { width: 100%; justify-content: center; height: 56px; }
-            .track-input { height: 56px; font-size: 16px; }
+            .track-card { padding: 24px 20px 22px; border-radius: 24px; }
+            .track-input { height: 60px; font-size: 16px; padding: 0 20px; }
+            .track-btn { height: 58px; font-size: 16px; }
         }
 
         /* ─── SECTION SHARED ─────────────────────────────────────────── */
