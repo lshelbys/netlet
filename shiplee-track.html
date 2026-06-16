@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="#22C55E">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Track Order | ShipLee</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --shiplee-green:       #22C55E;
+            --shiplee-green-dark:  #16A34A;
+            --shiplee-green-deep:  #15803D;
+            --shiplee-green-light: #DCFCE7;
+            --shiplee-bg:          #F0FDF4;
+            --text-dark:           #1A2E1A;
+            --text-mid:            #374151;
+            --text-light:          #6B7280;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--shiplee-bg);
+            color: var(--text-mid);
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+            padding-top: 72px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* ── HEADER ─────────────────────────────────────────────────── */
+        .sl-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(240, 253, 244, 0.75);
+            backdrop-filter: blur(25px) saturate(210%);
+            -webkit-backdrop-filter: blur(25px) saturate(210%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+            padding: 0 20px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sl-header-inner {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .sl-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .sl-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--shiplee-green), var(--shiplee-green-deep));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+            flex-shrink: 0;
+        }
+
+        .sl-logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .sl-logo-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--shiplee-green-deep);
+            letter-spacing: -0.5px;
+        }
+
+        .sl-logo-tagline {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .sl-nav {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sl-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-mid);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .sl-nav-link:hover {
+            background: rgba(34, 197, 94, 0.12);
+            color: var(--shiplee-green-dark);
+        }
+
+        .sl-nav-link.primary {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--shiplee-green-dark);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+        }
+
+        .sl-nav-link.primary:hover {
+            background: rgba(34, 197, 94, 0.25);
+        }
+
+        /* ── ESTIMATED DELIVERY BANNER ──────────────────────────────── */
+        .delivery-banner {
+            background: rgba(220, 252, 231, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(34, 197, 94, 0.25);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7), 0 2px 12px rgba(34, 197, 94, 0.1);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--shiplee-green-deep);
+        }
+
+        .delivery-banner i {
+            font-size: 16px;
+            color: var(--shiplee-green);
+        }
+
+        .delivery-banner-sep {
+            color: rgba(34, 197, 94, 0.4);
+            font-weight: 300;
+        }
+
+        /* ── MAIN LAYOUT ─────────────────────────────────────────────── */
+        .sl-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 20px 60px;
+        }
+
+        .sl-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* ── GLASS CARD ─────────────────────────────────────────────── */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(22px) saturate(190%);
+            -webkit-backdrop-filter: blur(22px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.06),
+                inset 0 1px 2px rgba(255, 255, 255, 0.7);
+            padding: 28px;
+            overflow: hidden;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.3px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--shiplee-green);
+            font-size: 15px;
+        }
+
+        /* ── ORDER ID BADGE ─────────────────────────────────────────── */
+        .order-id-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            border-radius: 12px;
+            padding: 10px 16px;
+            margin-bottom: 24px;
+        }
+
+        .order-id-badge i {
+            color: var(--shiplee-green);
+            font-size: 14px;
+        }
+
+        .order-id-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: 0.5px;
+        }
+
+        /* ── CANCELLED BANNER ───────────────────────────────────────── */
+        .cancelled-banner {
+            background: rgba(254, 202, 202, 0.6);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #991B1B;
+        }
+
+        .cancelled-banner i {
+            font-size: 28px;
+            color: #EF4444;
+            flex-shrink: 0;
+        }
+
+        .cancelled-banner-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .cancelled-banner-sub {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        /* ── TIMELINE ───────────────────────────────────────────────── */
+        .timeline {
+            position: relative;
+            padding-left: 44px;
+        }
+
+        .timeline-track {
+            position: absolute;
+            left: 15px;
+            top: 16px;
+            bottom: 16px;
+            width: 2px;
+            background: rgba(209, 250, 229, 0.8);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .timeline-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to bottom, var(--shiplee-green), var(--shiplee-green-dark));
+            border-radius: 2px;
+            transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .timeline-step {
+            position: relative;
+            padding-bottom: 28px;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeSlideUp 0.5s ease forwards;
+        }
+
+        .timeline-step:last-child {
+            padding-bottom: 0;
+        }
+
+        @keyframes fadeSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-step:nth-child(1) { animation-delay: 0.08s; }
+        .timeline-step:nth-child(2) { animation-delay: 0.18s; }
+        .timeline-step:nth-child(3) { animation-delay: 0.28s; }
+        .timeline-step:nth-child(4) { animation-delay: 0.38s; }
+        .timeline-step:nth-child(5) { animation-delay: 0.48s; }
+
+        .timeline-dot {
+            position: absolute;
+            left: -36px;
+            top: 2px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .timeline-dot.completed {
+            background: linear-gradient(135deg, var(--shiplee-green), var(--shiplee-green-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+        }
+
+        .timeline-dot.current {
+            background: white;
+            color: var(--shiplee-green);
+            border: 2.5px solid var(--shiplee-green);
+            animation: pulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+            50%       { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+        }
+
+        .timeline-dot.upcoming {
+            background: rgba(243, 244, 246, 0.8);
+            color: #D1D5DB;
+            border: 2px solid rgba(209, 213, 219, 0.6);
+        }
+
+        .timeline-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.2;
+            margin-bottom: 3px;
+        }
+
+        .timeline-label.upcoming {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .timeline-time.active {
+            color: var(--shiplee-green-dark);
+            font-weight: 600;
+        }
+
+        /* ── STATUS BADGE ───────────────────────────────────────────── */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .status-badge.pending     { background: rgba(254, 243, 199, 0.8); color: #D97706; border: 1px solid rgba(251, 191, 36, 0.4); }
+        .status-badge.processing  { background: rgba(219, 234, 254, 0.8); color: #1D4ED8; border: 1px solid rgba(96, 165, 250, 0.4); }
+        .status-badge.shipped     { background: rgba(224, 242, 254, 0.8); color: #0369A1; border: 1px solid rgba(56, 189, 248, 0.4); }
+        .status-badge.delivered   { background: rgba(220, 252, 231, 0.8); color: var(--shiplee-green-dark); border: 1px solid rgba(34, 197, 94, 0.4); }
+        .status-badge.cancelled   { background: rgba(254, 226, 226, 0.8); color: #DC2626; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+        /* ── DELIVERY INFO ──────────────────────────────────────────── */
+        .delivery-info-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(240, 253, 244, 0.7);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .delivery-info-row i {
+            color: var(--shiplee-green);
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .delivery-info-label {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .delivery-info-value {
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        /* ── ITEMS LIST ─────────────────────────────────────────────── */
+        .items-divider {
+            border: none;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            margin: 16px 0;
+        }
+
+        .order-item-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .order-item-row:last-child {
+            border-bottom: none;
+        }
+
+        .item-icon-box {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: rgba(240, 253, 244, 0.8);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .item-brand {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-bottom: 2px;
+        }
+
+        .item-qty-label {
+            font-size: 11px;
+            color: var(--text-mid);
+        }
+
+        .item-line-price {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+        }
+
+        /* ── TOTALS ─────────────────────────────────────────────────── */
+        .totals-section {
+            background: rgba(240, 253, 244, 0.5);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-mid);
+            padding: 4px 0;
+        }
+
+        .totals-row.grand {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(34, 197, 94, 0.2);
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .promo-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 8px;
+            padding: 3px 9px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--shiplee-green-dark);
+            margin-top: 8px;
+        }
+
+        /* ── ACTION BUTTONS ─────────────────────────────────────────── */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--shiplee-green), var(--shiplee-green-dark));
+            color: white;
+            box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-mid);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-1px);
+        }
+
+        /* ── NOT FOUND STATE ────────────────────────────────────────── */
+        .not-found-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 72px);
+            padding: 40px 20px;
+        }
+
+        .not-found-card {
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            padding: 48px 36px;
+        }
+
+        .not-found-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: var(--shiplee-green);
+            margin: 0 auto 24px;
+        }
+
+        .not-found-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .not-found-sub {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        /* ── PAGE HEADER ROW ────────────────────────────────────────── */
+        .page-header-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .page-back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            color: var(--text-mid);
+            font-size: 14px;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+            flex-shrink: 0;
+        }
+
+        .page-back-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        /* ── RESPONSIVE ─────────────────────────────────────────────── */
+        @media (max-width: 820px) {
+            .sl-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sl-nav-link span {
+                display: none;
+            }
+
+            .sl-nav-link {
+                padding: 8px 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding-top: 64px;
+            }
+
+            .sl-header {
+                height: 64px;
+                padding: 0 16px;
+            }
+
+            .sl-logo-tagline {
+                display: none;
+            }
+
+            .sl-logo-name {
+                font-size: 16px;
+            }
+
+            .sl-logo-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .sl-main {
+                padding: 20px 14px 50px;
+            }
+
+            .glass-card {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .delivery-banner {
+                flex-wrap: wrap;
+                text-align: center;
+                font-size: 13px;
+            }
+
+            .delivery-banner-sep {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .sl-nav {
+                gap: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── HEADER ──────────────────────────────────────────────────── -->
+    <header class="sl-header">
+        <div class="sl-header-inner">
+            <a href="shiplee.html" class="sl-logo">
+                <div class="sl-logo-icon">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <div class="sl-logo-text">
+                    <span class="sl-logo-name">ShipLee</span>
+                    <span class="sl-logo-tagline">Order Tracking</span>
+                </div>
+            </a>
+            <nav class="sl-nav">
+                <a href="shiplee.html" class="sl-nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="shiplee.html" class="sl-nav-link primary" id="newSearchLink">
+                    <i class="fas fa-search"></i>
+                    <span>New Search</span>
+                </a>
+                <a href="orders.html" class="sl-nav-link">
+                    <i class="fas fa-box"></i>
+                    <span>Back to NetLet</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ── DELIVERY BANNER (injected by JS) ────────────────────────── -->
+    <div id="deliveryBanner" style="display:none"></div>
+
+    <!-- ── MAIN CONTENT ────────────────────────────────────────────── -->
+    <main class="sl-main" id="mainContent">
+        <!-- Rendered by JS -->
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ── Helpers ────────────────────────────────────────────────
+        const KW_CITIES = ["Kuwait City", "Salmiya", "Hawalli", "Farwaniya", "Jahra"];
+
+        function getCityForOrder(id) {
+            const last3 = parseInt(id.slice(-3), 10) || 0;
+            return KW_CITIES[last3 % 5];
+        }
+
+        function addHours(dateStr, h) {
+            const d = new Date(dateStr);
+            d.setTime(d.getTime() + h * 3600 * 1000);
+            return d;
+        }
+
+        function addDays(dateStr, d) {
+            const dt = new Date(dateStr);
+            dt.setDate(dt.getDate() + d);
+            return dt;
+        }
+
+        function fmtDate(d) {
+            return d.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function fmtDateTime(d) {
+            return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function estDelivery(order) {
+            if (order.status === 'Delivered') return 'Delivered';
+            const days = (order.status === 'Shipped' || order.status === 'Out for Delivery') ? 1 : 3;
+            return fmtDate(addDays(order.date, days));
+        }
+
+        const statusStepMap = {
+            'Pending':    1,
+            'Processing': 2,
+            'Shipped':    3,
+            'Delivered':  5
+        };
+
+        const statusColors = {
+            'Pending':    'pending',
+            'Processing': 'processing',
+            'Shipped':    'shipped',
+            'Delivered':  'delivered',
+            'Cancelled':  'cancelled'
+        };
+
+        const statusIcons = {
+            'Pending':    'fa-clock',
+            'Processing': 'fa-cog',
+            'Shipped':    'fa-truck',
+            'Delivered':  'fa-check-circle',
+            'Cancelled':  'fa-times-circle'
+        };
+
+        // ── Read params ────────────────────────────────────────────
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get('id');
+
+        const mainContent  = document.getElementById('mainContent');
+        const deliveryBanner = document.getElementById('deliveryBanner');
+
+        // ── Not-found helper ───────────────────────────────────────
+        function renderNotFound(msg, sub) {
+            mainContent.innerHTML = `
+                <div class="not-found-wrap">
+                    <div class="glass-card not-found-card">
+                        <div class="not-found-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="not-found-title">${msg}</div>
+                        <div class="not-found-sub">${sub}</div>
+                        <a href="shiplee.html" class="btn btn-primary" style="display:inline-flex;max-width:220px;margin:0 auto;">
+                            <i class="fas fa-shipping-fast"></i>
+                            Go to ShipLee
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ── Guard: no id param ─────────────────────────────────────
+        if (!orderId) {
+            renderNotFound('Order Not Found', 'No Order ID was provided.<br>Check your Order ID and try again.');
+            return;
+        }
+
+        // ── Read from localStorage ─────────────────────────────────
+        let orders = [];
+        try { orders = JSON.parse(localStorage.getItem('netletOrders')) || []; } catch(e) {}
+        const order = orders.find(o => o.id === orderId);
+
+        if (!order) {
+            renderNotFound('Order Not Found', `We couldn't find an order with ID <strong>${orderId}</strong>.<br>Check your Order ID and try again.`);
+            return;
+        }
+
+        // ── Order found — render delivery banner ───────────────────
+        const isCancelled = order.status === 'Cancelled';
+        const isDelivered  = order.status === 'Delivered';
+
+        if (!isCancelled && !isDelivered) {
+            const city = getCityForOrder(order.id);
+            const estDate = estDelivery(order);
+            deliveryBanner.style.display = 'flex';
+            deliveryBanner.innerHTML = `
+                <i class="fas fa-truck-fast"></i>
+                <span>Estimated Delivery: <strong>${estDate}</strong></span>
+                <span class="delivery-banner-sep">|</span>
+                <i class="fas fa-location-dot"></i>
+                <span>${city}, Kuwait</span>
+            `;
+            deliveryBanner.className = 'delivery-banner';
+        }
+
+        // ── Timeline data ──────────────────────────────────────────
+        const activeSteps = isCancelled ? 0 : (statusStepMap[order.status] || 1);
+
+        const STEPS = [
+            { label: 'Order Placed',      icon: 'fa-shopping-cart', offset: 0  },
+            { label: 'Processing',        icon: 'fa-cog',           offset: 1  },
+            { label: 'Shipped',           icon: 'fa-truck',         offset: 6  },
+            { label: 'Out for Delivery',  icon: 'fa-route',         offset: 24 },
+            { label: 'Delivered',         icon: 'fa-house-circle-check', offset: 36 }
+        ];
+
+        function stepState(index) {
+            const stepNum = index + 1;
+            if (isCancelled) return 'upcoming';
+            if (stepNum < activeSteps) return 'completed';
+            if (stepNum === activeSteps) return 'current';
+            return 'upcoming';
+        }
+
+        function stepTimestamp(index, state) {
+            if (state === 'upcoming') return 'Pending';
+            const dt = addHours(order.date, STEPS[index].offset);
+            return fmtDateTime(dt);
+        }
+
+        // Timeline fill height percentage
+        const fillPercent = isCancelled ? 0 : Math.max(0, ((activeSteps - 1) / 4) * 100);
+
+        const timelineHTML = STEPS.map((step, i) => {
+            const state = stepState(i);
+            const ts    = stepTimestamp(i, state);
+            const dotClass = `timeline-dot ${state}`;
+            const labelClass = `timeline-label${state === 'upcoming' ? ' upcoming' : ''}`;
+            const timeClass  = `timeline-time${state !== 'upcoming' ? ' active' : ''}`;
+            const dotIcon = state === 'completed' ? 'fa-check' : step.icon;
+
+            return `
+                <div class="timeline-step">
+                    <div class="${dotClass}">
+                        <i class="fas ${dotIcon}"></i>
+                    </div>
+                    <div class="${labelClass}">${step.label}</div>
+                    <div class="${timeClass}">${ts}</div>
+                </div>
+            `;
+        }).join('');
+
+        // ── Items HTML ─────────────────────────────────────────────
+        const itemsHTML = order.items.map(item => `
+            <div class="order-item-row">
+                <div class="item-icon-box">
+                    <i class="${item.icon || 'fas fa-box'}"></i>
+                </div>
+                <div class="item-info">
+                    <div class="item-title">${item.title}</div>
+                    <div class="item-brand">${item.brand}</div>
+                    <div class="item-qty-label">Qty: ${item.quantity}</div>
+                </div>
+                <div class="item-line-price">KWD ${(item.price * item.quantity).toFixed(3)}</div>
+            </div>
+        `).join('');
+
+        // ── Promo chip ─────────────────────────────────────────────
+        const promoHTML = order.promoCode ? `
+            <div class="promo-chip">
+                <i class="fas fa-tag"></i>
+                ${order.promoCode} applied
+            </div>
+        ` : '';
+
+        // ── Status badge ───────────────────────────────────────────
+        const badgeClass = statusColors[order.status] || 'pending';
+        const badgeIcon  = statusIcons[order.status]  || 'fa-circle';
+        const statusBadgeHTML = `
+            <span class="status-badge ${badgeClass}">
+                <i class="fas ${badgeIcon}"></i>
+                ${order.status}
+            </span>
+        `;
+
+        // ── Delivery info row (right column) ───────────────────────
+        const estDeliveryStr = estDelivery(order);
+        const deliveryInfoHTML = `
+            <div class="delivery-info-row">
+                <i class="fas fa-calendar-check"></i>
+                <span class="delivery-info-label">Estimated Delivery:&nbsp;</span>
+                <span class="delivery-info-value">${estDeliveryStr}</span>
+            </div>
+        `;
+
+        // ── Cancelled banner (left column) ─────────────────────────
+        const cancelledHTML = isCancelled ? `
+            <div class="cancelled-banner">
+                <i class="fas fa-ban"></i>
+                <div>
+                    <div class="cancelled-banner-title">Order Cancelled</div>
+                    <div class="cancelled-banner-sub">This order has been cancelled and will not be delivered.</div>
+                </div>
+            </div>
+        ` : `
+            <div class="timeline">
+                <div class="timeline-track">
+                    <div class="timeline-fill" style="height: ${fillPercent}%"></div>
+                </div>
+                ${timelineHTML}
+            </div>
+        `;
+
+        const orderDateStr = fmtDate(new Date(order.date));
+
+        // ── Full render ────────────────────────────────────────────
+        mainContent.innerHTML = `
+            <div class="page-header-row">
+                <a href="orders.html" class="page-back-btn" title="Back to orders">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div class="page-title">Track Your Order</div>
+            </div>
+
+            <div class="sl-grid">
+                <!-- LEFT: Timeline -->
+                <div class="glass-card">
+                    <div class="card-title">
+                        <i class="fas fa-route"></i>
+                        Tracking Timeline
+                    </div>
+                    <div class="order-id-badge">
+                        <i class="fas fa-hashtag"></i>
+                        <span class="order-id-text">${order.id}</span>
+                    </div>
+                    ${cancelledHTML}
+                </div>
+
+                <!-- RIGHT: Order Summary -->
+                <div class="glass-card">
+                    <div class="card-title">
+                        <i class="fas fa-receipt"></i>
+                        Order Summary
+                    </div>
+
+                    ${statusBadgeHTML}
+                    ${!isCancelled ? deliveryInfoHTML : ''}
+
+                    <div class="card-title" style="font-size:13px;margin-bottom:8px;margin-top:4px;">
+                        <i class="fas fa-box-open"></i>
+                        Items
+                    </div>
+                    ${itemsHTML}
+
+                    <div class="totals-section">
+                        <div class="totals-row">
+                            <span>Subtotal</span>
+                            <span>KWD ${order.total.toFixed(3)}</span>
+                        </div>
+                        <div class="totals-row">
+                            <span>Shipping</span>
+                            <span style="color:var(--shiplee-green);font-weight:700;">Free</span>
+                        </div>
+                        ${order.promoCode ? `<div class="totals-row"><span>Promo (${order.promoCode})</span><span style="color:var(--shiplee-green-dark);font-weight:700;">Applied</span></div>` : ''}
+                        <div class="totals-row grand">
+                            <span>Total</span>
+                            <span>KWD ${order.total.toFixed(3)}</span>
+                        </div>
+                        ${promoHTML}
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="orders.html" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Orders
+                        </a>
+                        <a href="shiplee.html" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                            Track Another Order
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Animate timeline fill after paint
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                const fill = document.querySelector('.timeline-fill');
+                if (fill) fill.style.height = fillPercent + '%';
+            });
+        });
+    });
+    </script>
+
+</body>
+</html>
