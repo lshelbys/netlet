@@ -367,11 +367,7 @@
             background: rgba(250,250,250,0.5); border-radius: 12px;
             position: relative; overflow: hidden;
         }
-        .image-placeholder {
-            width: 100%; height: 100%;
-            object-fit: cover; border-radius: 12px;
-            display: block;
-        }
+        .image-placeholder { font-size: 56px; }
 
         .product-details { display: flex; flex-direction: column; gap: 4px; }
         .product-brand { font-size: 11px; font-weight: 700; color: #7E859B; text-transform: uppercase; }
@@ -436,13 +432,7 @@
             cursor: pointer;
         }
         .deal-card:hover { background: rgba(255,255,255,0.65); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.09); }
-        .deal-icon {
-            width: 52px; height: 52px; border-radius: 14px;
-            background: linear-gradient(135deg, var(--green), var(--green-dark));
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; font-size: 22px; color: #fff;
-            box-shadow: 0 3px 10px rgba(22,163,74,0.30);
-        }
+        .deal-icon { font-size: 40px; flex-shrink: 0; }
         .deal-card-title { font-size: 14px; font-weight: 800; color: var(--text-dark); margin-bottom: 3px; }
         .deal-card-sub { font-size: 12px; color: #7E859B; }
         .deal-card-badge { font-size: 13px; font-weight: 800; color: var(--red); margin-top: 4px; }
@@ -513,7 +503,7 @@
             .hero-cta { display: none; }
             .deals-strip { grid-template-columns: repeat(2, 1fr); gap: 8px; }
             .deal-card { padding: 14px 12px; gap: 10px; }
-            .deal-icon { width: 44px; height: 44px; font-size: 18px; }
+            .deal-icon { font-size: 28px; }
             .deal-card-title { font-size: 13px; }
 
             .mobile-bottom-ui {
@@ -568,7 +558,7 @@
             .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .product-card { padding: 12px; }
             .image-container { height: 130px; }
-            .image-placeholder { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; display: block; }
+            .image-placeholder { font-size: 44px; }
             footer { margin-top: 20px; padding: 24px 16px 16px; }
             .footer-container { grid-template-columns: 1fr; gap: 30px; }
 
@@ -588,11 +578,11 @@
 
 <!-- ══ PROMO BAR ════════════════════════════════════════════════════ -->
 <div class="top-promo-bar" id="promoBar">
-    <span class="promo-message active">Free delivery on grocery orders over KWD 5! Code: FRESHKW</span>
-    <span class="promo-message">Same-day delivery on fresh produce — order before 2 PM!</span>
-    <span class="promo-message">New organic range just landed — up to 20% off this week!</span>
-    <span class="promo-message">Fresh meat & seafood restocked daily from local suppliers.</span>
-    <span class="promo-message">Buy 2 get 1 free on all bakery items every Friday!</span>
+    <span class="promo-message active">🥬 Free delivery on grocery orders over KWD 5! Code: FRESHKW</span>
+    <span class="promo-message">⚡ Same-day delivery on fresh produce — order before 2 PM!</span>
+    <span class="promo-message">🌿 New organic range just landed — up to 20% off this week!</span>
+    <span class="promo-message">🥩 Fresh meat & seafood restocked daily from local suppliers.</span>
+    <span class="promo-message">🎉 Buy 2 get 1 free on all bakery items every Friday!</span>
 </div>
 
 <!-- ══ HEADER ═══════════════════════════════════════════════════════ -->
@@ -648,14 +638,14 @@
     <div class="nav-container">
         <ul class="nav-links">
             <li><a href="#" class="active" data-cat="">All</a></li>
-            <li><a href="#" data-cat="Fresh Produce"><i class="fas fa-carrot"></i> Fresh Produce</a></li>
-            <li><a href="#" data-cat="Dairy &amp; Eggs"><i class="fas fa-egg"></i> Dairy &amp; Eggs</a></li>
-            <li><a href="#" data-cat="Bakery"><i class="fas fa-bread-slice"></i> Bakery</a></li>
-            <li><a href="#" data-cat="Meat &amp; Seafood"><i class="fas fa-fish"></i> Meat &amp; Seafood</a></li>
-            <li><a href="#" data-cat="Beverages"><i class="fas fa-bottle-water"></i> Beverages</a></li>
-            <li><a href="#" data-cat="Pantry"><i class="fas fa-jar"></i> Pantry</a></li>
-            <li><a href="#" data-cat="Frozen"><i class="fas fa-snowflake"></i> Frozen</a></li>
-            <li><a href="#" data-cat="Snacks"><i class="fas fa-cookie-bite"></i> Snacks</a></li>
+            <li><a href="#" data-cat="Fresh Produce">🥦 Fresh Produce</a></li>
+            <li><a href="#" data-cat="Dairy & Eggs">🥛 Dairy & Eggs</a></li>
+            <li><a href="#" data-cat="Bakery">🍞 Bakery</a></li>
+            <li><a href="#" data-cat="Meat & Seafood">🥩 Meat & Seafood</a></li>
+            <li><a href="#" data-cat="Beverages">🧃 Beverages</a></li>
+            <li><a href="#" data-cat="Pantry">🫙 Pantry</a></li>
+            <li><a href="#" data-cat="Frozen">🧊 Frozen</a></li>
+            <li><a href="#" data-cat="Snacks">🍫 Snacks</a></li>
         </ul>
     </div>
 </nav>
@@ -666,7 +656,7 @@
         <div class="hero-orb hero-orb-1"></div>
         <div class="hero-orb hero-orb-2"></div>
         <div class="hero-text-content">
-            <div class="hero-tag"><i class="fas fa-bolt"></i> Same-Day Delivery</div>
+            <div class="hero-tag">⚡ Same-Day Delivery</div>
             <h1 class="hero-title">Fresh groceries,<br><em>at your door.</em></h1>
             <p class="hero-subtitle">Farm-fresh produce, daily dairy & more — delivered to Kuwait in hours.</p>
             <a href="#products" class="hero-cta">
@@ -674,18 +664,18 @@
                 Shop Now
             </a>
         </div>
-        <div class="hero-graphic" aria-hidden="true"><i class="fas fa-basket-shopping" style="font-size:inherit;color:inherit"></i></div>
+        <div class="hero-graphic" aria-hidden="true">🛒</div>
     </div>
 </section>
 
 <!-- ══ DEALS STRIP ════════════════════════════════════════════════════ -->
 <section class="section-wrapper" aria-label="Today's deals">
     <div class="section-header">
-        <h2 class="section-title">Today's Deals</h2>
+        <h2 class="section-title">🔥 Today's Deals</h2>
     </div>
     <div class="deals-strip">
         <div class="deal-card" onclick="filterByCategory('Fresh Produce')">
-            <div class="deal-icon"><i class="fas fa-carrot"></i></div>
+            <div class="deal-icon">🥗</div>
             <div>
                 <div class="deal-card-title">Fresh Produce</div>
                 <div class="deal-card-sub">Farm-fresh daily</div>
@@ -693,7 +683,7 @@
             </div>
         </div>
         <div class="deal-card" onclick="filterByCategory('Dairy & Eggs')">
-            <div class="deal-icon"><i class="fas fa-egg"></i></div>
+            <div class="deal-icon">🥛</div>
             <div>
                 <div class="deal-card-title">Dairy & Eggs</div>
                 <div class="deal-card-sub">Local & imported</div>
@@ -701,7 +691,7 @@
             </div>
         </div>
         <div class="deal-card" onclick="filterByCategory('Bakery')">
-            <div class="deal-icon"><i class="fas fa-bread-slice"></i></div>
+            <div class="deal-icon">🥖</div>
             <div>
                 <div class="deal-card-title">Bakery</div>
                 <div class="deal-card-sub">Baked this morning</div>
@@ -709,7 +699,7 @@
             </div>
         </div>
         <div class="deal-card" onclick="filterByCategory('Meat & Seafood')">
-            <div class="deal-icon"><i class="fas fa-fish"></i></div>
+            <div class="deal-icon">🐟</div>
             <div>
                 <div class="deal-card-title">Meat & Seafood</div>
                 <div class="deal-card-sub">Halal certified</div>
@@ -728,15 +718,15 @@
 
     <!-- Category chips -->
     <div class="category-chips" id="categoryChips" role="list" aria-label="Filter by category">
-        <button class="chip active" data-cat="" role="listitem"><i class="fas fa-border-all"></i> All</button>
-        <button class="chip" data-cat="Fresh Produce" role="listitem"><i class="fas fa-carrot"></i> Fresh Produce</button>
-        <button class="chip" data-cat="Dairy &amp; Eggs" role="listitem"><i class="fas fa-egg"></i> Dairy &amp; Eggs</button>
-        <button class="chip" data-cat="Bakery" role="listitem"><i class="fas fa-bread-slice"></i> Bakery</button>
-        <button class="chip" data-cat="Meat &amp; Seafood" role="listitem"><i class="fas fa-fish"></i> Meat &amp; Seafood</button>
-        <button class="chip" data-cat="Beverages" role="listitem"><i class="fas fa-bottle-water"></i> Beverages</button>
-        <button class="chip" data-cat="Pantry" role="listitem"><i class="fas fa-jar"></i> Pantry</button>
-        <button class="chip" data-cat="Frozen" role="listitem"><i class="fas fa-snowflake"></i> Frozen</button>
-        <button class="chip" data-cat="Snacks" role="listitem"><i class="fas fa-cookie-bite"></i> Snacks</button>
+        <button class="chip active" data-cat="" role="listitem">🛒 All</button>
+        <button class="chip" data-cat="Fresh Produce" role="listitem">🥦 Fresh Produce</button>
+        <button class="chip" data-cat="Dairy & Eggs" role="listitem">🥛 Dairy & Eggs</button>
+        <button class="chip" data-cat="Bakery" role="listitem">🍞 Bakery</button>
+        <button class="chip" data-cat="Meat & Seafood" role="listitem">🥩 Meat & Seafood</button>
+        <button class="chip" data-cat="Beverages" role="listitem">🧃 Beverages</button>
+        <button class="chip" data-cat="Pantry" role="listitem">🫙 Pantry</button>
+        <button class="chip" data-cat="Frozen" role="listitem">🧊 Frozen</button>
+        <button class="chip" data-cat="Snacks" role="listitem">🍫 Snacks</button>
     </div>
 
     <div class="products-container">
