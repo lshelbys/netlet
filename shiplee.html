@@ -402,7 +402,7 @@
         }
         .stats-strip-inner {
             max-width: 1180px; margin: 0 auto; padding: 0 32px;
-            display: grid; grid-template-columns: repeat(4, 1fr);
+            display: grid; grid-template-columns: repeat(3, 1fr);
         }
         .stat-item {
             padding: 32px 24px; text-align: center; position: relative;
@@ -420,10 +420,9 @@
             font-size: 12px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.1px;
         }
         @media (max-width: 640px) {
-            .stats-strip-inner { grid-template-columns: repeat(2, 1fr); padding: 0 16px; }
-            .stat-item { padding: 24px 16px; }
-            .stat-num { font-size: 28px; }
-            .stat-item:nth-child(2)::after { display: none; }
+            .stats-strip-inner { grid-template-columns: repeat(3, 1fr); padding: 0 16px; }
+            .stat-item { padding: 20px 12px; }
+            .stat-num { font-size: 26px; }
         }
 
         /* ─── SECTION SHARED ──────────────────────────── */
@@ -881,10 +880,6 @@
 <!-- ══ STATS STRIP ══════════════════════════════════════════════════ -->
 <div class="stats-strip" aria-label="ShipLee at a glance">
     <div class="stats-strip-inner">
-        <div class="stat-item">
-            <div class="stat-num">2M+</div>
-            <div class="stat-lbl">Packages Tracked</div>
-        </div>
         <div class="stat-item">
             <div class="stat-num">99.8%</div>
             <div class="stat-lbl">Delivery Accuracy</div>
