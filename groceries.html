@@ -367,7 +367,11 @@
             background: rgba(250,250,250,0.5); border-radius: 12px;
             position: relative; overflow: hidden;
         }
-        .image-placeholder { font-size: 56px; }
+        .image-placeholder {
+            width: 100%; height: 100%;
+            object-fit: cover; border-radius: 12px;
+            display: block;
+        }
 
         .product-details { display: flex; flex-direction: column; gap: 4px; }
         .product-brand { font-size: 11px; font-weight: 700; color: #7E859B; text-transform: uppercase; }
@@ -432,7 +436,13 @@
             cursor: pointer;
         }
         .deal-card:hover { background: rgba(255,255,255,0.65); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.09); }
-        .deal-icon { font-size: 40px; flex-shrink: 0; }
+        .deal-icon {
+            width: 52px; height: 52px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; font-size: 22px; color: #fff;
+            box-shadow: 0 3px 10px rgba(22,163,74,0.30);
+        }
         .deal-card-title { font-size: 14px; font-weight: 800; color: var(--text-dark); margin-bottom: 3px; }
         .deal-card-sub { font-size: 12px; color: #7E859B; }
         .deal-card-badge { font-size: 13px; font-weight: 800; color: var(--red); margin-top: 4px; }
@@ -503,7 +513,7 @@
             .hero-cta { display: none; }
             .deals-strip { grid-template-columns: repeat(2, 1fr); gap: 8px; }
             .deal-card { padding: 14px 12px; gap: 10px; }
-            .deal-icon { font-size: 28px; }
+            .deal-icon { width: 44px; height: 44px; font-size: 18px; }
             .deal-card-title { font-size: 13px; }
 
             .mobile-bottom-ui {
@@ -558,7 +568,7 @@
             .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .product-card { padding: 12px; }
             .image-container { height: 130px; }
-            .image-placeholder { font-size: 44px; }
+            .image-placeholder { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; display: block; }
             footer { margin-top: 20px; padding: 24px 16px 16px; }
             .footer-container { grid-template-columns: 1fr; gap: 30px; }
 
@@ -578,11 +588,11 @@
 
 <!-- ══ PROMO BAR ════════════════════════════════════════════════════ -->
 <div class="top-promo-bar" id="promoBar">
-    <span class="promo-message active">🥬 Free delivery on grocery orders over KWD 5! Code: FRESHKW</span>
-    <span class="promo-message">⚡ Same-day delivery on fresh produce — order before 2 PM!</span>
-    <span class="promo-message">🌿 New organic range just landed — up to 20% off this week!</span>
-    <span class="promo-message">🥩 Fresh meat & seafood restocked daily from local suppliers.</span>
-    <span class="promo-message">🎉 Buy 2 get 1 free on all bakery items every Friday!</span>
+    <span class="promo-message active">Free delivery on grocery orders over KWD 5! Code: FRESHKW</span>
+    <span class="promo-message">Same-day delivery on fresh produce — order before 2 PM!</span>
+    <span class="promo-message">New organic range just landed — up to 20% off this week!</span>
+    <span class="promo-message">Fresh meat &amp; seafood restocked daily from local suppliers.</span>
+    <span class="promo-message">Buy 2 get 1 free on all bakery items every Friday!</span>
 </div>
 
 <!-- ══ HEADER ═══════════════════════════════════════════════════════ -->
@@ -638,14 +648,14 @@
     <div class="nav-container">
         <ul class="nav-links">
             <li><a href="#" class="active" data-cat="">All</a></li>
-            <li><a href="#" data-cat="Fresh Produce">🥦 Fresh Produce</a></li>
-            <li><a href="#" data-cat="Dairy & Eggs">🥛 Dairy & Eggs</a></li>
-            <li><a href="#" data-cat="Bakery">🍞 Bakery</a></li>
-            <li><a href="#" data-cat="Meat & Seafood">🥩 Meat & Seafood</a></li>
-            <li><a href="#" data-cat="Beverages">🧃 Beverages</a></li>
-            <li><a href="#" data-cat="Pantry">🫙 Pantry</a></li>
-            <li><a href="#" data-cat="Frozen">🧊 Frozen</a></li>
-            <li><a href="#" data-cat="Snacks">🍫 Snacks</a></li>
+            <li><a href="#" data-cat="Fresh Produce"><i class="fas fa-carrot"></i> Fresh Produce</a></li>
+            <li><a href="#" data-cat="Dairy &amp; Eggs"><i class="fas fa-egg"></i> Dairy &amp; Eggs</a></li>
+            <li><a href="#" data-cat="Bakery"><i class="fas fa-bread-slice"></i> Bakery</a></li>
+            <li><a href="#" data-cat="Meat &amp; Seafood"><i class="fas fa-fish"></i> Meat &amp; Seafood</a></li>
+            <li><a href="#" data-cat="Beverages"><i class="fas fa-bottle-water"></i> Beverages</a></li>
+            <li><a href="#" data-cat="Pantry"><i class="fas fa-jar"></i> Pantry</a></li>
+            <li><a href="#" data-cat="Frozen"><i class="fas fa-snowflake"></i> Frozen</a></li>
+            <li><a href="#" data-cat="Snacks"><i class="fas fa-cookie-bite"></i> Snacks</a></li>
         </ul>
     </div>
 </nav>
@@ -656,26 +666,26 @@
         <div class="hero-orb hero-orb-1"></div>
         <div class="hero-orb hero-orb-2"></div>
         <div class="hero-text-content">
-            <div class="hero-tag">⚡ Same-Day Delivery</div>
+            <div class="hero-tag"><i class="fas fa-bolt"></i> Same-Day Delivery</div>
             <h1 class="hero-title">Fresh groceries,<br><em>at your door.</em></h1>
-            <p class="hero-subtitle">Farm-fresh produce, daily dairy & more — delivered to Kuwait in hours.</p>
+            <p class="hero-subtitle">Farm-fresh produce, daily dairy &amp; more — delivered to Kuwait in hours.</p>
             <a href="#products" class="hero-cta">
                 <i class="fas fa-shopping-basket"></i>
                 Shop Now
             </a>
         </div>
-        <div class="hero-graphic" aria-hidden="true">🛒</div>
+        <div class="hero-graphic" aria-hidden="true"><i class="fas fa-basket-shopping" style="font-size:inherit;color:inherit"></i></div>
     </div>
 </section>
 
 <!-- ══ DEALS STRIP ════════════════════════════════════════════════════ -->
 <section class="section-wrapper" aria-label="Today's deals">
     <div class="section-header">
-        <h2 class="section-title">🔥 Today's Deals</h2>
+        <h2 class="section-title">Today's Deals</h2>
     </div>
     <div class="deals-strip">
         <div class="deal-card" onclick="filterByCategory('Fresh Produce')">
-            <div class="deal-icon">🥗</div>
+            <div class="deal-icon"><i class="fas fa-carrot"></i></div>
             <div>
                 <div class="deal-card-title">Fresh Produce</div>
                 <div class="deal-card-sub">Farm-fresh daily</div>
@@ -683,15 +693,15 @@
             </div>
         </div>
         <div class="deal-card" onclick="filterByCategory('Dairy & Eggs')">
-            <div class="deal-icon">🥛</div>
+            <div class="deal-icon"><i class="fas fa-egg"></i></div>
             <div>
-                <div class="deal-card-title">Dairy & Eggs</div>
-                <div class="deal-card-sub">Local & imported</div>
+                <div class="deal-card-title">Dairy &amp; Eggs</div>
+                <div class="deal-card-sub">Local &amp; imported</div>
                 <div class="deal-card-badge">Buy 2 Get 1</div>
             </div>
         </div>
         <div class="deal-card" onclick="filterByCategory('Bakery')">
-            <div class="deal-icon">🥖</div>
+            <div class="deal-icon"><i class="fas fa-bread-slice"></i></div>
             <div>
                 <div class="deal-card-title">Bakery</div>
                 <div class="deal-card-sub">Baked this morning</div>
@@ -699,9 +709,9 @@
             </div>
         </div>
         <div class="deal-card" onclick="filterByCategory('Meat & Seafood')">
-            <div class="deal-icon">🐟</div>
+            <div class="deal-icon"><i class="fas fa-fish"></i></div>
             <div>
-                <div class="deal-card-title">Meat & Seafood</div>
+                <div class="deal-card-title">Meat &amp; Seafood</div>
                 <div class="deal-card-sub">Halal certified</div>
                 <div class="deal-card-badge">Flash sale 20% off</div>
             </div>
@@ -718,15 +728,15 @@
 
     <!-- Category chips -->
     <div class="category-chips" id="categoryChips" role="list" aria-label="Filter by category">
-        <button class="chip active" data-cat="" role="listitem">🛒 All</button>
-        <button class="chip" data-cat="Fresh Produce" role="listitem">🥦 Fresh Produce</button>
-        <button class="chip" data-cat="Dairy & Eggs" role="listitem">🥛 Dairy & Eggs</button>
-        <button class="chip" data-cat="Bakery" role="listitem">🍞 Bakery</button>
-        <button class="chip" data-cat="Meat & Seafood" role="listitem">🥩 Meat & Seafood</button>
-        <button class="chip" data-cat="Beverages" role="listitem">🧃 Beverages</button>
-        <button class="chip" data-cat="Pantry" role="listitem">🫙 Pantry</button>
-        <button class="chip" data-cat="Frozen" role="listitem">🧊 Frozen</button>
-        <button class="chip" data-cat="Snacks" role="listitem">🍫 Snacks</button>
+        <button class="chip active" data-cat="" role="listitem"><i class="fas fa-border-all"></i> All</button>
+        <button class="chip" data-cat="Fresh Produce" role="listitem"><i class="fas fa-carrot"></i> Fresh Produce</button>
+        <button class="chip" data-cat="Dairy &amp; Eggs" role="listitem"><i class="fas fa-egg"></i> Dairy &amp; Eggs</button>
+        <button class="chip" data-cat="Bakery" role="listitem"><i class="fas fa-bread-slice"></i> Bakery</button>
+        <button class="chip" data-cat="Meat &amp; Seafood" role="listitem"><i class="fas fa-fish"></i> Meat &amp; Seafood</button>
+        <button class="chip" data-cat="Beverages" role="listitem"><i class="fas fa-bottle-water"></i> Beverages</button>
+        <button class="chip" data-cat="Pantry" role="listitem"><i class="fas fa-jar"></i> Pantry</button>
+        <button class="chip" data-cat="Frozen" role="listitem"><i class="fas fa-snowflake"></i> Frozen</button>
+        <button class="chip" data-cat="Snacks" role="listitem"><i class="fas fa-cookie-bite"></i> Snacks</button>
     </div>
 
     <div class="products-container">
@@ -757,9 +767,9 @@
         <div class="footer-section">
             <h3><i class="fas fa-tags"></i> Categories</h3>
             <a href="#" onclick="filterByCategory('Fresh Produce');return false">Fresh Produce</a>
-            <a href="#" onclick="filterByCategory('Dairy & Eggs');return false">Dairy & Eggs</a>
+            <a href="#" onclick="filterByCategory('Dairy & Eggs');return false">Dairy &amp; Eggs</a>
             <a href="#" onclick="filterByCategory('Bakery');return false">Bakery</a>
-            <a href="#" onclick="filterByCategory('Meat & Seafood');return false">Meat & Seafood</a>
+            <a href="#" onclick="filterByCategory('Meat & Seafood');return false">Meat &amp; Seafood</a>
             <a href="#" onclick="filterByCategory('Beverages');return false">Beverages</a>
             <a href="#" onclick="filterByCategory('Pantry');return false">Pantry</a>
         </div>
@@ -778,7 +788,7 @@
             <a href="#">Cookie Policy</a>
             <a href="index.html">NetLet Marketplace</a>
         </div>
-        <p>© 2025 NetLet Groceries. A NetLet Kuwait Company. All rights reserved.</p>
+        <p>&#169; 2025 NetLet Groceries. A NetLet Kuwait Company. All rights reserved.</p>
     </div>
 </footer>
 
@@ -820,66 +830,66 @@
     /* ── Product Inventory ────────────────────────────────────────── */
     const PRODUCTS = [
         // Fresh Produce
-        { id: 'g001', name: 'Organic Bananas', brand: 'Local Farm', weight: '1 kg', price: 0.650, category: 'Fresh Produce', emoji: '🍌', organic: true, rating: 4.8, reviews: 312 },
-        { id: 'g002', name: 'Fresh Strawberries', brand: 'Berry Farm KW', weight: '500 g', price: 1.850, oldPrice: 2.200, category: 'Fresh Produce', emoji: '🍓', discount: 16, rating: 4.9, reviews: 204 },
-        { id: 'g003', name: 'Red Apples', brand: 'Imported', weight: '1 kg', price: 0.950, category: 'Fresh Produce', emoji: '🍎', organic: true, rating: 4.6, reviews: 178 },
-        { id: 'g004', name: 'Avocados', brand: 'Peru Select', weight: 'Pack of 4', price: 2.250, oldPrice: 2.750, category: 'Fresh Produce', emoji: '🥑', discount: 18, rating: 4.7, reviews: 267 },
-        { id: 'g005', name: 'Baby Spinach', brand: 'Green Fields', weight: '200 g', price: 0.850, category: 'Fresh Produce', emoji: '🥬', organic: true, rating: 4.5, reviews: 139 },
-        { id: 'g006', name: 'Broccoli', brand: 'Local Farm', weight: '500 g', price: 0.750, category: 'Fresh Produce', emoji: '🥦', rating: 4.4, reviews: 95 },
-        { id: 'g007', name: 'Cherry Tomatoes', brand: 'Sun Harvest', weight: '400 g', price: 1.100, category: 'Fresh Produce', emoji: '🍅', organic: true, rating: 4.7, reviews: 221 },
-        { id: 'g008', name: 'Lemons', brand: 'Imported', weight: '1 kg', price: 0.600, category: 'Fresh Produce', emoji: '🍋', rating: 4.3, reviews: 88 },
-        { id: 'g009', name: 'Mango', brand: 'Pakistan Select', weight: 'Each', price: 0.450, oldPrice: 0.600, category: 'Fresh Produce', emoji: '🥭', discount: 25, rating: 4.9, reviews: 445 },
-        { id: 'g010', name: 'Watermelon', brand: 'Local Farm', weight: 'Whole', price: 2.500, category: 'Fresh Produce', emoji: '🍉', rating: 4.8, reviews: 302 },
+        { id: 'g001', name: 'Organic Bananas', brand: 'Local Farm', weight: '1 kg', price: 0.650, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&h=400&fit=crop&auto=format&q=80', organic: true, rating: 4.8, reviews: 312 },
+        { id: 'g002', name: 'Fresh Strawberries', brand: 'Berry Farm KW', weight: '500 g', price: 1.850, oldPrice: 2.200, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400&h=400&fit=crop&auto=format&q=80', discount: 16, rating: 4.9, reviews: 204 },
+        { id: 'g003', name: 'Red Apples', brand: 'Imported', weight: '1 kg', price: 0.950, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=400&h=400&fit=crop&auto=format&q=80', organic: true, rating: 4.6, reviews: 178 },
+        { id: 'g004', name: 'Avocados', brand: 'Peru Select', weight: 'Pack of 4', price: 2.250, oldPrice: 2.750, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1519162808019-7de1683fa2ad?w=400&h=400&fit=crop&auto=format&q=80', discount: 18, rating: 4.7, reviews: 267 },
+        { id: 'g005', name: 'Baby Spinach', brand: 'Green Fields', weight: '200 g', price: 0.850, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=400&fit=crop&auto=format&q=80', organic: true, rating: 4.5, reviews: 139 },
+        { id: 'g006', name: 'Broccoli', brand: 'Local Farm', weight: '500 g', price: 0.750, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.4, reviews: 95 },
+        { id: 'g007', name: 'Cherry Tomatoes', brand: 'Sun Harvest', weight: '400 g', price: 1.100, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1546470427-227c6419f1d2?w=400&h=400&fit=crop&auto=format&q=80', organic: true, rating: 4.7, reviews: 221 },
+        { id: 'g008', name: 'Lemons', brand: 'Imported', weight: '1 kg', price: 0.600, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1590502160462-58b41354f588?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.3, reviews: 88 },
+        { id: 'g009', name: 'Mango', brand: 'Pakistan Select', weight: 'Each', price: 0.450, oldPrice: 0.600, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400&h=400&fit=crop&auto=format&q=80', discount: 25, rating: 4.9, reviews: 445 },
+        { id: 'g010', name: 'Watermelon', brand: 'Local Farm', weight: 'Whole', price: 2.500, category: 'Fresh Produce', img: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.8, reviews: 302 },
 
         // Dairy & Eggs
-        { id: 'g011', name: 'Full-Fat Milk', brand: 'Almarai', weight: '2 L', price: 0.900, category: 'Dairy & Eggs', emoji: '🥛', rating: 4.8, reviews: 534 },
-        { id: 'g012', name: 'Greek Yogurt', brand: 'OIKOS', weight: '500 g', price: 1.350, oldPrice: 1.600, category: 'Dairy & Eggs', emoji: '🍶', discount: 16, rating: 4.6, reviews: 187 },
-        { id: 'g013', name: 'Unsalted Butter', brand: 'Lurpak', weight: '200 g', price: 1.200, category: 'Dairy & Eggs', emoji: '🧈', rating: 4.9, reviews: 623 },
-        { id: 'g014', name: 'Free-Range Eggs', brand: 'Happy Hens', weight: '12 eggs', price: 1.850, oldPrice: 2.100, category: 'Dairy & Eggs', emoji: '🥚', discount: 12, organic: true, rating: 4.7, reviews: 289 },
-        { id: 'g015', name: 'Cheddar Cheese', brand: 'Cathedral City', weight: '400 g', price: 2.100, category: 'Dairy & Eggs', emoji: '🧀', rating: 4.5, reviews: 156 },
-        { id: 'g016', name: 'Cream Cheese', brand: 'Philadelphia', weight: '300 g', price: 1.650, category: 'Dairy & Eggs', emoji: '🥣', rating: 4.6, reviews: 198 },
-        { id: 'g017', name: 'Heavy Cream', brand: 'Almarai', weight: '200 ml', price: 0.850, category: 'Dairy & Eggs', emoji: '🍦', rating: 4.4, reviews: 112 },
+        { id: 'g011', name: 'Full-Fat Milk', brand: 'Almarai', weight: '2 L', price: 0.900, category: 'Dairy & Eggs', img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.8, reviews: 534 },
+        { id: 'g012', name: 'Greek Yogurt', brand: 'OIKOS', weight: '500 g', price: 1.350, oldPrice: 1.600, category: 'Dairy & Eggs', img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=400&fit=crop&auto=format&q=80', discount: 16, rating: 4.6, reviews: 187 },
+        { id: 'g013', name: 'Unsalted Butter', brand: 'Lurpak', weight: '200 g', price: 1.200, category: 'Dairy & Eggs', img: 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.9, reviews: 623 },
+        { id: 'g014', name: 'Free-Range Eggs', brand: 'Happy Hens', weight: '12 eggs', price: 1.850, oldPrice: 2.100, category: 'Dairy & Eggs', img: 'https://images.unsplash.com/photo-1518569656558-1f25e69d2fd4?w=400&h=400&fit=crop&auto=format&q=80', discount: 12, organic: true, rating: 4.7, reviews: 289 },
+        { id: 'g015', name: 'Cheddar Cheese', brand: 'Cathedral City', weight: '400 g', price: 2.100, category: 'Dairy & Eggs', img: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.5, reviews: 156 },
+        { id: 'g016', name: 'Cream Cheese', brand: 'Philadelphia', weight: '300 g', price: 1.650, category: 'Dairy & Eggs', img: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.6, reviews: 198 },
+        { id: 'g017', name: 'Heavy Cream', brand: 'Almarai', weight: '200 ml', price: 0.850, category: 'Dairy & Eggs', img: 'https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.4, reviews: 112 },
 
         // Bakery
-        { id: 'g018', name: 'Sourdough Loaf', brand: 'Artisan Bakers', weight: '800 g', price: 1.500, category: 'Bakery', emoji: '🍞', rating: 4.8, reviews: 247 },
-        { id: 'g019', name: 'Whole Wheat Bread', brand: 'Harvest Gold', weight: '700 g', price: 0.950, category: 'Bakery', emoji: '🍞', organic: true, rating: 4.5, reviews: 189 },
-        { id: 'g020', name: 'Butter Croissants', brand: 'French Corner', weight: 'Pack of 4', price: 1.800, oldPrice: 2.200, category: 'Bakery', emoji: '🥐', discount: 18, rating: 4.9, reviews: 412 },
-        { id: 'g021', name: 'Sesame Bagels', brand: 'Morning Glory', weight: 'Pack of 6', price: 1.200, category: 'Bakery', emoji: '🥯', rating: 4.3, reviews: 94 },
-        { id: 'g022', name: 'Pita Bread', brand: 'Local Bakery', weight: 'Pack of 8', price: 0.600, category: 'Bakery', emoji: '🫓', rating: 4.6, reviews: 378 },
+        { id: 'g018', name: 'Sourdough Loaf', brand: 'Artisan Bakers', weight: '800 g', price: 1.500, category: 'Bakery', img: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.8, reviews: 247 },
+        { id: 'g019', name: 'Whole Wheat Bread', brand: 'Harvest Gold', weight: '700 g', price: 0.950, category: 'Bakery', img: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=400&h=400&fit=crop&auto=format&q=80', organic: true, rating: 4.5, reviews: 189 },
+        { id: 'g020', name: 'Butter Croissants', brand: 'French Corner', weight: 'Pack of 4', price: 1.800, oldPrice: 2.200, category: 'Bakery', img: 'https://images.unsplash.com/photo-1555507036-ab794f4afe5e?w=400&h=400&fit=crop&auto=format&q=80', discount: 18, rating: 4.9, reviews: 412 },
+        { id: 'g021', name: 'Sesame Bagels', brand: 'Morning Glory', weight: 'Pack of 6', price: 1.200, category: 'Bakery', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.3, reviews: 94 },
+        { id: 'g022', name: 'Pita Bread', brand: 'Local Bakery', weight: 'Pack of 8', price: 0.600, category: 'Bakery', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.6, reviews: 378 },
 
         // Meat & Seafood
-        { id: 'g023', name: 'Chicken Breast', brand: 'Kuwait Poultry', weight: '1 kg', price: 2.800, oldPrice: 3.200, category: 'Meat & Seafood', emoji: '🍗', discount: 13, rating: 4.7, reviews: 523 },
-        { id: 'g024', name: 'Salmon Fillet', brand: 'Norwegian Select', weight: '500 g', price: 5.500, category: 'Meat & Seafood', emoji: '🐟', rating: 4.8, reviews: 267 },
-        { id: 'g025', name: 'Ground Beef', brand: 'Halal Farms', weight: '500 g', price: 2.950, category: 'Meat & Seafood', emoji: '🥩', rating: 4.6, reviews: 198 },
-        { id: 'g026', name: 'Tiger Shrimp', brand: 'Gulf Fresh', weight: '500 g', price: 4.200, oldPrice: 5.000, category: 'Meat & Seafood', emoji: '🦐', discount: 16, rating: 4.9, reviews: 341 },
-        { id: 'g027', name: 'Lamb Chops', brand: 'New Zealand', weight: '500 g', price: 6.500, category: 'Meat & Seafood', emoji: '🍖', rating: 4.7, reviews: 145 },
+        { id: 'g023', name: 'Chicken Breast', brand: 'Kuwait Poultry', weight: '1 kg', price: 2.800, oldPrice: 3.200, category: 'Meat & Seafood', img: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&h=400&fit=crop&auto=format&q=80', discount: 13, rating: 4.7, reviews: 523 },
+        { id: 'g024', name: 'Salmon Fillet', brand: 'Norwegian Select', weight: '500 g', price: 5.500, category: 'Meat & Seafood', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.8, reviews: 267 },
+        { id: 'g025', name: 'Ground Beef', brand: 'Halal Farms', weight: '500 g', price: 2.950, category: 'Meat & Seafood', img: 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.6, reviews: 198 },
+        { id: 'g026', name: 'Tiger Shrimp', brand: 'Gulf Fresh', weight: '500 g', price: 4.200, oldPrice: 5.000, category: 'Meat & Seafood', img: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=400&h=400&fit=crop&auto=format&q=80', discount: 16, rating: 4.9, reviews: 341 },
+        { id: 'g027', name: 'Lamb Chops', brand: 'New Zealand', weight: '500 g', price: 6.500, category: 'Meat & Seafood', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.7, reviews: 145 },
 
         // Beverages
-        { id: 'g028', name: 'Fresh Orange Juice', brand: 'Tropicana', weight: '1 L', price: 1.650, oldPrice: 1.950, category: 'Beverages', emoji: '🍊', discount: 15, rating: 4.7, reviews: 312 },
-        { id: 'g029', name: 'Sparkling Water', brand: "S.Pellegrino", weight: '6 × 500 ml', price: 1.800, category: 'Beverages', emoji: '💧', rating: 4.5, reviews: 223 },
-        { id: 'g030', name: 'Green Tea', brand: 'Lipton', weight: '100 bags', price: 1.200, category: 'Beverages', emoji: '🍵', rating: 4.4, reviews: 189 },
-        { id: 'g031', name: 'Almond Milk', brand: 'Alpro', weight: '1 L', price: 2.100, category: 'Beverages', emoji: '🥛', organic: true, rating: 4.6, reviews: 134 },
-        { id: 'g032', name: 'Cold Brew Coffee', brand: 'Starbucks', weight: '500 ml', price: 2.500, category: 'Beverages', emoji: '☕', rating: 4.8, reviews: 287 },
+        { id: 'g028', name: 'Fresh Orange Juice', brand: 'Tropicana', weight: '1 L', price: 1.650, oldPrice: 1.950, category: 'Beverages', img: 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=400&fit=crop&auto=format&q=80', discount: 15, rating: 4.7, reviews: 312 },
+        { id: 'g029', name: 'Sparkling Water', brand: "S.Pellegrino", weight: '6 × 500 ml', price: 1.800, category: 'Beverages', img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.5, reviews: 223 },
+        { id: 'g030', name: 'Green Tea', brand: 'Lipton', weight: '100 bags', price: 1.200, category: 'Beverages', img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.4, reviews: 189 },
+        { id: 'g031', name: 'Almond Milk', brand: 'Alpro', weight: '1 L', price: 2.100, category: 'Beverages', img: 'https://images.unsplash.com/photo-1600788907416-456578634209?w=400&h=400&fit=crop&auto=format&q=80', organic: true, rating: 4.6, reviews: 134 },
+        { id: 'g032', name: 'Cold Brew Coffee', brand: 'Starbucks', weight: '500 ml', price: 2.500, category: 'Beverages', img: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.8, reviews: 287 },
 
         // Pantry
-        { id: 'g033', name: 'Extra Virgin Olive Oil', brand: 'Filippo Berio', weight: '750 ml', price: 3.500, oldPrice: 4.100, category: 'Pantry', emoji: '🫒', discount: 15, rating: 4.8, reviews: 456 },
-        { id: 'g034', name: 'Spaghetti Pasta', brand: 'Barilla', weight: '500 g', price: 0.850, category: 'Pantry', emoji: '🍝', rating: 4.6, reviews: 298 },
-        { id: 'g035', name: 'Basmati Rice', brand: 'Tilda', weight: '2 kg', price: 2.950, category: 'Pantry', emoji: '🍚', rating: 4.7, reviews: 512 },
-        { id: 'g036', name: 'Chopped Tomatoes', brand: 'Cirio', weight: '400 g × 2', price: 1.100, category: 'Pantry', emoji: '🍅', rating: 4.5, reviews: 178 },
-        { id: 'g037', name: 'Peanut Butter', brand: "Skippy", weight: '500 g', price: 1.950, category: 'Pantry', emoji: '🥜', rating: 4.7, reviews: 234 },
-        { id: 'g038', name: 'Honey', brand: 'Sidr Natural', weight: '500 g', price: 4.500, category: 'Pantry', emoji: '🍯', organic: true, rating: 4.9, reviews: 389 },
+        { id: 'g033', name: 'Extra Virgin Olive Oil', brand: 'Filippo Berio', weight: '750 ml', price: 3.500, oldPrice: 4.100, category: 'Pantry', img: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&h=400&fit=crop&auto=format&q=80', discount: 15, rating: 4.8, reviews: 456 },
+        { id: 'g034', name: 'Spaghetti Pasta', brand: 'Barilla', weight: '500 g', price: 0.850, category: 'Pantry', img: 'https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.6, reviews: 298 },
+        { id: 'g035', name: 'Basmati Rice', brand: 'Tilda', weight: '2 kg', price: 2.950, category: 'Pantry', img: 'https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.7, reviews: 512 },
+        { id: 'g036', name: 'Chopped Tomatoes', brand: 'Cirio', weight: '400 g × 2', price: 1.100, category: 'Pantry', img: 'https://images.unsplash.com/photo-1589927986089-35812388d1f4?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.5, reviews: 178 },
+        { id: 'g037', name: 'Peanut Butter', brand: "Skippy", weight: '500 g', price: 1.950, category: 'Pantry', img: 'https://images.unsplash.com/photo-1571185188048-c22c3b6a4e6d?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.7, reviews: 234 },
+        { id: 'g038', name: 'Honey', brand: 'Sidr Natural', weight: '500 g', price: 4.500, category: 'Pantry', img: 'https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=400&h=400&fit=crop&auto=format&q=80', organic: true, rating: 4.9, reviews: 389 },
 
         // Frozen
-        { id: 'g039', name: 'Frozen Peas', brand: 'Birds Eye', weight: '1 kg', price: 1.200, category: 'Frozen', emoji: '🫛', rating: 4.4, reviews: 134 },
-        { id: 'g040', name: 'Vanilla Ice Cream', brand: 'Häagen-Dazs', weight: '460 ml', price: 3.800, oldPrice: 4.500, category: 'Frozen', emoji: '🍨', discount: 16, rating: 4.9, reviews: 523 },
-        { id: 'g041', name: 'Frozen Pizza', brand: "Dr. Oetker", weight: '400 g', price: 2.500, category: 'Frozen', emoji: '🍕', rating: 4.3, reviews: 189 },
-        { id: 'g042', name: 'Mixed Vegetables', brand: 'Farm Fresh', weight: '1 kg', price: 1.450, category: 'Frozen', emoji: '🥕', organic: true, rating: 4.5, reviews: 112 },
+        { id: 'g039', name: 'Frozen Peas', brand: 'Birds Eye', weight: '1 kg', price: 1.200, category: 'Frozen', img: 'https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.4, reviews: 134 },
+        { id: 'g040', name: 'Vanilla Ice Cream', brand: 'Häagen-Dazs', weight: '460 ml', price: 3.800, oldPrice: 4.500, category: 'Frozen', img: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=400&fit=crop&auto=format&q=80', discount: 16, rating: 4.9, reviews: 523 },
+        { id: 'g041', name: 'Frozen Pizza', brand: "Dr. Oetker", weight: '400 g', price: 2.500, category: 'Frozen', img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.3, reviews: 189 },
+        { id: 'g042', name: 'Mixed Vegetables', brand: 'Farm Fresh', weight: '1 kg', price: 1.450, category: 'Frozen', img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=400&fit=crop&auto=format&q=80', organic: true, rating: 4.5, reviews: 112 },
 
         // Snacks
-        { id: 'g043', name: 'Mixed Nuts', brand: 'Wonderful', weight: '500 g', price: 4.200, oldPrice: 5.000, category: 'Snacks', emoji: '🥜', discount: 16, rating: 4.7, reviews: 287 },
-        { id: 'g044', name: 'Dark Chocolate', brand: 'Lindt 85%', weight: '100 g', price: 1.950, category: 'Snacks', emoji: '🍫', rating: 4.8, reviews: 345 },
-        { id: 'g045', name: 'Kettle Chips', brand: 'Pringles', weight: '165 g', price: 0.950, oldPrice: 1.200, category: 'Snacks', emoji: '🥔', discount: 21, rating: 4.5, reviews: 412 },
-        { id: 'g046', name: 'Granola Bar', brand: 'KIND', weight: 'Pack of 6', price: 2.800, category: 'Snacks', emoji: '🌾', organic: true, rating: 4.6, reviews: 198 },
+        { id: 'g043', name: 'Mixed Nuts', brand: 'Wonderful', weight: '500 g', price: 4.200, oldPrice: 5.000, category: 'Snacks', img: 'https://images.unsplash.com/photo-1508061253366-f7da158b6d46?w=400&h=400&fit=crop&auto=format&q=80', discount: 16, rating: 4.7, reviews: 287 },
+        { id: 'g044', name: 'Dark Chocolate', brand: 'Lindt 85%', weight: '100 g', price: 1.950, category: 'Snacks', img: 'https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&h=400&fit=crop&auto=format&q=80', rating: 4.8, reviews: 345 },
+        { id: 'g045', name: 'Kettle Chips', brand: 'Pringles', weight: '165 g', price: 0.950, oldPrice: 1.200, category: 'Snacks', img: 'https://images.unsplash.com/photo-1575664610840-01eb9e5e3b48?w=400&h=400&fit=crop&auto=format&q=80', discount: 21, rating: 4.5, reviews: 412 },
+        { id: 'g046', name: 'Granola Bar', brand: 'KIND', weight: 'Pack of 6', price: 2.800, category: 'Snacks', img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&h=400&fit=crop&auto=format&q=80', organic: true, rating: 4.6, reviews: 198 },
     ];
 
     /* ── Cart (separate key from main NetLet) ─────────────────────── */
@@ -896,10 +906,10 @@
         if (existing) {
             existing.qty++;
         } else {
-            cart.push({ id: product.id, name: product.name, emoji: product.emoji, price: product.price, weight: product.weight, qty: 1 });
+            cart.push({ id: product.id, name: product.name, img: product.img, price: product.price, weight: product.weight, qty: 1 });
         }
         saveCart();
-        showToast('🛒 ' + product.name + ' added to basket');
+        showToast(product.name + ' added to basket');
     }
 
     function updateCartUI() {
@@ -949,7 +959,7 @@
         if (products.length === 0) {
             grid.innerHTML = `
                 <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#7E859B">
-                    <div style="font-size:48px;margin-bottom:16px">🔍</div>
+                    <div style="font-size:48px;margin-bottom:16px;color:#CBD5E1"><i class="fas fa-magnifying-glass"></i></div>
                     <div style="font-size:18px;font-weight:700;color:#1F2229;margin-bottom:8px">No products found</div>
                     <div style="font-size:14px">Try a different search or category</div>
                 </div>`;
@@ -963,7 +973,7 @@
 
             const badge = p.discount
                 ? `<div class="discount-badge">-${p.discount}%</div>`
-                : (p.organic ? `<div class="organic-badge">🌿 Organic</div>` : '');
+                : (p.organic ? `<div class="organic-badge"><i class="fas fa-seedling"></i> Organic</div>` : '');
 
             const strikePrice = p.oldPrice ? `<span class="strike-price">KWD ${p.oldPrice.toFixed(3)}</span>` : '';
 
@@ -975,7 +985,7 @@
                     <i class="fas fa-heart wishlist-icon"></i>
                 </button>
                 <div class="image-container">
-                    <div class="image-placeholder">${p.emoji}</div>
+                    <img src="${p.img}" alt="${escHtml(p.name)}" class="image-placeholder" loading="lazy">
                 </div>
                 <div class="product-details">
                     <div class="product-brand">${escHtml(p.brand)}</div>
@@ -1007,7 +1017,7 @@
                 e.stopPropagation();
                 const icon = this.querySelector('.wishlist-icon');
                 icon.classList.toggle('active');
-                showToast(icon.classList.contains('active') ? '❤️ Added to wishlist' : '💔 Removed from wishlist');
+                showToast(icon.classList.contains('active') ? 'Added to wishlist' : 'Removed from wishlist');
             });
 
             grid.appendChild(card);
