@@ -655,33 +655,39 @@
             .cta-action { width: 100%; justify-content: center; }
         }
 
-        /* ─── FOOTER ──────────────────────────────────── */
-        .sl-footer { background: #0B1120; border-top: 1px solid rgba(255,255,255,0.06); }
+        /* ─── FOOTER (white liquid glass) ────────────── */
+        .sl-footer {
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(32px) saturate(200%);
+            -webkit-backdrop-filter: blur(32px) saturate(200%);
+            border-top: 1px solid rgba(255,255,255,0.88);
+            box-shadow: 0 -4px 32px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.95);
+        }
         .sl-footer-inner {
             max-width: 1180px; margin: 0 auto; padding: 60px 32px 44px;
             display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 48px;
         }
         .sl-footer-brand p {
-            font-size: 13px; color: rgba(255,255,255,0.32); line-height: 1.7;
+            font-size: 13px; color: var(--text-muted); line-height: 1.7;
             margin-top: 12px; max-width: 220px; font-weight: 400;
         }
         .sl-footer-col h4 {
             font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-            color: rgba(255,255,255,0.45); margin-bottom: 16px;
+            color: var(--text-dark); margin-bottom: 16px;
         }
         .sl-footer-col a {
-            display: block; font-size: 14px; color: rgba(255,255,255,0.32);
+            display: block; font-size: 14px; color: var(--text-muted);
             margin-bottom: 11px; transition: color 0.18s; font-weight: 400;
         }
-        .sl-footer-col a:hover { color: rgba(255,255,255,0.78); }
+        .sl-footer-col a:hover { color: var(--green-dark); }
         .sl-footer-bottom {
             max-width: 1180px; margin: 0 auto; padding: 20px 32px 32px;
-            border-top: 1px solid rgba(255,255,255,0.07);
+            border-top: 1px solid rgba(0,0,0,0.07);
             display: flex; justify-content: space-between; align-items: center;
-            font-size: 12px; color: rgba(255,255,255,0.22); gap: 12px; flex-wrap: wrap;
+            font-size: 12px; color: var(--text-muted); gap: 12px; flex-wrap: wrap;
         }
-        .sl-footer-bottom a { color: rgba(255,255,255,0.42); font-weight: 600; transition: color 0.18s; }
-        .sl-footer-bottom a:hover { color: rgba(255,255,255,0.72); }
+        .sl-footer-bottom a { color: var(--green-dark); font-weight: 600; transition: opacity 0.18s; }
+        .sl-footer-bottom a:hover { opacity: 0.72; }
         @media (max-width: 720px) {
             .sl-footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; padding: 44px 16px 28px; }
             .sl-footer-brand { grid-column: 1/-1; }
@@ -761,7 +767,6 @@
             </div>
 
             <div class="hero-trust" aria-hidden="true">
-                <div class="trust-item"><i class="fa-solid fa-shield-halved"></i> 2M+ packages tracked</div>
                 <div class="trust-item"><i class="fa-solid fa-bolt"></i> 24/7 live updates</div>
                 <div class="trust-item"><i class="fa-solid fa-circle-check"></i> 99.8% accuracy</div>
             </div>
